@@ -1,0 +1,19 @@
+.searchInput_container {
+  display: flex;
+  align-items: center;
+  background-color: var(--ecommerce-background);
+  padding: 10px;
+  border-radius: 20px;
+  width: 90%;
+}
+.searchInput_container > input {
+  flex: 1;
+  border: none;
+  background-color: var(--ecommerce-background);
+}
+.searchInput_container > input:focus {
+  outline: none;
+}
+.searchInput_searchIcon {
+  color: gray;
+}

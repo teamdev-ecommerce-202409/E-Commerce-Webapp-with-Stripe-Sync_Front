@@ -1,0 +1,53 @@
+.detailpage_container {
+  width: 100%;
+  height: 100%;
+
+  box-sizing: border-box;
+
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.detailpage_content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 1200px;
+  gap: 20px;
+}
+
+.detailpage_image {
+  flex: 1; /* 左側の画像部分 */
+}
+
+.detailpage_image img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+}
+.detailpage_info_container {
+  flex: 1; /* 右側の情報部分 */
+}
+
+.detailpage_info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
+  background-color: var(--ecommerce-background);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.detailpage_itemReviews {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
+  background-color: var(--ecommerce-background);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}

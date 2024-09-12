@@ -1,0 +1,33 @@
+body {
+  --ecommerce-color: #333;
+  --ecommerce-background: #f9f9f9;
+  --ecommerce-background2: rgb(83, 100, 113);
+  font-family: sans-serif;
+}
+
+.app {
+  display: flex;
+  justify-content: center;
+  /* height: 100vh; */
+  max-width: 1300px;
+  margin: 0 auto; /* 画面中央に配置 */
+}
+
+main {
+  max-width: 1300px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto; /* 画面中央に配置 */
+}
+
+.errMsg {
+  color: red;
+  padding: 5px;
+}
+
+.iconButton {
+  width: min-content;
+  height: min-content;
+  color: #50b7f5;
+}

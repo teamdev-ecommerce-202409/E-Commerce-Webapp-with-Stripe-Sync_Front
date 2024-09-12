@@ -1,0 +1,6 @@
+.childrenContainer {
+  max-width: 1000px;
+  width: 100%;
+  min-height: 80vh;
+  margin: 0 auto; /* 画面中央に配置 */
+}

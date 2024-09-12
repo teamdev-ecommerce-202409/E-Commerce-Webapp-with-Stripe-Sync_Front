@@ -1,0 +1,7 @@
+.itemFilter_container {
+  box-sizing: border-box;
+
+  height: 100%;
+  flex: 2;
+  padding: 20px;
+}

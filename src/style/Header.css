@@ -1,0 +1,53 @@
+/* Header全体のスタイル */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #333;
+  color: white;
+  padding: 10px 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* ロゴのスタイル */
+.logo a {
+  font-size: 24px;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* ナビゲーションのスタイル */
+.nav-links ul {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin: 0;
+  padding: 0;
+}
+.nav-links li {
+  margin: auto 0;
+  padding: 0;
+}
+
+.nav-links ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  transition: color 0.3s ease;
+}
+
+/* ホバー時の効果 */
+.nav-links ul li a:hover {
+  color: var(--ecommerce-background2);
+}
+
+.header_iconButton {
+  color: white !important; /* 通常時の色 */
+  transition: color 0.3s ease !important; /* 色がスムーズに変わるように */
+}
+
+.header_iconButton:hover {
+  color: var(--ecommerce-background2) !important; /* ホバー時の色 */
+}

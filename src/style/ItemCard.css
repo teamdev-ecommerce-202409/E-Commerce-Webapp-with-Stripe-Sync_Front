@@ -1,0 +1,44 @@
+.itemCard_container {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  aspect-ratio: 1;
+  justify-content: space-between;
+}
+.itemCard_container:hover {
+  background-color: var(--ecommerce-background);
+}
+
+.itemImage {
+  width: 150px; /* 画像の幅を150pxに設定 */
+  height: 150px; /* 画像の高さを150pxに設定 */
+  border-radius: 8px;
+  object-fit: cover; /* 画像を枠にフィットさせ、アスペクト比を維持 */
+  margin: 0 auto;
+}
+
+.itemActions_container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.favoriteButton,
+.cartButton {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.favoriteButton:hover,
+.cartButton:hover {
+  background-color: #0056b3;
+}
