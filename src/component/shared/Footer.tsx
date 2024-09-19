@@ -1,4 +1,4 @@
-import "../style/Footer.css";
+import "../../style/Footer.css";
 import GitHubIcon from "@mui/icons-material/GitHub";
 export const Footer = () => {
   const currentYear = new Date().getFullYear();

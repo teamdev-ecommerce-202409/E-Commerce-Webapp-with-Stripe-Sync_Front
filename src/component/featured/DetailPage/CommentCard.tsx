@@ -1,5 +1,5 @@
 import { Rating } from "@mui/material";
-import "../style/CommentCard.css";
+import "../../../style/CommentCard.css";
 const CommentCard = () => {
   return (
     <div className="commentCard_container">

@@ -1,5 +1,5 @@
-import { ItemInfo } from "../lib/type/ItemType";
-import "../style/ItemList.css";
+import { ItemInfo } from "../../../lib/type/ItemType";
+import "../../../style/ItemList.css";
 import ItemCard from "./ItemCard";
 
 type Props = {

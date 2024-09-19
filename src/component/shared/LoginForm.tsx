@@ -1,5 +1,5 @@
-import "../style/LoginForm.css";
-import useLogin from "../hook/useLogin";
+import "../../style/LoginForm.css";
+import useLogin from "../../hook/useLogin";
 import PrimaryButton from "./PrimaryButton";
 import { useForm } from "react-hook-form";
 import CloseIcon from "@mui/icons-material/Close";

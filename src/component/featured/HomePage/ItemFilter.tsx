@@ -1,5 +1,5 @@
-import { CategoryInfo } from "../lib/type/CategoryType";
-import "../style/ItemFilter.css";
+import { CategoryInfo } from "../../../lib/type/CategoryType";
+import "../../../style/ItemFilter.css";
 import CatgoryCheckBox from "./CatgoryCheckBox";
 type Props = {
   categories: CategoryInfo[];

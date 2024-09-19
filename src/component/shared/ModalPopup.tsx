@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal } from "@mui/material";
-import "../style/ModalPopup.css";
+import "../../style/ModalPopup.css";
 
 type Props = {
   children: React.ReactNode;

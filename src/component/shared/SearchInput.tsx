@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../style/SearchInput.css";
+import "../../style/SearchInput.css";
 import { Search } from "@mui/icons-material";
 
 type Props = {

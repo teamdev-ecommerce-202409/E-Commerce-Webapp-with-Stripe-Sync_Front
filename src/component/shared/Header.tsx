@@ -1,13 +1,13 @@
 import { useState } from "react";
-import "../style/Header.css";
+import "../../style/Header.css";
 import { Link } from "react-router-dom";
-import SearchInput from "./SearchInput";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ModalPopup from "./ModalPopup";
 import LoginForm from "./LoginForm";
 import { IconButton } from "@mui/material";
+import SearchInput from "./SearchInput";
 
 export const Header = () => {
   const [keyword, setKeyword] = useState("");

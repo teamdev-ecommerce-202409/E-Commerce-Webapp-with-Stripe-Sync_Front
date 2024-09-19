@@ -1,7 +1,7 @@
-import { ItemInfo } from "../lib/type/ItemType";
-import FavoriteButton from "./FavoriteButton";
-import ShoppingCartButton from "./ShoppingCartButton";
-import "../style/ItemCard.css";
+import { ItemInfo } from "../../../lib/type/ItemType";
+import FavoriteButton from "../../shared/FavoriteButton";
+import ShoppingCartButton from "../../shared/ShoppingCartButton";
+import "../../../style/ItemCard.css";
 import { useNavigate } from "react-router-dom";
 type Props = {
   item: ItemInfo;

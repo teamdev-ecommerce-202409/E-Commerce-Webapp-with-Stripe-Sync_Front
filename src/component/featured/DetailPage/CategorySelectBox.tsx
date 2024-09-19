@@ -6,7 +6,7 @@ import {
   InputLabel,
   SelectChangeEvent,
 } from "@mui/material";
-import { CategoryInfo } from "../lib/type/CategoryType";
+import { CategoryInfo } from "../../../lib/type/CategoryType";
 type Props = {
   categoryInfo: CategoryInfo;
 };

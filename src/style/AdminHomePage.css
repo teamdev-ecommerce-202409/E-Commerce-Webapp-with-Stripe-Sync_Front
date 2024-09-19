@@ -1,0 +1,20 @@
+.adminHomePage_container {
+  padding: 1rem;
+}
+
+.adminHomePage_title_container {
+  margin: 10px 0;
+}
+
+.adminHomePage_actions_container {
+  display: flex;
+  justify-content: flex-start;
+  gap: 1;
+}
+
+.adminHomePage_button_container {
+  width: 150px;
+}
+.adminHomePage_list_container {
+  margin-top: 20px;
+}

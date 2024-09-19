@@ -1,5 +1,5 @@
 import React from "react";
-import "../style/PrimaryButton.css";
+import "../../style/PrimaryButton.css";
 import { Button, CircularProgress } from "@mui/material";
 
 type Props = {

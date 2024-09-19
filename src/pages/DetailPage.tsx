@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import "../style/DeatilPage.css";
-import Layout from "../component/Layout";
+import Layout from "../component/shared/Layout";
 import { ItemInfo } from "../lib/type/ItemType";
 import { useParams } from "react-router-dom";
 import { testCategories, testItems } from "../lib/testData/testData";
-import CategorySelectBox from "../component/CategorySelectBox";
-import ShoppingCartButton from "../component/ShoppingCartButton";
-import FavoriteButton from "../component/FavoriteButton";
+import CategorySelectBox from "../component/featured/DetailPage/CategorySelectBox";
+import ShoppingCartButton from "../component/shared/ShoppingCartButton";
+import FavoriteButton from "../component/shared/FavoriteButton";
 import Rating from "@mui/material/Rating";
-import CommentCard from "../component/CommentCard";
+import CommentCard from "../component/featured/DetailPage/CommentCard";
 
 const DetailPage = () => {
   const [item, setItem] = useState<ItemInfo | undefined>(undefined);

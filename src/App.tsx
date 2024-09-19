@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import HomePage from "./pages/HomePage";
 import DetailPage from "./pages/DetailPage";
+import AdminHomePage from "./pages/AdminHomePage";
+import AdminItemDetailPage from "./pages/AdminItemDetailPage";
 
 const theme = createTheme({
   palette: {
@@ -25,6 +27,8 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/item/:itemId" element={<DetailPage />} />
+            <Route path="/admin" element={<AdminHomePage />} />
+            <Route path="/admin/item" element={<AdminItemDetailPage />} />
           </Routes>
         </Router>
       </div>

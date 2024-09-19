@@ -3,7 +3,7 @@ import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
 import { FormLabel } from "@mui/material";
-import { CategoryInfo } from "../lib/type/CategoryType";
+import { CategoryInfo } from "../../../lib/type/CategoryType";
 
 type Props = {
   categoryInfo: CategoryInfo;

@@ -1,11 +1,11 @@
-import ItemFilter from "../component/ItemFilter";
-import ItemList from "../component/ItemList";
+import ItemFilter from "../component/featured/HomePage/ItemFilter";
+import ItemList from "../component/featured/HomePage/ItemList";
 import "../style/HomePage.css";
 import { useEffect, useState } from "react";
 import { testCategories, testItems } from "../lib/testData/testData";
 import { CategoryInfo } from "../lib/type/CategoryType";
 import { ItemInfo } from "../lib/type/ItemType";
-import Layout from "../component/Layout";
+import Layout from "../component/shared/Layout";
 
 const HomePage = () => {
   const [categories, setCategories] = useState<CategoryInfo[]>([]);
