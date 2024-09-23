@@ -4,7 +4,9 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import HomePage from "./pages/HomePage";
 import DetailPage from "./pages/DetailPage";
 import AdminHomePage from "./pages/AdminHomePage";
+import AdminItemPage from "./pages/AdminItemPage";
 import AdminItemDetailPage from "./pages/AdminItemDetailPage";
+import AdminItemCreatePage from "./pages/AdminItemCreatePage";
 
 const theme = createTheme({
   palette: {
@@ -19,6 +21,7 @@ const theme = createTheme({
     fontFamily: ["sans-serif"].join(","),
   },
 });
+
 function App() {
   return (
     <ThemeProvider theme={theme}>
@@ -28,7 +31,9 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/item/:itemId" element={<DetailPage />} />
             <Route path="/admin" element={<AdminHomePage />} />
-            <Route path="/admin/item" element={<AdminItemDetailPage />} />
+            <Route path="/admin/item" element={<AdminItemPage />} />
+            <Route path="/admin/item/new" element={<AdminItemCreatePage />} />
+            <Route path="/admin/item/:id" element={<AdminItemDetailPage />} />
           </Routes>
         </Router>
       </div>

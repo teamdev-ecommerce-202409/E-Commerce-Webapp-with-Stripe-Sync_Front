@@ -8,10 +8,12 @@ import {
   adminListItems,
   TestInfoType,
 } from "../component/featured/AdminHomePage/AdminItemList";
+
 interface LocationState {
   mode: "create" | "edit";
   itemId?: number;
 }
+
 const AdminItemDetailPage = () => {
   const location = useLocation();
   const state = location.state as LocationState;
