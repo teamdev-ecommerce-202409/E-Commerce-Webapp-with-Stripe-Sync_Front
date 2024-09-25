@@ -1,0 +1,90 @@
+フロントのフォルダ構成説明 2024/09/25
+
+C:.
+│  App.css　：アプリ全体のスタイリング
+│  App.tsx　：アプリ全体のルーティングとMUIのテーマを設定している
+│  index.css
+│  main.tsx
+│  vite-env.d.ts
+│
+├─assets　：ロゴ画像等アセットフォルダ
+│      memo.txt
+│      react.svg
+│
+├─component
+│  ├─featured　：ページごとの固有のコンポーネント格納フォルダ。ここに格納されているソースを他ページが勝手にインポートして使用してはいけない。使用したい場合は相談の上、共通コンポーネントフォルダに移動してから
+│  │  ├─AdminHomePage：ページ名
+│  │  │      AdminItemList.tsx
+│  │  │
+│  │  ├─DetailPage
+│  │  │      CategorySelectBox.tsx
+│  │  │      CommentCard.tsx
+│  │  │
+│  │  └─HomePage
+│  │          CatgoryCheckBox.tsx
+│  │          ItemCard.tsx
+│  │          ItemFilter.tsx
+│  │          ItemList.tsx
+│  │
+│  └─shared　：共通コンポーネント格納フォルダ。ここを触るときは他コンポーネントへの影響評価を行った後
+│          FavoriteButton.tsx
+│          Footer.tsx
+│          Header.tsx
+│          Layout.tsx
+│          LoginForm.tsx
+│          ModalPopup.tsx
+│          PrimaryButton.tsx
+│          SearchInput.tsx
+│          ShoppingCartButton.tsx
+│
+├─hook　：hooksの格納フォルダ
+│      useLogin.ts　：ユーザー情報のハンドリング用フック。認証関係
+│
+├─lib
+│  │  constants.ts　：定数ファイル
+│  │
+│  ├─database　：バックエンドとの接続用フォルダ
+│  │      apiClient.ts　：axiosをパッキングしたファイル。触らないこと。
+│  │      Post.ts：　かるかんが自分のSNSで使用した例。参考までに
+│  │      Product.ts：　商品情報をバックから取得する用のメソッドを格納
+│  │      User.ts：　ユーザー情報をバックから取得する用のメソッドを格納
+│  │      Order.ts：　注文情報をバックから取得する用のメソッドを格納
+│  │
+│  ├─jotai
+│  │  │  JotaiType.ts
+│  │  │
+│  │  └─atoms
+│  │          user.ts
+│  │
+│  ├─testData
+│  │      testData.ts　：モック用テストデータ。後で消す
+│  │
+│  └─type：プロジェクト全体で使用する型ファイル群
+│          CategoryType.ts：　モック用。今後は使用しない。あとで削除
+│          ItemType.ts：　モック用。今後は使用しない。あとで削除
+│          OrderType.ts：　注文情報関連の型
+│          ProductType.ts：　商品情報関連の型
+│          UserInfoType.ts：　ユーザー情報関連の型
+│
+├─pages：各ページのReactソース
+│      AdminHomePage.tsx
+│      AdminItemDetailPage.tsx
+│      DetailPage.tsx
+│      HomePage.tsx
+│
+└─style：各ページ・各コンポーネントごとのスタイリングファイル
+        AdminHomePage.css
+        AdminItemDetailPage.css
+        CommentCard.css
+        DeatilPage.css
+        Footer.css
+        Header.css
+        HomePage.css
+        ItemCard.css
+        ItemFilter.css
+        ItemList.css
+        Layout.css
+        LoginForm.css
+        ModalPopup.css
+        PrimaryButton.css
+        SearchInput.css
