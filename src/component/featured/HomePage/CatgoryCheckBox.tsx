@@ -1,46 +1,69 @@
+import {
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  FormLabel,
+} from "@mui/material";
 import { useState } from "react";
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormGroup from "@mui/material/FormGroup";
-import { FormLabel } from "@mui/material";
-import { CategoryInfo } from "../../../lib/type/CategoryType";
+// import { CatgoryType, SizeType, TargetType, ClothesType, BrandType } from "../../../lib/type/ProductType";
 
-type Props = {
-  categoryInfo: CategoryInfo;
-  onCategoryChange: (categoryInfo: CategoryInfo, isChecked: boolean) => void;
+type Props<T> = {
+  label: string; // "サイズ", "ターゲット" など
+  categories: T[];
+  selectedCategories: T[];
+  setSelectedCategories: (categories: T[]) => void;
 };
 
-const CategoryCheckBox = ({ categoryInfo, onCategoryChange }: Props) => {
-  // 各チェックボックスの状態を動的に管理
-  const [checked, setChecked] = useState<{ [key: string]: boolean }>({});
+const CategoryCheckBox = <T extends { id: number; name: string }>({
+  label,
+  categories,
+  selectedCategories,
+  setSelectedCategories,
+}: Props<T>) => {
+  // チェックボックスの選択状態を管理するstate
+  const [checkedState, setCheckedState] = useState<{ [key: number]: boolean }>(
+    {},
+  );
 
+  // チェックボックスが変更されたときの処理
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = event.target;
-    console.log(name, checked);
-    setChecked((prev) => ({
+    const numId = Number(name);
+
+    // チェックボックスの状態を更新
+    setCheckedState((prev) => ({
       ...prev,
-      [name]: checked,
+      [numId]: checked,
     }));
 
-    // 親コンポーネントに選択されたカテゴリの状態を通知
-    onCategoryChange(categoryInfo, checked);
+    // 選択されたカテゴリをsetSelectedCategoriesで更新
+    if (checked) {
+      setSelectedCategories([
+        ...selectedCategories,
+        categories.find((category) => category.id === numId)!,
+      ]);
+    } else {
+      setSelectedCategories(
+        selectedCategories.filter((category) => category.id !== numId),
+      );
+    }
   };
 
   return (
     <div>
-      <FormLabel component="legend">{categoryInfo.categoryName}</FormLabel>
+      <FormLabel component="legend">{label}</FormLabel>
       <FormGroup>
-        {categoryInfo.categoryChoices.map((categoryChoice) => (
+        {categories.map((categoryChoice) => (
           <FormControlLabel
-            key={categoryChoice.name} // keyを指定してリスト項目を一意に識別
+            key={categoryChoice.id}
             control={
               <Checkbox
-                checked={checked[categoryChoice.name] || false} // checkedの動的管理
+                checked={checkedState[categoryChoice.id] || false}
                 onChange={handleChange}
-                name={categoryChoice.name} // nameにカテゴリ名を設定
+                name={categoryChoice.id.toString()}
               />
             }
-            label={categoryChoice.name} // チェックボックスのラベル
+            label={categoryChoice.name}
           />
         ))}
       </FormGroup>

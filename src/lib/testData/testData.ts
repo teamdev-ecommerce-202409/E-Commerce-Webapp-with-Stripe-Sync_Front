@@ -1,62 +1,64 @@
-import { CategoryInfo } from "../type/CategoryType";
 import { ItemInfo } from "../type/ItemType";
+import { CatgoryType } from "../type/ProductType";
 
-export const testCategories: CategoryInfo[] = [
-  {
-    id: 1,
-    categoryName: "サイズ",
-    categoryChoices: [
-      {
-        id: 1,
-        name: "S",
-      },
-      {
-        id: 2,
-        name: "M",
-      },
-      {
-        id: 3,
-        name: "L",
-      },
-    ],
-  },
-  {
-    id: 2,
-    categoryName: "アイテム名",
-    categoryChoices: [
-      {
-        id: 1,
-        name: "トップス",
-      },
-      {
-        id: 2,
-        name: "ズボン",
-      },
-      {
-        id: 3,
-        name: "スカート",
-      },
-    ],
-  },
-  {
-    id: 3,
-    categoryName: "顧客属性",
-    categoryChoices: [
-      {
-        id: 1,
-        name: "メンズ",
-      },
-      {
-        id: 2,
-        name: "レディース",
-      },
-      {
-        id: 3,
-        name: "キッズ",
-      },
-    ],
-  },
-];
+export const testCategories: CatgoryType = {
+  sizeCatgory: [
+    {
+      id: 1,
+      name: "S",
+    },
+    {
+      id: 2,
+      name: "M",
+    },
+    {
+      id: 3,
+      name: "L",
+    },
+  ],
+  targetCatgory: [
+    {
+      id: 1,
+      name: "メンズ",
+    },
+    {
+      id: 2,
+      name: "レディース",
+    },
+    {
+      id: 3,
+      name: "キッズ",
+    },
+  ],
+  typeCatgory: [
+    {
+      id: 1,
+      name: "トップス",
+    },
+    {
+      id: 2,
+      name: "ズボン",
+    },
+    {
+      id: 3,
+      name: "スカート",
+    },
+  ],
+  brandCatgory: [
+    {
+      id: 1,
+      name: "NICE",
+    },
+    {
+      id: 2,
+      name: "UNIQ",
+    },
+    {
+      id: 3,
+      name: "KARUKAN",
+    },
+  ],
+};
 
 export const testItems: ItemInfo[] = [
   {

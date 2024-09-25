@@ -1,39 +1,75 @@
-import { CategoryInfo } from "../../../lib/type/CategoryType";
-import "../../../style/ItemFilter.css";
-import CatgoryCheckBox from "./CatgoryCheckBox";
-type Props = {
-  categories: CategoryInfo[];
-  setSelectedCategories: React.Dispatch<React.SetStateAction<CategoryInfo[]>>;
-};
-const ItemFilter = ({ categories, setSelectedCategories }: Props) => {
-  const handleCategoryChange = (
-    categoryInfo: CategoryInfo,
-    isChecked: boolean,
-  ) => {
-    console.log("handleCategoryChange", categoryInfo, isChecked);
-    setSelectedCategories((prevCategories) => {
-      if (isChecked) {
-        // チェックされた場合、カテゴリを追加
-        return [...prevCategories, categoryInfo];
-      } else {
-        // チェックが外れた場合、カテゴリを削除
-        return prevCategories.filter(
-          (category) => category.id !== categoryInfo.id,
-        );
-      }
-    });
-  };
+// import CategoryCheckBox from "./CategoryCheckBox";
+import {
+  BrandType,
+  CatgoryType,
+  ClothesType,
+  SizeType,
+  TargetType,
+} from "../../../lib/type/ProductType";
+import CategoryCheckBox from "./CatgoryCheckBox";
+
+const ItemFilter = ({
+  categories,
+  selectedCategories,
+  setSelectedCategories,
+}: {
+  categories: CatgoryType | null;
+  selectedCategories: CatgoryType | null;
+  setSelectedCategories: React.Dispatch<
+    React.SetStateAction<CatgoryType | null>
+  >;
+}) => {
+  if (!categories || !selectedCategories) return null;
+
   return (
-    <div className="itemFilter_container">
-      {categories.map((categoryInfo) => {
-        return (
-          <CatgoryCheckBox
-            key={categoryInfo.id}
-            categoryInfo={categoryInfo}
-            onCategoryChange={handleCategoryChange}
-          />
-        );
-      })}
+    <div>
+      <CategoryCheckBox<SizeType>
+        label="サイズ"
+        categories={categories.sizeCatgory}
+        selectedCategories={selectedCategories.sizeCatgory}
+        setSelectedCategories={(newSelected) =>
+          setSelectedCategories({
+            ...selectedCategories,
+            sizeCatgory: newSelected,
+          })
+        }
+      />
+
+      <CategoryCheckBox<TargetType>
+        label="ターゲット"
+        categories={categories.targetCatgory}
+        selectedCategories={selectedCategories.targetCatgory}
+        setSelectedCategories={(newSelected) =>
+          setSelectedCategories({
+            ...selectedCategories,
+            targetCatgory: newSelected,
+          })
+        }
+      />
+
+      <CategoryCheckBox<ClothesType>
+        label="種類"
+        categories={categories.typeCatgory}
+        selectedCategories={selectedCategories.typeCatgory}
+        setSelectedCategories={(newSelected) =>
+          setSelectedCategories({
+            ...selectedCategories,
+            typeCatgory: newSelected,
+          })
+        }
+      />
+
+      <CategoryCheckBox<BrandType>
+        label="ブランド"
+        categories={categories.brandCatgory}
+        selectedCategories={selectedCategories.brandCatgory}
+        setSelectedCategories={(newSelected) =>
+          setSelectedCategories({
+            ...selectedCategories,
+            brandCatgory: newSelected,
+          })
+        }
+      />
     </div>
   );
 };

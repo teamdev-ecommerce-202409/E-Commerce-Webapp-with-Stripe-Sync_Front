@@ -1,4 +1,11 @@
 // 関連する ForeignKey テーブルの型定義
+export type CatgoryType = {
+  sizeCatgory: SizeType[];
+  targetCatgory: TargetType[];
+  typeCatgory: ClothesType[];
+  brandCatgory: BrandType[];
+};
+
 export type SizeType = {
   id: number;
   name: string;
