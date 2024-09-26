@@ -33,7 +33,7 @@ function App() {
             <Route path="/admin" element={<AdminHomePage />} />
             <Route path="/admin/item" element={<AdminItemPage />} />
             <Route path="/admin/item/new" element={<AdminItemCreatePage />} />
-            <Route path="/admin/item/:id" element={<AdminItemDetailPage />} />
+            <Route path="/admin/item/:itemId" element={<AdminItemDetailPage />} />
           </Routes>
         </Router>
       </div>
