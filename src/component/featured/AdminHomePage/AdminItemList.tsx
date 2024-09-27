@@ -76,9 +76,8 @@ const AdminItemList = () => {
   };
 
   const handleEdit = (item: TestInfoType) => {
-    alert(`Edit ${item.title}`);
     const itemId = item.id;
-    navigate(`/admin/item`, { state: { mode: "edit", itemId } });
+    navigate(`/admin/item/${itemId}`, { state: item });
   };
 
   return (
@@ -96,6 +95,8 @@ const AdminItemList = () => {
             <TableCell>サイズ</TableCell>
             <TableCell>ブランド</TableCell>
             <TableCell>対象</TableCell>
+            <TableCell>タイプ</TableCell>
+            <TableCell>発売日</TableCell>
             <TableCell></TableCell>
           </TableRow>
         </TableHead>
