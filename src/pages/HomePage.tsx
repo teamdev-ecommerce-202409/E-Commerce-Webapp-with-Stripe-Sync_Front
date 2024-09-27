@@ -3,13 +3,13 @@ import ItemList from "../component/featured/HomePage/ItemList";
 import "../style/HomePage.css";
 import { useEffect, useState } from "react";
 import { testCategories, testItems } from "../lib/testData/testData";
-import { ItemInfo } from "../lib/type/ItemType";
 import Layout from "../component/shared/Layout";
 // import { getAllCategories } from "../lib/database/Product";
-import { CatgoryType } from "../lib/type/ProductType";
+import { CatgoryType, ProductInfoType } from "../lib/type/ProductType";
 import ItemFilter from "../component/featured/HomePage/ItemFilter";
 // import FilterCard from "../component/featured/HomePage/FilterCardList";
 import FilterCardList from "../component/featured/HomePage/FilterCardList";
+// import { getProducts } from "../lib/database/Product";
 
 const HomePage = () => {
   const [categories, setCategories] = useState<CatgoryType | null>(null);
@@ -20,7 +20,7 @@ const HomePage = () => {
       typeCatgory: [],
       brandCatgory: [],
     }); // カテゴリ選択を管理
-  const [itemList, setItemList] = useState<ItemInfo[]>([]);
+  const [itemList, setItemList] = useState<ProductInfoType[]>([]);
   const [filterTitle, setFilterTitle] = useState<string>("すべての商品");
 
   useEffect(() => {
@@ -31,6 +31,8 @@ const HomePage = () => {
       setCategories(testCategories);
 
       //商品リストを取得
+      // const products = await getProducts();
+      // setItemList(products ? products : []);
       const allItems = testItems;
       setItemList(allItems);
     };
@@ -44,7 +46,6 @@ const HomePage = () => {
 
     console.log({ selectedCategories });
 
-    // タイトルを変更
     if (
       selectedCategories &&
       (selectedCategories.brandCatgory.length > 0 ||
@@ -52,28 +53,25 @@ const HomePage = () => {
         selectedCategories.targetCatgory.length > 0 ||
         selectedCategories.sizeCatgory.length > 0)
     ) {
+      // タイトルを変更
+
       setFilterTitle("検索結果");
     }
-    // if (selectedCategories.find((val) => val.id == 2)) {
-    //   const itemType = selectedCategories.find((val) => val.id == 2)
-    //     ?.categoryChoices[0].name;
-    //   setFilterTitle(itemType || "");
-    // }
   }, [selectedCategories, itemList]);
 
   // フィルタリング処理
-  useEffect(() => {
-    if (selectedCategories) {
-      // 選択されたカテゴリに基づいて商品リストをフィルタリングするロジックをここに追加
-      // 例: サイズやブランドなどに基づくフィルタリング
-      const filteredItems = testItems.filter((item) => {
-        // カテゴリに応じたフィルタリング条件をここで指定
-        console.log(item);
-        return true; // フィルタリング条件
-      });
-      setItemList(filteredItems);
-    }
-  }, [selectedCategories]);
+  // useEffect(() => {
+  //   if (selectedCategories) {
+  //     // 選択されたカテゴリに基づいて商品リストをフィルタリングするロジックをここに追加
+  //     // 例: サイズやブランドなどに基づくフィルタリング
+  //     const filteredItems = testItems.filter((item) => {
+  //       // カテゴリに応じたフィルタリング条件をここで指定
+  //       console.log(item);
+  //       return true; // フィルタリング条件
+  //     });
+  //     setItemList(filteredItems);
+  //   }
+  // }, [selectedCategories]);
 
   return (
     <Layout>

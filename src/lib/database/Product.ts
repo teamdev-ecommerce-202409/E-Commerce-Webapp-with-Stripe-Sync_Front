@@ -1,5 +1,5 @@
 import apiClient from "./apiClient";
-import { CatgoryType } from "../type/ProductType";
+import { CatgoryType, ProductInfoType } from "../type/ProductType";
 
 export async function getAllCategories() {
   try {
@@ -18,6 +18,30 @@ export async function getAllCategories() {
       throw new Error("Failed to fetch data");
     }
     return response.data as CatgoryType;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+
+    return null;
+  }
+}
+
+export async function getProducts() {
+  try {
+    // クエリパラメータを用意
+    const params: { [key: string]: unknown } = {};
+
+    // リクエストヘッダー
+    const headers = {};
+    // データを取得する
+    const response = await apiClient.get("/products", {
+      headers,
+      params,
+    });
+    if (response.status !== 200) {
+      // This will activate the closest `error.js` Error Boundary
+      throw new Error("Failed to fetch data");
+    }
+    return response.data as ProductInfoType[];
   } catch (error) {
     console.error("Error fetching data:", error);
 

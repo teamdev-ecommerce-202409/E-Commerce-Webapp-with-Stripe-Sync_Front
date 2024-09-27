@@ -1,9 +1,9 @@
-import { ItemInfo } from "../../../lib/type/ItemType";
+import { ProductInfoType } from "../../../lib/type/ProductType";
 import "../../../style/ItemList.css";
 import ItemCard from "./ItemCard";
 
 type Props = {
-  itemList: ItemInfo[];
+  itemList: ProductInfoType[];
 };
 
 const ItemList = ({ itemList }: Props) => {

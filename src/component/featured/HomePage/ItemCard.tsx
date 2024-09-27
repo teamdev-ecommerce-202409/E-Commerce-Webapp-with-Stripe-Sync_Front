@@ -1,10 +1,10 @@
-import { ItemInfo } from "../../../lib/type/ItemType";
 import FavoriteButton from "../../shared/FavoriteButton";
 import ShoppingCartButton from "../../shared/ShoppingCartButton";
 import "../../../style/ItemCard.css";
 import { useNavigate } from "react-router-dom";
+import { ProductInfoType } from "../../../lib/type/ProductType";
 type Props = {
-  item: ItemInfo;
+  item: ProductInfoType;
 };
 const ItemCard = ({ item }: Props) => {
   const navigate = useNavigate();
@@ -15,8 +15,8 @@ const ItemCard = ({ item }: Props) => {
   };
   return (
     <div key={item.id} className="itemCard_container" onClick={handleCardClick}>
-      <img src={item.imageUrl} alt={item.name} className="itemImage" />
-      <h3>{item.name}</h3>
+      <img src={item.imgUrl} alt={item.title} className="itemImage" />
+      <h3>{item.title}</h3>
       <p>Price: ${item.price.toFixed(2)}</p>
       <div className="itemActions_container">
         <FavoriteButton />
