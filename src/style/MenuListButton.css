@@ -1,0 +1,8 @@
+.menuList_iconButton {
+  color: white !important; /* 通常時の色 */
+  transition: color 0.3s ease !important; /* 色がスムーズに変わるように */
+}
+
+.menuList_iconButton:hover {
+  color: var(--ecommerce-background2) !important; /* ホバー時の色 */
+}
