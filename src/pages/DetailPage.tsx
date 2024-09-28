@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "../style/DeatilPage.css";
+import "../style/DetailPage.css";
 import Layout from "../component/shared/Layout";
 import { ItemInfo } from "../lib/type/ItemType";
 import { useParams } from "react-router-dom";
