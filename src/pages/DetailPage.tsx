@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 import "../style/DetailPage.css";
 import Layout from "../component/shared/Layout";
-import { ItemInfo } from "../lib/type/ItemType";
 import { useParams } from "react-router-dom";
-import { testCategories, testItems } from "../lib/testData/testData";
-import CategorySelectBox from "../component/featured/DetailPage/CategorySelectBox";
+import { testItems } from "../lib/testData/testData";
+// import CategorySelectBox from "../component/featured/DetailPage/CategorySelectBox";
 import ShoppingCartButton from "../component/shared/ShoppingCartButton";
 import FavoriteButton from "../component/shared/FavoriteButton";
 import Rating from "@mui/material/Rating";
 import CommentCard from "../component/featured/DetailPage/CommentCard";
+import { ProductInfoType } from "../lib/type/ProductType";
 
 const DetailPage = () => {
-  const [item, setItem] = useState<ItemInfo | undefined>(undefined);
+  const [item, setItem] = useState<ProductInfoType | undefined>(undefined);
   const { itemId } = useParams<{ itemId: string }>();
 
   // id を数値に変換
@@ -32,16 +32,16 @@ const DetailPage = () => {
       <div className="detailpage_container">
         <div className="detailpage_content">
           <div className="detailpage_image">
-            <img src={item?.imageUrl} alt={item?.name} />
+            <img src={item?.imgUrl} alt={item?.title} />
           </div>
           <div className="detailpage_info_container">
             <div className="detailpage_info">
-              <h2>{item?.name}</h2>
+              <h2>{item?.title}</h2>
               <p>Price: ${item?.price.toFixed(2)}</p>
               <p>メンズ</p>
               <p>トップス</p>
 
-              <CategorySelectBox categoryInfo={testCategories[0]} />
+              {/* <CategorySelectBox categoryInfo={testCategories.sizeCatgory} /> */}
 
               <p>
                 商品説明商品説明商品説明商品説明商品説明商品説明商品説明商品説明商品説明商品説明商品説明商品説明商品説明商品説明商品説明商品説明商品説明商品説明商品説明商品説明
