@@ -2,13 +2,14 @@
 import ItemList from "../component/featured/HomePage/ItemList";
 import "../style/HomePage.css";
 import { useEffect, useState } from "react";
-import { testCategories, testItems } from "../lib/testData/testData";
+import { testItems } from "../lib/testData/testData";
 import Layout from "../component/shared/Layout";
 // import { getAllCategories } from "../lib/database/Product";
 import { CatgoryType, ProductInfoType } from "../lib/type/ProductType";
 import ItemFilter from "../component/featured/HomePage/ItemFilter";
 // import FilterCard from "../component/featured/HomePage/FilterCardList";
 import FilterCardList from "../component/featured/HomePage/FilterCardList";
+import { getAllCategories } from "../lib/database/Product";
 // import { getProducts } from "../lib/database/Product";
 
 const HomePage = () => {
@@ -26,9 +27,9 @@ const HomePage = () => {
   useEffect(() => {
     // 以下、初期表示時のデータ取得→設定
     const setInitialData = async () => {
-      // const allCategories = await getAllCategories();
-      // setCategories(allCategories);
-      setCategories(testCategories);
+      const allCategories = await getAllCategories();
+      setCategories(allCategories);
+      // setCategories(testCategories);
 
       //商品リストを取得
       // const products = await getProducts();
