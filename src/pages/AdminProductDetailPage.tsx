@@ -2,11 +2,11 @@ import { useState } from "react";
 import Layout from "../component/shared/Layout";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../style/DetailPage.css";
-import "../style/AdminItemDetailPage.css";
+import "../style/AdminProductDetailPage.css";
 import PrimaryButton from "../component/shared/PrimaryButton";
 import { TextField, Box } from "@mui/material";
 
-const AdminItemDetailPage = () => {
+const AdminProductDetailPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const item = location.state;
@@ -23,30 +23,22 @@ const AdminItemDetailPage = () => {
 
   const handleUpdate = () => {
     // バックエンドにリクエスト送る
-    navigate(`/admin/item`);
+    navigate(`/admin/product`);
   };
 
   const handleDelete = () => {
     // バックエンドにリクエスト送る
-    navigate(`/admin/item`);
+    navigate(`/admin/product`);
   };
 
   return (
     <Layout>
-      <div className="adminItemDetailPage_actions_container">
-        <div className="adminItemDetailPage_button_container">
-          <PrimaryButton
-            onClick={handleUpdate}
-            loading={false}
-            text={"更新"}
-          />
+      <div className="adminProductDetailPage_actions_container">
+        <div className="adminProductDetailPage_button_container">
+          <PrimaryButton onClick={handleUpdate} loading={false} text={"更新"} />
         </div>
-        <div className="adminItemDetailPage_button_container">
-          <PrimaryButton
-            onClick={handleDelete}
-            loading={false}
-            text={"削除"}
-          />
+        <div className="adminProductDetailPage_button_container">
+          <PrimaryButton onClick={handleDelete} loading={false} text={"削除"} />
         </div>
       </div>
       <Box>
@@ -143,4 +135,4 @@ const AdminItemDetailPage = () => {
   );
 };
 
-export default AdminItemDetailPage;
+export default AdminProductDetailPage;

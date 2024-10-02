@@ -58,13 +58,13 @@ export const adminListItems: TestInfoType[] = [
   },
 ];
 
-const AdminItemList = () => {
-  const [checkedItems, setCheckedItems] = useState<number[]>([]);
+const AdminProductList = () => {
+  const [checkedProducts, setCheckedProducts] = useState<number[]>([]);
   const navigate = useNavigate();
 
   const handleToggle = (id: number) => {
-    const currentIndex = checkedItems.indexOf(id);
-    const newChecked = [...checkedItems];
+    const currentIndex = checkedProducts.indexOf(id);
+    const newChecked = [...checkedProducts];
 
     if (currentIndex === -1) {
       newChecked.push(id);
@@ -72,12 +72,12 @@ const AdminItemList = () => {
       newChecked.splice(currentIndex, 1);
     }
 
-    setCheckedItems(newChecked);
+    setCheckedProducts(newChecked);
   };
 
   const handleEdit = (item: TestInfoType) => {
-    const itemId = item.id;
-    navigate(`/admin/item/${itemId}`, { state: item });
+    const productId = item.id;
+    navigate(`/admin/product/${productId}`, { state: item });
   };
 
   return (
@@ -101,28 +101,28 @@ const AdminItemList = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {adminListItems.map((item) => (
-            <TableRow key={item.id}>
+          {adminListItems.map((product) => (
+            <TableRow key={product.id}>
               <TableCell padding="checkbox">
                 <Checkbox
-                  checked={checkedItems.indexOf(item.id) !== -1}
-                  onChange={() => handleToggle(item.id)}
+                  checked={checkedProducts.indexOf(product.id) !== -1}
+                  onChange={() => handleToggle(product.id)}
                 />
               </TableCell>
-              <TableCell>{item.title}</TableCell>
+              <TableCell>{product.title}</TableCell>
               <TableCell>
                 {" "}
-                {item.description.length > 10
-                  ? item.description.slice(0, 10) + "..."
-                  : item.description}
+                {product.description.length > 10
+                  ? product.description.slice(0, 10) + "..."
+                  : product.description}
               </TableCell>
-              <TableCell>{`$${item.price.toFixed(2)}`}</TableCell>
-              <TableCell>{item.stock_quantity}</TableCell>
-              <TableCell>{item.size}</TableCell>
-              <TableCell>{item.brand}</TableCell>
-              <TableCell>{item.target}</TableCell>
+              <TableCell>{`$${product.price.toFixed(2)}`}</TableCell>
+              <TableCell>{product.stock_quantity}</TableCell>
+              <TableCell>{product.size}</TableCell>
+              <TableCell>{product.brand}</TableCell>
+              <TableCell>{product.target}</TableCell>
               <TableCell>
-                <IconButton onClick={() => handleEdit(item)}>
+                <IconButton onClick={() => handleEdit(product)}>
                   <EditIcon />
                 </IconButton>
               </TableCell>
@@ -134,4 +134,4 @@ const AdminItemList = () => {
   );
 };
 
-export default AdminItemList;
+export default AdminProductList;

@@ -1,4 +1,4 @@
-.itemCard_container {
+.productCard_container {
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 16px;
@@ -10,11 +10,11 @@
   aspect-ratio: 1;
   justify-content: space-between;
 }
-.itemCard_container:hover {
+.productCard_container:hover {
   background-color: var(--ecommerce-background);
 }
 
-.itemImage {
+.productImage {
   width: 150px; /* 画像の幅を150pxに設定 */
   height: 150px; /* 画像の高さを150pxに設定 */
   border-radius: 8px;
@@ -22,7 +22,7 @@
   margin: 0 auto;
 }
 
-.itemActions_container {
+.productActions_container {
   display: flex;
   justify-content: space-between;
   margin-top: 16px;

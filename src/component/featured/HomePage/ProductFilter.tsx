@@ -8,7 +8,7 @@ import {
 } from "../../../lib/type/ProductType";
 import CategoryCheckBox from "./CatgoryCheckBox";
 
-const ItemFilter = ({
+const ProductFilter = ({
   categories,
   selectedCategories,
   setSelectedCategories,
@@ -74,4 +74,4 @@ const ItemFilter = ({
   );
 };
 
-export default ItemFilter;
+export default ProductFilter;
