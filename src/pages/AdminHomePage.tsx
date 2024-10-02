@@ -7,7 +7,7 @@ import "../style/AdminHomePage.css";
 const AdminHomePage = () => {
   const navigate = useNavigate();
 
-  const handleItem = () => {
+  const handleProduct = () => {
     navigate(`/admin/product`);
   };
 
@@ -24,7 +24,7 @@ const AdminHomePage = () => {
         <div className="adminHomePage_actions_container">
           <div className="adminHomePage_button_container">
             <PrimaryButton
-              onClick={handleItem}
+              onClick={handleProduct}
               loading={false}
               text={"製品一覧"}
             />
