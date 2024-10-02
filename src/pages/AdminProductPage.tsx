@@ -1,20 +1,18 @@
-import AdminItemList from "../component/featured/AdminHomePage/AdminItemList";
 import Layout from "../component/shared/Layout";
 import PrimaryButton from "../component/shared/PrimaryButton";
 import { useNavigate } from "react-router-dom";
 
-import "../style/AdminItemPage.css";
+import "../style/AdminProductPage.css";
+import AdminProductList from "../component/featured/AdminHomePage/AdminProductList";
 
-const AdminItemPage = () => {
+const AdminProductPage = () => {
   const navigate = useNavigate();
 
   const handleCreate = () => {
-    navigate(`/admin/item/new`);
+    navigate(`/admin/product/new`);
   };
 
-  const handleDelete = () => {
-    
-  };
+  const handleDelete = () => {};
 
   return (
     <Layout>
@@ -39,11 +37,11 @@ const AdminItemPage = () => {
           </div>
         </div>
         <div className="adminHomePage_list_container">
-          <AdminItemList />
+          <AdminProductList />
         </div>
       </div>
     </Layout>
   );
 };
 
-export default AdminItemPage;
+export default AdminProductPage;

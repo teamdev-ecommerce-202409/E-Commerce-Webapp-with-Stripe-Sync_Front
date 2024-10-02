@@ -8,7 +8,7 @@ const AdminHomePage = () => {
   const navigate = useNavigate();
 
   const handleItem = () => {
-    navigate(`/admin/item`);
+    navigate(`/admin/product`);
   };
 
   const handleOrder = () => {

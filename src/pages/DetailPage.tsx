@@ -11,18 +11,20 @@ import CommentCard from "../component/featured/DetailPage/CommentCard";
 import { ProductInfoType } from "../lib/type/ProductType";
 
 const DetailPage = () => {
-  const [item, setItem] = useState<ProductInfoType | undefined>(undefined);
-  const { itemId } = useParams<{ itemId: string }>();
+  const [product, setProduct] = useState<ProductInfoType | undefined>(
+    undefined,
+  );
+  const { productId } = useParams<{ productId: string }>();
 
   // id を数値に変換
-  const id = Number(itemId);
+  const id = Number(productId);
 
   useEffect(() => {
     // `id` の変更に基づいて、データを取得する
     if (!isNaN(id)) {
       const testItem = testItems.find((item) => item.id === id);
       if (testItem) {
-        setItem(testItem);
+        setProduct(testItem);
       }
     }
   }, [id]); // `id` を依存配列に追加
@@ -32,12 +34,12 @@ const DetailPage = () => {
       <div className="detailpage_container">
         <div className="detailpage_content">
           <div className="detailpage_image">
-            <img src={item?.imgUrl} alt={item?.title} />
+            <img src={product?.imgUrl} alt={product?.title} />
           </div>
           <div className="detailpage_info_container">
             <div className="detailpage_info">
-              <h2>{item?.title}</h2>
-              <p>Price: ${item?.price.toFixed(2)}</p>
+              <h2>{product?.title}</h2>
+              <p>Price: ${product?.price.toFixed(2)}</p>
               <p>メンズ</p>
               <p>トップス</p>
 

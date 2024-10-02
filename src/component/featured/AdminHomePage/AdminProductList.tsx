@@ -58,7 +58,7 @@ export const adminListItems: TestInfoType[] = [
   },
 ];
 
-const AdminItemList = () => {
+const AdminProductList = () => {
   const [checkedItems, setCheckedItems] = useState<number[]>([]);
   const navigate = useNavigate();
 
@@ -77,7 +77,7 @@ const AdminItemList = () => {
 
   const handleEdit = (item: TestInfoType) => {
     const itemId = item.id;
-    navigate(`/admin/item/${itemId}`, { state: item });
+    navigate(`/admin/product/${itemId}`, { state: item });
   };
 
   return (
@@ -134,4 +134,4 @@ const AdminItemList = () => {
   );
 };
 
-export default AdminItemList;
+export default AdminProductList;

@@ -1,23 +1,34 @@
 import Layout from "../component/shared/Layout";
-import "../style/AdminItemCreatePage.css";
-import { InputLabel, MenuItem, Select, TextField, Button, SelectChangeEvent } from "@mui/material";
+import "../style/AdminProductCreatePage.css";
+import {
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Button,
+  SelectChangeEvent,
+} from "@mui/material";
 import { useState } from "react";
 
-const AdminItemCreatePage = () => {
+const AdminProductCreatePage = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    size: '',
-    target: '',
-    type: '',
-    brand: '',
-    inventoryCount: ''
+    name: "",
+    description: "",
+    size: "",
+    target: "",
+    type: "",
+    brand: "",
+    inventoryCount: "",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>) => {
+  const handleChange = (
+    e:
+      | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+      | SelectChangeEvent<string>,
+  ) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -30,8 +41,8 @@ const AdminItemCreatePage = () => {
       },
       body: JSON.stringify(formData),
     })
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         console.log("Success:", data);
       })
       .catch((error) => {
@@ -41,7 +52,10 @@ const AdminItemCreatePage = () => {
 
   return (
     <Layout>
-      <form className="adminItemCreatePage_container" onSubmit={handleSubmit}>
+      <form
+        className="adminProductCreatePage_container"
+        onSubmit={handleSubmit}
+      >
         <div>
           <TextField
             id="name"
@@ -146,4 +160,4 @@ const AdminItemCreatePage = () => {
   );
 };
 
-export default AdminItemCreatePage;
+export default AdminProductCreatePage;

@@ -1,16 +1,12 @@
-// import ItemFilter from "../component/featured/HomePage/ItemFilter";
-import ItemList from "../component/featured/HomePage/ItemList";
 import "../style/HomePage.css";
 import { useEffect, useState } from "react";
 import { testItems } from "../lib/testData/testData";
 import Layout from "../component/shared/Layout";
-// import { getAllCategories } from "../lib/database/Product";
 import { CatgoryType, ProductInfoType } from "../lib/type/ProductType";
-import ItemFilter from "../component/featured/HomePage/ItemFilter";
-// import FilterCard from "../component/featured/HomePage/FilterCardList";
+import ProductFilter from "../component/featured/HomePage/ProductFilter";
 import FilterCardList from "../component/featured/HomePage/FilterCardList";
 import { getAllCategories } from "../lib/database/Product";
-// import { getProducts } from "../lib/database/Product";
+import ProductList from "../component/featured/HomePage/ProductList";
 
 const HomePage = () => {
   const [categories, setCategories] = useState<CatgoryType | null>(null);
@@ -21,7 +17,7 @@ const HomePage = () => {
       typeCatgory: [],
       brandCatgory: [],
     }); // カテゴリ選択を管理
-  const [itemList, setItemList] = useState<ProductInfoType[]>([]);
+  const [productList, setProductList] = useState<ProductInfoType[]>([]);
   const [filterTitle, setFilterTitle] = useState<string>("すべての商品");
 
   useEffect(() => {
@@ -35,7 +31,7 @@ const HomePage = () => {
       // const products = await getProducts();
       // setItemList(products ? products : []);
       const allItems = testItems;
-      setItemList(allItems);
+      setProductList(allItems);
     };
 
     setInitialData();
@@ -58,7 +54,7 @@ const HomePage = () => {
 
       setFilterTitle("検索結果");
     }
-  }, [selectedCategories, itemList]);
+  }, [selectedCategories, productList]);
 
   // フィルタリング処理
   // useEffect(() => {
@@ -102,13 +98,13 @@ const HomePage = () => {
           </div>
         </div>
 
-        <div className="homepage_item_container">
-          <ItemFilter
+        <div className="homepage_product_container">
+          <ProductFilter
             categories={categories}
             selectedCategories={selectedCategories}
             setSelectedCategories={setSelectedCategories}
           />
-          <ItemList itemList={itemList} />
+          <ProductList productList={productList} />
         </div>
       </div>
     </Layout>

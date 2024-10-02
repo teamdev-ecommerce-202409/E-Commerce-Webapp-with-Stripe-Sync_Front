@@ -1,0 +1,9 @@
+.adminProductDetailPage_actions_container {
+  display: flex;
+  justify-content: flex-start;
+  gap: 1;
+}
+
+.adminProductDetailPage_button_container {
+  width: 2150px;
+}
