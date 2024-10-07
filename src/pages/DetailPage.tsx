@@ -2,18 +2,17 @@ import { useEffect, useState } from "react";
 import "../style/DetailPage.css";
 import Layout from "../component/shared/Layout";
 import { useParams } from "react-router-dom";
-import { testItems } from "../lib/testData/testData";
+// import { testItems } from "../lib/testData/testData";
 // import CategorySelectBox from "../component/featured/DetailPage/CategorySelectBox";
 import ShoppingCartButton from "../component/shared/ShoppingCartButton";
 import FavoriteButton from "../component/shared/FavoriteButton";
 import Rating from "@mui/material/Rating";
 import CommentCard from "../component/featured/DetailPage/CommentCard";
 import { ProductInfoType } from "../lib/type/ProductType";
+import { getProductDetailById } from "../lib/database/Product";
 
 const DetailPage = () => {
-  const [product, setProduct] = useState<ProductInfoType | undefined>(
-    undefined,
-  );
+  const [product, setProduct] = useState<ProductInfoType | null>(null);
   const { productId } = useParams<{ productId: string }>();
 
   // id を数値に変換
@@ -22,10 +21,16 @@ const DetailPage = () => {
   useEffect(() => {
     // `id` の変更に基づいて、データを取得する
     if (!isNaN(id)) {
-      const testItem = testItems.find((item) => item.id === id);
-      if (testItem) {
-        setProduct(testItem);
-      }
+      // const testItem = testItems.find((item) => item.id === id);
+      // if (testItem) {
+      //   setProduct(testItem);
+      // }
+      const setProductDetailInfo = async () => {
+        const productDetail = await getProductDetailById(id);
+        console.log({ productDetail });
+        setProduct(productDetail);
+      };
+      setProductDetailInfo();
     }
   }, [id]); // `id` を依存配列に追加
 
