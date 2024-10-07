@@ -19,7 +19,11 @@ const ProductCard = ({ product }: Props) => {
       className="productCard_container"
       onClick={handleCardClick}
     >
-      <img src={product.imgUrl} alt={product.title} className="productImage" />
+      <img
+        src={product.imgUrl ? product.imgUrl : "public/no_image_square.jpg"}
+        alt={product.title}
+        className="productImage"
+      />
       <h3>{product.title}</h3>
       <p>Price: ${product.price.toFixed(2)}</p>
       <div className="productActions_container">
