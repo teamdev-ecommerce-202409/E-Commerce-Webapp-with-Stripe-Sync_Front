@@ -1,11 +1,10 @@
 import "../style/HomePage.css";
 import { useEffect, useState } from "react";
-import { testItems } from "../lib/testData/testData";
 import Layout from "../component/shared/Layout";
 import { CatgoryType, ProductInfoType } from "../lib/type/ProductType";
 import ProductFilter from "../component/featured/HomePage/ProductFilter";
 import FilterCardList from "../component/featured/HomePage/FilterCardList";
-import { getAllCategories } from "../lib/database/Product";
+import { getAllCategories, getProducts } from "../lib/database/Product";
 import ProductList from "../component/featured/HomePage/ProductList";
 
 const HomePage = () => {
@@ -16,7 +15,7 @@ const HomePage = () => {
       targetCatgory: [],
       typeCatgory: [],
       brandCatgory: [],
-    }); // カテゴリ選択を管理
+    });
   const [productList, setProductList] = useState<ProductInfoType[]>([]);
   const [filterTitle, setFilterTitle] = useState<string>("すべての商品");
 
@@ -25,13 +24,12 @@ const HomePage = () => {
     const setInitialData = async () => {
       const allCategories = await getAllCategories();
       setCategories(allCategories);
-      // setCategories(testCategories);
 
       //商品リストを取得
-      // const products = await getProducts();
-      // setItemList(products ? products : []);
-      const allItems = testItems;
-      setProductList(allItems);
+      const products = await getProducts();
+      console.log({ products });
+
+      setProductList(products ? products : []);
     };
 
     setInitialData();
