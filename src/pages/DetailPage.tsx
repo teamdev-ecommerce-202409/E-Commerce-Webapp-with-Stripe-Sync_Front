@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import "../style/DetailPage.css";
 import Layout from "../component/shared/Layout";
 import { useParams } from "react-router-dom";
-// import { testItems } from "../lib/testData/testData";
-// import CategorySelectBox from "../component/featured/DetailPage/CategorySelectBox";
 import ShoppingCartButton from "../component/shared/ShoppingCartButton";
 import FavoriteButton from "../component/shared/FavoriteButton";
 import Rating from "@mui/material/Rating";
@@ -21,10 +19,6 @@ const DetailPage = () => {
   useEffect(() => {
     // `id` の変更に基づいて、データを取得する
     if (!isNaN(id)) {
-      // const testItem = testItems.find((item) => item.id === id);
-      // if (testItem) {
-      //   setProduct(testItem);
-      // }
       const setProductDetailInfo = async () => {
         const productDetail = await getProductDetailById(id);
         console.log({ productDetail });
@@ -32,27 +26,28 @@ const DetailPage = () => {
       };
       setProductDetailInfo();
     }
-  }, [id]); // `id` を依存配列に追加
+  }, [id]);
 
   return (
     <Layout>
       <div className="detailpage_container">
         <div className="detailpage_content">
           <div className="detailpage_image">
-            <img src={product?.imgUrl} alt={product?.title} />
+            <img
+              src={
+                product?.imgUrl ? product.imgUrl : "public/no_image_square.jpg"
+              }
+              alt={product?.title}
+            />
           </div>
           <div className="detailpage_info_container">
             <div className="detailpage_info">
               <h2>{product?.title}</h2>
               <p>Price: ${product?.price.toFixed(2)}</p>
-              <p>メンズ</p>
-              <p>トップス</p>
+              <p>Target: {product?.target.name}</p>
+              <p>Type: {product?.clothes_type.name}</p>
 
-              {/* <CategorySelectBox categoryInfo={testCategories.sizeCatgory} /> */}
-
-              <p>
-                商品説明商品説明商品説明商品説明商品説明商品説明商品説明商品説明商品説明商品説明商品説明商品説明商品説明商品説明商品説明商品説明商品説明商品説明商品説明商品説明
-              </p>
+              <p>{product?.description}</p>
               <div className="detailpage_info_action_container">
                 <ShoppingCartButton />
                 <FavoriteButton />
