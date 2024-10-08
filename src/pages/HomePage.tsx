@@ -36,37 +36,38 @@ const HomePage = () => {
   }, []);
 
   useEffect(() => {
-    // カテゴリが選択されたときに商品リストをフィルタリング
-    // →バックエンドAPIに引数渡してリクエスト
+    const fetchFilteredProducts = async () => {
+      if (
+        selectedCategories &&
+        (selectedCategories.brandCatgory.length > 0 ||
+          selectedCategories.typeCatgory.length > 0 ||
+          selectedCategories.targetCatgory.length > 0 ||
+          selectedCategories.sizeCatgory.length > 0)
+      ) {
+        // フィルタ条件に基づいて商品リストを取得
+        const filteredProducts = await getProducts(
+          selectedCategories.sizeCatgory.map((size) => size.id),
+          selectedCategories.targetCatgory.map((target) => target.id),
+          selectedCategories.typeCatgory.map((clothType) => clothType.id),
+          selectedCategories.brandCatgory.map((brand) => brand.id),
+        );
 
-    console.log({ selectedCategories });
+        // 商品リストを更新
+        setProductList(filteredProducts ? filteredProducts : []);
 
-    if (
-      selectedCategories &&
-      (selectedCategories.brandCatgory.length > 0 ||
-        selectedCategories.typeCatgory.length > 0 ||
-        selectedCategories.targetCatgory.length > 0 ||
-        selectedCategories.sizeCatgory.length > 0)
-    ) {
-      // タイトルを変更
+        // タイトルを変更
+        setFilterTitle("検索結果");
+      } else {
+        // フィルタがない場合は全ての商品を再取得
+        const allProducts = await getProducts();
+        setProductList(allProducts ? allProducts : []);
+        setFilterTitle("全商品リスト");
+      }
+    };
 
-      setFilterTitle("検索結果");
-    }
-  }, [selectedCategories, productList]);
-
-  // フィルタリング処理
-  // useEffect(() => {
-  //   if (selectedCategories) {
-  //     // 選択されたカテゴリに基づいて商品リストをフィルタリングするロジックをここに追加
-  //     // 例: サイズやブランドなどに基づくフィルタリング
-  //     const filteredItems = testItems.filter((item) => {
-  //       // カテゴリに応じたフィルタリング条件をここで指定
-  //       console.log(item);
-  //       return true; // フィルタリング条件
-  //     });
-  //     setItemList(filteredItems);
-  //   }
-  // }, [selectedCategories]);
+    // カテゴリが変更されたらAPIを呼び出す
+    fetchFilteredProducts();
+  }, [selectedCategories]);
 
   return (
     <Layout>

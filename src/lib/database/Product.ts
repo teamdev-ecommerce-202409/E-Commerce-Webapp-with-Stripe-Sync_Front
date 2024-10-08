@@ -14,7 +14,6 @@ export async function getAllCategories() {
       params,
     });
     if (response.status !== 200) {
-      // This will activate the closest `error.js` Error Boundary
       throw new Error("Failed to fetch data");
     }
     return response.data as CatgoryType;
@@ -26,31 +25,29 @@ export async function getAllCategories() {
 }
 
 export async function getProducts(
-  count: number = 10,
-  page: number = 1,
-  sizeId?: number,
-  targetId?: number,
-  clothesTypeId?: number,
-  brandId?: number,
+  sizeId?: number[],
+  targetId?: number[],
+  clothesTypeId?: number[],
+  brandId?: number[],
   keyword?: string,
   isDeleted?: string,
   releaseDate?: string,
 ) {
   try {
     // クエリパラメータを用意
-    const params: { [key: string]: unknown } = { count, page };
+    const params: { [key: string]: unknown } = {};
 
     // 指定されていればパラメータに設定
-    if (sizeId) {
+    if (sizeId && sizeId.length > 0) {
       params.size = sizeId;
     }
-    if (targetId) {
+    if (targetId && targetId.length > 0) {
       params.target = targetId;
     }
-    if (clothesTypeId) {
+    if (clothesTypeId && clothesTypeId.length > 0) {
       params.clothes_type = clothesTypeId;
     }
-    if (brandId) {
+    if (brandId && brandId.length > 0) {
       params.brand = brandId;
     }
     if (keyword) {
@@ -69,6 +66,7 @@ export async function getProducts(
     const response = await apiClient.get("/products", {
       headers,
       params,
+      paramsSerializer: { indexes: false },
     });
     if (response.status !== 200) {
       throw new Error("Failed to fetch data");
