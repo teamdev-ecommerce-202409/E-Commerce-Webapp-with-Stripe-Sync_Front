@@ -6,23 +6,29 @@ import ShoppingCartButton from "../component/shared/ShoppingCartButton";
 import FavoriteButton from "../component/shared/FavoriteButton";
 import Rating from "@mui/material/Rating";
 import CommentCard from "../component/featured/DetailPage/CommentCard";
-import { ProductInfoType } from "../lib/type/ProductType";
-import { getProductDetailById } from "../lib/database/Product";
+import { ProductInfoType, RatingInfoType } from "../lib/type/ProductType";
+import {
+  getProductDetailById,
+  getProductRatings,
+} from "../lib/database/Product";
 
 const DetailPage = () => {
-  const [product, setProduct] = useState<ProductInfoType | null>(null);
   const { productId } = useParams<{ productId: string }>();
+  const [product, setProduct] = useState<ProductInfoType | null>(null);
+  const [rating, setRating] = useState<RatingInfoType | null>(null);
 
-  // id を数値に変換
   const id = Number(productId);
 
   useEffect(() => {
-    // `id` の変更に基づいて、データを取得する
     if (!isNaN(id)) {
       const setProductDetailInfo = async () => {
         const productDetail = await getProductDetailById(id);
         console.log({ productDetail });
         setProduct(productDetail);
+
+        const ratings = await getProductRatings(id);
+        console.log({ ratings });
+        setRating(ratings);
       };
       setProductDetailInfo();
     }
@@ -35,7 +41,7 @@ const DetailPage = () => {
           <div className="detailpage_image">
             <img
               src={
-                product?.imgUrl ? product.imgUrl : "public/no_image_square.jpg"
+                product?.imgUrl ? product.imgUrl : "/public/no_image_square.jpg"
               }
               alt={product?.title}
             />
@@ -52,14 +58,18 @@ const DetailPage = () => {
                 <ShoppingCartButton />
                 <FavoriteButton />
               </div>
-              {/* 商品の詳細情報を追加 */}
             </div>
             <div className="detailpage_itemReviews">
               <h3>レビュー</h3>
-              <Rating name="read-only" value={4} readOnly />
-              <CommentCard />
-              <CommentCard />
-              <CommentCard />
+              <Rating
+                name="read-only"
+                value={rating?.average_rating || 0}
+                readOnly
+                defaultValue={0}
+              />
+              {rating?.comments.map((comment) => {
+                return <CommentCard key={comment.id} comment={comment} />;
+              })}
             </div>
           </div>
         </div>

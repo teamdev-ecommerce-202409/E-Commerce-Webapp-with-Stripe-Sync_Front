@@ -43,3 +43,17 @@ export type ProductInfoType = {
   created_at: string; // DateTimeField は string で扱う
   updated_at: string; // DateTimeField は string で扱う
 };
+
+export type RatingInfoType = {
+  average_rating: number;
+  comments: CommentInfoType[];
+};
+
+export type CommentInfoType = {
+  id: number;
+  user: number;
+  product: number;
+  rating: number;
+  comment: string;
+  created_at: string;
+};
