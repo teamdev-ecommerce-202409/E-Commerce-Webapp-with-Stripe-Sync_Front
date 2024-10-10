@@ -15,10 +15,10 @@
 }
 
 .productImage {
-  width: 150px; /* 画像の幅を150pxに設定 */
-  height: 150px; /* 画像の高さを150pxに設定 */
+  width: 90%;
+  height: 90%;
   border-radius: 8px;
-  object-fit: cover; /* 画像を枠にフィットさせ、アスペクト比を維持 */
+  object-fit: cover;
   margin: 0 auto;
 }
 

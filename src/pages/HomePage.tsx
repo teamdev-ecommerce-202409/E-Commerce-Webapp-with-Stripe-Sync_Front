@@ -1,11 +1,10 @@
 import "../style/HomePage.css";
 import { useEffect, useState } from "react";
-import { testItems } from "../lib/testData/testData";
 import Layout from "../component/shared/Layout";
 import { CatgoryType, ProductInfoType } from "../lib/type/ProductType";
 import ProductFilter from "../component/featured/HomePage/ProductFilter";
 import FilterCardList from "../component/featured/HomePage/FilterCardList";
-import { getAllCategories } from "../lib/database/Product";
+import { getAllCategories, getProducts } from "../lib/database/Product";
 import ProductList from "../component/featured/HomePage/ProductList";
 
 const HomePage = () => {
@@ -16,7 +15,7 @@ const HomePage = () => {
       targetCatgory: [],
       typeCatgory: [],
       brandCatgory: [],
-    }); // カテゴリ選択を管理
+    });
   const [productList, setProductList] = useState<ProductInfoType[]>([]);
   const [filterTitle, setFilterTitle] = useState<string>("すべての商品");
 
@@ -25,50 +24,50 @@ const HomePage = () => {
     const setInitialData = async () => {
       const allCategories = await getAllCategories();
       setCategories(allCategories);
-      // setCategories(testCategories);
 
       //商品リストを取得
-      // const products = await getProducts();
-      // setItemList(products ? products : []);
-      const allItems = testItems;
-      setProductList(allItems);
+      const products = await getProducts();
+      console.log({ products });
+
+      setProductList(products ? products : []);
     };
 
     setInitialData();
   }, []);
 
   useEffect(() => {
-    // カテゴリが選択されたときに商品リストをフィルタリング
-    // →バックエンドAPIに引数渡してリクエスト
+    const fetchFilteredProducts = async () => {
+      if (
+        selectedCategories &&
+        (selectedCategories.brandCatgory.length > 0 ||
+          selectedCategories.typeCatgory.length > 0 ||
+          selectedCategories.targetCatgory.length > 0 ||
+          selectedCategories.sizeCatgory.length > 0)
+      ) {
+        // フィルタ条件に基づいて商品リストを取得
+        const filteredProducts = await getProducts(
+          selectedCategories.sizeCatgory.map((size) => size.id),
+          selectedCategories.targetCatgory.map((target) => target.id),
+          selectedCategories.typeCatgory.map((clothType) => clothType.id),
+          selectedCategories.brandCatgory.map((brand) => brand.id),
+        );
 
-    console.log({ selectedCategories });
+        // 商品リストを更新
+        setProductList(filteredProducts ? filteredProducts : []);
 
-    if (
-      selectedCategories &&
-      (selectedCategories.brandCatgory.length > 0 ||
-        selectedCategories.typeCatgory.length > 0 ||
-        selectedCategories.targetCatgory.length > 0 ||
-        selectedCategories.sizeCatgory.length > 0)
-    ) {
-      // タイトルを変更
+        // タイトルを変更
+        setFilterTitle("検索結果");
+      } else {
+        // フィルタがない場合は全ての商品を再取得
+        const allProducts = await getProducts();
+        setProductList(allProducts ? allProducts : []);
+        setFilterTitle("全商品リスト");
+      }
+    };
 
-      setFilterTitle("検索結果");
-    }
-  }, [selectedCategories, productList]);
-
-  // フィルタリング処理
-  // useEffect(() => {
-  //   if (selectedCategories) {
-  //     // 選択されたカテゴリに基づいて商品リストをフィルタリングするロジックをここに追加
-  //     // 例: サイズやブランドなどに基づくフィルタリング
-  //     const filteredItems = testItems.filter((item) => {
-  //       // カテゴリに応じたフィルタリング条件をここで指定
-  //       console.log(item);
-  //       return true; // フィルタリング条件
-  //     });
-  //     setItemList(filteredItems);
-  //   }
-  // }, [selectedCategories]);
+    // カテゴリが変更されたらAPIを呼び出す
+    fetchFilteredProducts();
+  }, [selectedCategories]);
 
   return (
     <Layout>
