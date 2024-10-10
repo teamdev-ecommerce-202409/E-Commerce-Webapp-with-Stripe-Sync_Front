@@ -94,18 +94,15 @@ export async function getProductDetailById(productId: number) {
     if (!productId) {
       throw new Error("productId is required");
     } else {
-      params.userId = productId;
+      params.productId = productId;
     }
 
-    // リクエストヘッダー
     const headers = {};
-    // データを取得する
     const response = await apiClient.get("/products/" + productId.toString(), {
       headers,
       params,
     });
     if (response.status !== 200) {
-      // This will activate the closest `error.js` Error Boundary
       throw new Error("Failed to fetch data");
     }
     return response.data as ProductInfoType;
