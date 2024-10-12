@@ -1,2 +1,2 @@
 // 定数ファイル
-export const loadNumPerPage = 20;
+export const loadNumPerPage = 10;
