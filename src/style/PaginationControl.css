@@ -1,0 +1,6 @@
+.pagination_container {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  justify-content: center;
+}

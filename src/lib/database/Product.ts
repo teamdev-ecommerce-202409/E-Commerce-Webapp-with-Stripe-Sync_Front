@@ -4,6 +4,7 @@ import {
   ProductInfoType,
   RatingInfoType,
 } from "../type/ProductType";
+import { PaginationInfoType } from "../type/GenericType";
 
 export async function getAllCategories() {
   try {
@@ -29,6 +30,7 @@ export async function getAllCategories() {
 }
 
 export async function getProducts(
+  page: number = 1,
   sizeId?: number[],
   targetId?: number[],
   clothesTypeId?: number[],
@@ -39,7 +41,7 @@ export async function getProducts(
 ) {
   try {
     // クエリパラメータを用意
-    const params: { [key: string]: unknown } = {};
+    const params: { [key: string]: unknown } = { page };
 
     // 指定されていればパラメータに設定
     if (sizeId && sizeId.length > 0) {
@@ -76,7 +78,7 @@ export async function getProducts(
       throw new Error("Failed to fetch data");
     }
     console.log(response.data);
-    return response.data as ProductInfoType[];
+    return response.data as PaginationInfoType<ProductInfoType>;
   } catch (error) {
     console.error("Error fetching data:", error);
 
@@ -97,12 +99,15 @@ export async function getProductDetailById(productId: number) {
       params.productId = productId;
     }
 
+    // リクエストヘッダー
     const headers = {};
+    // データを取得する
     const response = await apiClient.get("/products/" + productId.toString(), {
       headers,
       params,
     });
     if (response.status !== 200) {
+      // This will activate the closest `error.js` Error Boundary
       throw new Error("Failed to fetch data");
     }
     return response.data as ProductInfoType;
