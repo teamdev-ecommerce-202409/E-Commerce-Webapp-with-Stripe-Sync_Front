@@ -8,6 +8,7 @@ import { getAllCategories, getProducts } from "../lib/database/Product";
 import ProductList from "../component/featured/HomePage/ProductList";
 import PaginationControl from "../component/shared/PaginationControl";
 import { loadNumPerPage } from "../lib/constants";
+import SearchInput from "../component/shared/SearchInput";
 
 const HomePage = () => {
   const [categories, setCategories] = useState<CatgoryType | null>(null);
@@ -18,6 +19,7 @@ const HomePage = () => {
       typeCatgory: [],
       brandCatgory: [],
     });
+  const [keyword, setKeyword] = useState("");
   const [productList, setProductList] = useState<ProductInfoType[]>([]);
   const [page, setPage] = useState(1);
   const [allPageCount, setAllPageCount] = useState(1);
@@ -30,19 +32,21 @@ const HomePage = () => {
 
     // フィルタリング条件が設定されているか
     if (
-      selectedCategories &&
-      (selectedCategories.brandCatgory.length > 0 ||
-        selectedCategories.typeCatgory.length > 0 ||
-        selectedCategories.targetCatgory.length > 0 ||
-        selectedCategories.sizeCatgory.length > 0)
+      keyword ||
+      (selectedCategories &&
+        (selectedCategories.brandCatgory.length > 0 ||
+          selectedCategories.typeCatgory.length > 0 ||
+          selectedCategories.targetCatgory.length > 0 ||
+          selectedCategories.sizeCatgory.length > 0))
     ) {
       // フィルタ条件に基づいて商品リストを取得
       const filteredProducts = await getProducts(
         currentPage,
-        selectedCategories.sizeCatgory.map((size) => size.id),
-        selectedCategories.targetCatgory.map((target) => target.id),
-        selectedCategories.typeCatgory.map((clothType) => clothType.id),
-        selectedCategories.brandCatgory.map((brand) => brand.id),
+        selectedCategories?.sizeCatgory.map((size) => size.id),
+        selectedCategories?.targetCatgory.map((target) => target.id),
+        selectedCategories?.typeCatgory.map((clothType) => clothType.id),
+        selectedCategories?.brandCatgory.map((brand) => brand.id),
+        keyword,
       );
 
       // 商品リストを更新
@@ -72,7 +76,7 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    // カテゴリが選択された場合に製品リストを新たに取得する
+    // カテゴリが選択された場合orキーワードが入力された場合、製品リストを新たに取得する
 
     // ページを初期値に戻す
     const newPage = 1;
@@ -80,7 +84,7 @@ const HomePage = () => {
 
     // カテゴリでフィルタリングされたリストを取得するAPIを呼び出す
     fetchFilteredProducts(newPage);
-  }, [selectedCategories]);
+  }, [selectedCategories, keyword]);
 
   useEffect(() => {
     // ページ番号が変更された時、次ページの製品リストを新たに取得する
@@ -90,10 +94,13 @@ const HomePage = () => {
   return (
     <Layout>
       <div className="homepage_container">
-        <div className="homepage_title_container">
-          <h2>{filterTitle}</h2>
-
-          {/* selectedCategoriesに入っている情報をカードにして表示 */}
+        <div className="homepage_searchConditions_container">
+          <div className="homepage_title_container">
+            <h2>{filterTitle}</h2>
+            <div className="homepage_keyword_container">
+              <SearchInput keyword={keyword} setKeyword={setKeyword} />
+            </div>
+          </div>
 
           <div className="homepage_filterCards_container">
             <FilterCardList
@@ -112,6 +119,19 @@ const HomePage = () => {
               categoryLabel="種類"
               selectedCategory={selectedCategories?.typeCatgory || []}
             />
+            <FilterCardList
+              categoryLabel="キーワード"
+              selectedCategory={
+                keyword
+                  ? [
+                      {
+                        id: Math.floor(Math.random() * 1000000) + Date.now(),
+                        name: keyword,
+                      },
+                    ]
+                  : []
+              }
+            />
           </div>
         </div>
 
@@ -122,8 +142,6 @@ const HomePage = () => {
             setSelectedCategories={setSelectedCategories}
           />
           <div className="homepage_productList_container">
-            page:{page}
-            allpage:{allPageCount}
             <ProductList productList={productList} />
             <PaginationControl
               allPageCount={allPageCount} //総ページ数

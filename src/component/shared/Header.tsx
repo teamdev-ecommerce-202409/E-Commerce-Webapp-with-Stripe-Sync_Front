@@ -7,11 +7,11 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ModalPopup from "./ModalPopup";
 import LoginForm from "./LoginForm";
 import { IconButton } from "@mui/material";
-import SearchInput from "./SearchInput";
+// import SearchInput from "./SearchInput";
 import MenuListButton from "./MenuListButton";
 
 export const Header = () => {
-  const [keyword, setKeyword] = useState("");
+  // const [keyword, setKeyword] = useState("");
   const [loginFormOpen, setLoginFormOpen] = useState(false);
 
   const handleLoginPopup = () => {
@@ -31,9 +31,9 @@ export const Header = () => {
       </div>
       <nav className="nav-links">
         <ul>
-          <li>
+          {/* <li>
             <SearchInput keyword={keyword} setKeyword={setKeyword} />
-          </li>
+          </li> */}
           <li>
             <IconButton
               className="header_iconButton"
