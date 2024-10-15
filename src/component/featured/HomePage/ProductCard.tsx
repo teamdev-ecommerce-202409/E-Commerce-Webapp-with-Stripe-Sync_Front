@@ -21,10 +21,10 @@ const ProductCard = ({ product }: Props) => {
     >
       <img
         src={product.imgUrl ? product.imgUrl : "public/no_image_square.jpg"}
-        alt={product.title}
+        alt={product.name}
         className="productImage"
       />
-      <h3>{product.title}</h3>
+      <h3>{product.name}</h3>
       <p>Price: ${product.price.toFixed(2)}</p>
       <div className="productActions_container">
         <FavoriteButton />

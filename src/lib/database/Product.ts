@@ -110,6 +110,7 @@ export async function getProductDetailById(productId: number) {
       // This will activate the closest `error.js` Error Boundary
       throw new Error("Failed to fetch data");
     }
+    console.log(response.data);
     return response.data as ProductInfoType;
   } catch (error) {
     console.error("Error fetching data:", error);

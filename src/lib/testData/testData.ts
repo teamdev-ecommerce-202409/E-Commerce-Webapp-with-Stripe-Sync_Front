@@ -62,7 +62,7 @@ export const testCategories: CatgoryType = {
 export const testItems: ProductInfoType[] = [
   {
     id: 1,
-    title: "testItem1",
+    name: "testItem1",
     description: "This is the description for testItem1",
     imgUrl: "/testImg/tops1.jpg",
     price: 100,
@@ -78,7 +78,7 @@ export const testItems: ProductInfoType[] = [
   },
   {
     id: 2,
-    title: "testItem2",
+    name: "testItem2",
     description: "This is the description for testItem2",
     imgUrl: "/testImg/tops2.jpg",
     price: 200,
@@ -94,7 +94,7 @@ export const testItems: ProductInfoType[] = [
   },
   {
     id: 3,
-    title: "testItem3",
+    name: "testItem3",
     description: "This is the description for testItem3",
     imgUrl: "/testImg/pants1.jpg",
     price: 300,
