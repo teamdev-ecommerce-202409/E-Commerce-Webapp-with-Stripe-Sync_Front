@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Table,
@@ -20,7 +20,6 @@ type Props = {
 
 const AdminProductList = ({ productList }: Props) => {
   const [checkedProducts, setCheckedProducts] = useState<number[]>([]);
-  const [products, setProducts] = useState<ProductInfoType[]>([]);
   const navigate = useNavigate();
 
   const handleToggle = (id: number) => {
@@ -36,7 +35,7 @@ const AdminProductList = ({ productList }: Props) => {
 
   const handleEdit = (product: ProductInfoType) => {
     const productId = product.id;
-    navigate(`/admin/product/${productId}`, { state: product });
+    navigate(`/admin/product/${productId}`, { state: productId });
   };
 
   return (

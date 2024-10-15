@@ -74,55 +74,39 @@ export async function getProducts(
   }
 }
 
-// IDから製品の詳細情報を取得する
 export async function getProductDetailById(productId: number) {
   try {
-    // クエリパラメータを用意
     const params: { [key: string]: unknown } = {};
-
-    //  各パラメータを設定
     if (!productId) {
       throw new Error("productId is required");
     } else {
       params.productId = productId;
     }
-
-    // リクエストヘッダー
     const headers = {};
-    // データを取得する
     const response = await apiClient.get("/products/" + productId.toString(), {
       headers,
       params,
     });
     if (response.status !== 200) {
-      // This will activate the closest `error.js` Error Boundary
       throw new Error("Failed to fetch data");
     }
     return response.data as ProductInfoType;
   } catch (error) {
     console.error("Error fetching data:", error);
-
     return null;
   }
 }
 
 export async function getProductRatings(productId?: number, userId?: number) {
   try {
-    // クエリパラメータを用意
     const params: { [key: string]: unknown } = {};
-
-    //  各パラメータを設定
     if (productId) {
       params.productId = productId;
     }
-
     if (userId) {
       params.userId = userId;
     }
-
-    // リクエストヘッダー
     const headers = {};
-    // データを取得する
     const response = await apiClient.get("/ratings/", {
       headers,
       params,
@@ -130,12 +114,10 @@ export async function getProductRatings(productId?: number, userId?: number) {
     if (response.status !== 200) {
       throw new Error("Failed to fetch data");
     }
-
     console.log("ratings", response.data);
     return response.data as RatingInfoType;
   } catch (error) {
     console.error("Error fetching data:", error);
-
     return null;
   }
 }
