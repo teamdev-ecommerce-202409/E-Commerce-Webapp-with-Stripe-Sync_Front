@@ -33,7 +33,7 @@ export type ProductInfoType = {
   target: TargetType; // ForeignKey: Target の情報
   clothes_type: ClothesType; // ForeignKey: ClothesType の情報
   brand: BrandType; // ForeignKey: Brand の情報
-  title: string;
+  name: string;
   description: string;
   imgUrl: string; //TODO現在、backのmodel.pyにないので仮置き
   price: number; // DecimalField に対応（number 型）

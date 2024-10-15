@@ -8,12 +8,8 @@ import { PaginationInfoType } from "../type/GenericType";
 
 export async function getAllCategories() {
   try {
-    // クエリパラメータを用意
     const params: { [key: string]: unknown } = {};
-
-    // リクエストヘッダー
     const headers = {};
-    // データを取得する
     const response = await apiClient.get("/categories", {
       headers,
       params,
@@ -24,7 +20,6 @@ export async function getAllCategories() {
     return response.data as CatgoryType;
   } catch (error) {
     console.error("Error fetching data:", error);
-
     return null;
   }
 }
@@ -40,10 +35,7 @@ export async function getProducts(
   releaseDate?: string,
 ) {
   try {
-    // クエリパラメータを用意
     const params: { [key: string]: unknown } = { page };
-
-    // 指定されていればパラメータに設定
     if (sizeId && sizeId.length > 0) {
       params.size = sizeId;
     }
@@ -65,11 +57,8 @@ export async function getProducts(
     if (releaseDate) {
       params.release_date = releaseDate;
     }
-
-    // リクエストヘッダー
     const headers = {};
-    // データを取得する
-    const response = await apiClient.get("/products", {
+    const response = await apiClient.get("/products/", {
       headers,
       params,
       paramsSerializer: { indexes: false },
@@ -81,7 +70,6 @@ export async function getProducts(
     return response.data as PaginationInfoType<ProductInfoType>;
   } catch (error) {
     console.error("Error fetching data:", error);
-
     return null;
   }
 }

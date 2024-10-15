@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Table,
@@ -12,72 +12,31 @@ import {
   IconButton,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
+import { ProductInfoType } from "../../../lib/type/ProductType";
 
-// アイテムの型定義
-export type TestInfoType = {
-  id: number;
-  title: string;
-  description: string;
-  price: number;
-  release_date: string;
-  stock_quantity: number;
-  brand: string;
-  clothes_type: string;
-  size: string;
-  target: string;
-  is_deleted: boolean;
+type Props = {
+  productList: ProductInfoType[];
 };
 
-// データ例
-export const adminListItems: TestInfoType[] = [
-  {
-    id: 1,
-    title: "Nike Air T-shirt",
-    description: "A lightweight and breathable t-shirt.",
-    price: 50.0,
-    release_date: "2024-01-01",
-    stock_quantity: 100,
-    brand: "Nike",
-    clothes_type: "Shirt",
-    size: "M",
-    target: "Men",
-    is_deleted: false,
-  },
-  {
-    id: 2,
-    title: "Adidas Track Pants",
-    description: "Comfortable track pants.",
-    price: 60.0,
-    release_date: "2023-12-01",
-    stock_quantity: 50,
-    brand: "Adidas",
-    clothes_type: "Pants",
-    size: "L",
-    target: "Women",
-    is_deleted: false,
-  },
-];
-
-const AdminProductList = () => {
+const AdminProductList = ({ productList }: Props) => {
   const [checkedProducts, setCheckedProducts] = useState<number[]>([]);
+  const [products, setProducts] = useState<ProductInfoType[]>([]);
   const navigate = useNavigate();
 
   const handleToggle = (id: number) => {
     const currentIndex = checkedProducts.indexOf(id);
     const newChecked = [...checkedProducts];
-
     if (currentIndex === -1) {
       newChecked.push(id);
     } else {
       newChecked.splice(currentIndex, 1);
     }
-
     setCheckedProducts(newChecked);
   };
 
-  const handleEdit = (item: TestInfoType) => {
-    const productId = item.id;
-    navigate(`/admin/product/${productId}`, { state: item });
+  const handleEdit = (product: ProductInfoType) => {
+    const productId = product.id;
+    navigate(`/admin/product/${productId}`, { state: product });
   };
 
   return (
@@ -88,20 +47,20 @@ const AdminProductList = () => {
             <TableCell padding="checkbox">
               <Checkbox />
             </TableCell>
-            <TableCell>アイテム名</TableCell>
+            <TableCell>製品名</TableCell>
             <TableCell>説明</TableCell>
             <TableCell>価格</TableCell>
+            <TableCell>発売日</TableCell>
             <TableCell>在庫数</TableCell>
             <TableCell>サイズ</TableCell>
             <TableCell>ブランド</TableCell>
             <TableCell>対象</TableCell>
             <TableCell>タイプ</TableCell>
-            <TableCell>発売日</TableCell>
             <TableCell></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {adminListItems.map((product) => (
+          {productList.map((product) => (
             <TableRow key={product.id}>
               <TableCell padding="checkbox">
                 <Checkbox
@@ -109,7 +68,7 @@ const AdminProductList = () => {
                   onChange={() => handleToggle(product.id)}
                 />
               </TableCell>
-              <TableCell>{product.title}</TableCell>
+              <TableCell>{product.name}</TableCell>
               <TableCell>
                 {" "}
                 {product.description.length > 10
@@ -117,10 +76,12 @@ const AdminProductList = () => {
                   : product.description}
               </TableCell>
               <TableCell>{`$${product.price.toFixed(2)}`}</TableCell>
+              <TableCell>{product.release_date}</TableCell>
               <TableCell>{product.stock_quantity}</TableCell>
-              <TableCell>{product.size}</TableCell>
-              <TableCell>{product.brand}</TableCell>
-              <TableCell>{product.target}</TableCell>
+              <TableCell>{product.size.name}</TableCell>
+              <TableCell>{product.brand.name}</TableCell>
+              <TableCell>{product.target.name}</TableCell>
+              <TableCell>{product.clothes_type.name}</TableCell>
               <TableCell>
                 <IconButton onClick={() => handleEdit(product)}>
                   <EditIcon />
