@@ -5,8 +5,18 @@
   flex-direction: column;
 }
 
-.homepage_title_container {
+.homepage_searchConditions_container {
   padding: 20px 10px;
+}
+
+.homepage_title_container {
+  display: flex;
+  justify-content: space-between;
+  gap: 2;
+}
+
+.homepage_keyword_container {
+  width: 200px;
 }
 
 .homepage_product_container {

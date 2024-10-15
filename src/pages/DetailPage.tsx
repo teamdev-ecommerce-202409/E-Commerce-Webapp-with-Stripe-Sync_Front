@@ -43,12 +43,12 @@ const DetailPage = () => {
               src={
                 product?.imgUrl ? product.imgUrl : "/public/no_image_square.jpg"
               }
-              alt={product?.title}
+              alt={product?.name}
             />
           </div>
           <div className="detailpage_info_container">
             <div className="detailpage_info">
-              <h2>{product?.title}</h2>
+              <h2>{product?.name}</h2>
               <p>Price: ${product?.price.toFixed(2)}</p>
               <p>Target: {product?.target.name}</p>
               <p>Type: {product?.clothes_type.name}</p>
