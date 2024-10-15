@@ -2,16 +2,13 @@ import { useState } from "react";
 import "../../style/Header.css";
 import { Link } from "react-router-dom";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
-// import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ModalPopup from "./ModalPopup";
 import LoginForm from "./LoginForm";
 import { IconButton } from "@mui/material";
-// import SearchInput from "./SearchInput";
 import MenuListButton from "./MenuListButton";
 
 export const Header = () => {
-  // const [keyword, setKeyword] = useState("");
   const [loginFormOpen, setLoginFormOpen] = useState(false);
 
   const handleLoginPopup = () => {
@@ -31,9 +28,6 @@ export const Header = () => {
       </div>
       <nav className="nav-links">
         <ul>
-          {/* <li>
-            <SearchInput keyword={keyword} setKeyword={setKeyword} />
-          </li> */}
           <li>
             <IconButton
               className="header_iconButton"
