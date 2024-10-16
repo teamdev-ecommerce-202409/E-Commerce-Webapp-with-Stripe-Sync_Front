@@ -97,6 +97,49 @@ export async function getProductDetailById(productId: number) {
   }
 }
 
+export async function updateProductDetail(
+  productId: number,
+  name: string,
+  description: string,
+  price: number,
+  releaseDate: string,
+  stockQuantity: number,
+  brandId: number,
+  clothTypeId: number,
+  sizeId: number,
+  targetId: number
+) {
+  try {
+    const params: { [key: string]: unknown } = {};
+    if (!productId) {
+      throw new Error("productId is required");
+    } else {
+      params.name = name;
+      params.description = description;
+      params.price = price;
+      params.releaseDate = releaseDate;
+      params.stockQuantity = stockQuantity;
+      params.brandId = brandId;
+      params.clothTypeId = clothTypeId;
+      params.sizeId = sizeId;
+      params.targetId = targetId;
+    }
+    const headers = {};
+    const response = await apiClient.put(`/products/${productId}/`, {
+      headers,
+      params,
+    });
+    if (response.status !== 200) {
+      throw new Error("Failed to fetch data");
+    }
+    return response.data as ProductInfoType;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    alert('製品情報の更新に失敗しました。');
+    return null;
+  }
+}
+
 export async function getProductRatings(productId?: number, userId?: number) {
   try {
     const params: { [key: string]: unknown } = {};
