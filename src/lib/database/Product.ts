@@ -113,21 +113,17 @@ export async function updateProductDetail(
     const params: { [key: string]: unknown } = {};
     if (!productId) {
       throw new Error("productId is required");
-    } else {
-      params.name = name;
-      params.description = description;
-      params.price = price;
-      params.releaseDate = releaseDate;
-      params.stockQuantity = stockQuantity;
-      params.brandId = brandId;
-      params.clothTypeId = clothTypeId;
-      params.sizeId = sizeId;
-      params.targetId = targetId;
     }
-    const headers = {};
     const response = await apiClient.put(`/products/${productId}/`, {
-      headers,
-      params,
+      name: name,
+      description: description,
+      price: price,
+      release_date: releaseDate,
+      stock_quantity: stockQuantity,
+      brand_pk: brandId,
+      clothes_type_pk: clothTypeId,
+      size_pk: sizeId,
+      target_pk: targetId
     });
     if (response.status !== 200) {
       throw new Error("Failed to fetch data");
