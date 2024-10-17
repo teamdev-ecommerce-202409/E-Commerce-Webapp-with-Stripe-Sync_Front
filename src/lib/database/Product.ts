@@ -8,12 +8,8 @@ import { PaginationInfoType } from "../type/GenericType";
 
 export async function getAllCategories() {
   try {
-    // クエリパラメータを用意
     const params: { [key: string]: unknown } = {};
-
-    // リクエストヘッダー
     const headers = {};
-    // データを取得する
     const response = await apiClient.get("/categories", {
       headers,
       params,
@@ -24,7 +20,6 @@ export async function getAllCategories() {
     return response.data as CatgoryType;
   } catch (error) {
     console.error("Error fetching data:", error);
-
     return null;
   }
 }
@@ -40,10 +35,7 @@ export async function getProducts(
   releaseDate?: string,
 ) {
   try {
-    // クエリパラメータを用意
     const params: { [key: string]: unknown } = { page };
-
-    // 指定されていればパラメータに設定
     if (sizeId && sizeId.length > 0) {
       params.size = sizeId;
     }
@@ -65,11 +57,8 @@ export async function getProducts(
     if (releaseDate) {
       params.release_date = releaseDate;
     }
-
-    // リクエストヘッダー
     const headers = {};
-    // データを取得する
-    const response = await apiClient.get("/products", {
+    const response = await apiClient.get("/products/", {
       headers,
       params,
       paramsSerializer: { indexes: false },
@@ -81,61 +70,83 @@ export async function getProducts(
     return response.data as PaginationInfoType<ProductInfoType>;
   } catch (error) {
     console.error("Error fetching data:", error);
-
     return null;
   }
 }
 
-// IDから製品の詳細情報を取得する
 export async function getProductDetailById(productId: number) {
   try {
-    // クエリパラメータを用意
     const params: { [key: string]: unknown } = {};
-
-    //  各パラメータを設定
     if (!productId) {
       throw new Error("productId is required");
     } else {
       params.productId = productId;
     }
-
-    // リクエストヘッダー
     const headers = {};
-    // データを取得する
     const response = await apiClient.get("/products/" + productId.toString(), {
       headers,
       params,
     });
     if (response.status !== 200) {
-      // This will activate the closest `error.js` Error Boundary
       throw new Error("Failed to fetch data");
     }
     console.log(response.data);
     return response.data as ProductInfoType;
   } catch (error) {
     console.error("Error fetching data:", error);
+    return null;
+  }
+}
 
+export async function updateProductDetail(
+  productId: number,
+  name: string,
+  description: string,
+  price: number,
+  releaseDate: string,
+  stockQuantity: number,
+  brandId: number,
+  clothTypeId: number,
+  sizeId: number,
+  targetId: number
+) {
+  try {
+    const params: { [key: string]: unknown } = {};
+    if (!productId) {
+      throw new Error("productId is required");
+    }
+    const response = await apiClient.put(`/products/${productId}/`, {
+      name: name,
+      description: description,
+      price: price,
+      release_date: releaseDate,
+      stock_quantity: stockQuantity,
+      brand_pk: brandId,
+      clothes_type_pk: clothTypeId,
+      size_pk: sizeId,
+      target_pk: targetId
+    });
+    if (response.status !== 200) {
+      throw new Error("Failed to fetch data");
+    }
+    return response.data as ProductInfoType;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    alert('製品情報の更新に失敗しました。');
     return null;
   }
 }
 
 export async function getProductRatings(productId?: number, userId?: number) {
   try {
-    // クエリパラメータを用意
     const params: { [key: string]: unknown } = {};
-
-    //  各パラメータを設定
     if (productId) {
       params.productId = productId;
     }
-
     if (userId) {
       params.userId = userId;
     }
-
-    // リクエストヘッダー
     const headers = {};
-    // データを取得する
     const response = await apiClient.get("/ratings/", {
       headers,
       params,
@@ -143,12 +154,10 @@ export async function getProductRatings(productId?: number, userId?: number) {
     if (response.status !== 200) {
       throw new Error("Failed to fetch data");
     }
-
     console.log("ratings", response.data);
     return response.data as RatingInfoType;
   } catch (error) {
     console.error("Error fetching data:", error);
-
     return null;
   }
 }

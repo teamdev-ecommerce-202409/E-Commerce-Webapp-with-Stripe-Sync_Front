@@ -1,33 +1,77 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Layout from "../component/shared/Layout";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../style/DetailPage.css";
 import "../style/AdminProductDetailPage.css";
 import PrimaryButton from "../component/shared/PrimaryButton";
-import { TextField, Box } from "@mui/material";
+import { TextField, Box, MenuItem } from "@mui/material";
+import { getAllCategories, getProductDetailById, updateProductDetail } from "../lib/database/Product";
+import { BrandType, CatgoryType, ClothesType, SizeType, TargetType } from "../lib/type/ProductType";
 
 const AdminProductDetailPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const item = location.state;
+  const productId = Number(location.state);
+  const [name, setName] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
+  const [price, setPrice] = useState<number>(0);
+  const [releaseDate, setReleaseDate] = useState<string>('');
+  const [stockQuantity, setStockQuantity] = useState<number>(0);
+  const [brandId, setBrandId] = useState<number>(0);
+  const [clothesTypeId, setClothesTypeId] = useState<number>(0);
+  const [sizeId, setSizeId] = useState<number>(0);
+  const [targetId, setTargetId] = useState<number>(0);
+  const [categories, setCategories] =
+    useState<CatgoryType | null>({
+      sizeCatgory: [],
+      targetCatgory: [],
+      typeCatgory: [],
+      brandCatgory: [],
+    });
 
-  const [title, setTitle] = useState(item.title);
-  const [description, setDescription] = useState(item.description);
-  const [price, setPrice] = useState(item.price);
-  const [releaseDate, setReleaseDate] = useState(item.release_date);
-  const [stockQuantity, setStockQuantity] = useState(item.stock_quantity);
-  const [brand, setBrand] = useState(item.brand);
-  const [clothesType, setClothesType] = useState(item.clothes_type);
-  const [size, setSize] = useState(item.size);
-  const [target, setTarget] = useState(item.target);
+  const setProductDetailInfo = async () => {
+    const productDetail = await getProductDetailById(productId);
+    console.log({ productDetail });
+    if (productDetail === null) {
+      return;
+    }
+    setName(productDetail.name);
+    setDescription(productDetail.description);
+    setPrice(productDetail.price);
+    setReleaseDate(productDetail.release_date.substring(0, 10));
+    setStockQuantity(productDetail.stock_quantity);
+    setBrandId(productDetail.brand.id);
+    setClothesTypeId(productDetail.clothes_type.id);
+    setSizeId(productDetail.size.id);
+    setTargetId(productDetail.target.id);
+  }
+
+  const fetchCategories = async () => {
+    const allCategories = await getAllCategories();
+    setCategories(allCategories);
+  };
+
+  const updateProduct = async () => {
+    const updatedProductInfo = await updateProductDetail(
+      productId, name, description, price, releaseDate,
+      stockQuantity, brandId, clothesTypeId, sizeId, targetId
+    );
+  };
+
+  useEffect(() => {
+    if (isNaN(productId)) {
+      return;
+    }
+    setProductDetailInfo();
+    fetchCategories();
+  }, []);
 
   const handleUpdate = () => {
-    // バックエンドにリクエスト送る
+    updateProduct();
     navigate(`/admin/product`);
   };
 
   const handleDelete = () => {
-    // バックエンドにリクエスト送る
     navigate(`/admin/product`);
   };
 
@@ -42,94 +86,122 @@ const AdminProductDetailPage = () => {
         </div>
       </div>
       <Box>
+        ID
         <TextField
           fullWidth
-          label="ID"
-          value={item.id}
+          value={productId}
           InputProps={{ readOnly: true }}
-          variant="outlined"
+          variant="filled"
           margin="normal"
         />
+        製品名
         <TextField
           fullWidth
-          label="タイトル"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          variant="outlined"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          variant="filled"
           margin="normal"
         />
+        説明
         <TextField
           fullWidth
-          label="説明"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          variant="outlined"
+          variant="filled"
           margin="normal"
           multiline
           rows={4}
         />
+        価格
         <TextField
           fullWidth
-          label="価格"
           type="number"
           value={price}
-          onChange={(e) => setPrice(e.target.value)}
-          variant="outlined"
+          onChange={(e) => setPrice(Number(e.target.value))}
+          variant="filled"
           margin="normal"
         />
+        発売日
         <TextField
           fullWidth
-          label="発売日"
           type="date"
           value={releaseDate}
           onChange={(e) => setReleaseDate(e.target.value)}
-          variant="outlined"
+          variant="filled"
           margin="normal"
           InputLabelProps={{
             shrink: true,
           }}
         />
+        在庫数
         <TextField
           fullWidth
-          label="在庫数"
           type="number"
           value={stockQuantity}
-          onChange={(e) => setStockQuantity(e.target.value)}
-          variant="outlined"
+          onChange={(e) => setStockQuantity(Number(e.target.value))}
+          variant="filled"
           margin="normal"
         />
+        ブランド
         <TextField
           fullWidth
-          label="ブランド"
-          value={brand}
-          onChange={(e) => setBrand(e.target.value)}
-          variant="outlined"
+          value={brandId}
+          onChange={(e) => setBrandId(Number(e.target.value))}
+          variant="filled"
           margin="normal"
-        />
+          select
+        >
+          {categories?.brandCatgory.map((brand) => (
+            <MenuItem key={brand.id} value={brand.id}>
+              {brand.name}
+            </MenuItem>
+          ))}
+        </TextField>
+        服のタイプ
         <TextField
           fullWidth
-          label="服のタイプ"
-          value={clothesType}
-          onChange={(e) => setClothesType(e.target.value)}
-          variant="outlined"
+          value={clothesTypeId}
+          onChange={(e) => setClothesTypeId(Number(e.target.value))}
+          variant="filled"
           margin="normal"
-        />
+          select
+        >
+          {categories?.typeCatgory.map((type) => (
+            <MenuItem key={type.id} value={type.id}>
+              {type.name}
+            </MenuItem>
+          ))}
+        </TextField>
+        サイズ
         <TextField
           fullWidth
-          label="サイズ"
-          value={size}
-          onChange={(e) => setSize(e.target.value)}
-          variant="outlined"
+          value={sizeId}
+          onChange={(e) => setSizeId(Number(e.target.value))}
+          variant="filled"
           margin="normal"
-        />
+          select
+        >
+          {categories?.sizeCatgory.map((size) => (
+            <MenuItem key={size.id} value={size.id}>
+              {size.name}
+            </MenuItem>
+          ))}
+        </TextField>
+        ターゲット
         <TextField
           fullWidth
-          label="ターゲット"
-          value={target}
-          onChange={(e) => setTarget(e.target.value)}
-          variant="outlined"
+          value={targetId}
+          onChange={(e) => setTargetId(Number(e.target.value))}
+          variant="filled"
           margin="normal"
-        />
+          select
+        >
+          {categories?.targetCatgory.map((target) => (
+            <MenuItem key={target.id} value={target.id}>
+              {target.name}
+            </MenuItem>
+          ))}
+        </TextField>
       </Box>
     </Layout>
   );
