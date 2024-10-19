@@ -52,10 +52,18 @@ const AdminProductDetailPage = () => {
   };
 
   const updateProduct = async () => {
-    const updatedProductInfo = await updateProductDetail(
-      productId, name, description, price, releaseDate,
-      stockQuantity, brandId, clothesTypeId, sizeId, targetId
-    );
+    try {
+      await updateProductDetail(
+        productId, name, description, price, releaseDate,
+        stockQuantity, brandId, clothesTypeId, sizeId, targetId
+      );
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert(String(error));
+      }
+    }
   };
 
   useEffect(() => {

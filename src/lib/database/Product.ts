@@ -110,11 +110,10 @@ export async function updateProductDetail(
   targetId: number
 ) {
   try {
-    const params: { [key: string]: unknown } = {};
     if (!productId) {
       throw new Error("productId is required");
     }
-    const response = await apiClient.put(`/products/${productId}/`, {
+    const data = {
       name: name,
       description: description,
       price: price,
@@ -124,15 +123,16 @@ export async function updateProductDetail(
       clothes_type_pk: clothTypeId,
       size_pk: sizeId,
       target_pk: targetId
-    });
+    };
+    checkProductUpdateParam(data);
+    const response = await apiClient.put(`/products/${productId}/`, data);
     if (response.status !== 200) {
       throw new Error("Failed to fetch data");
     }
     return response.data as ProductInfoType;
   } catch (error) {
     console.error("Error fetching data:", error);
-    alert('製品情報の更新に失敗しました。');
-    return null;
+    throw error;
   }
 }
 
@@ -158,5 +158,46 @@ export async function getProductRatings(productId?: number, userId?: number) {
   } catch (error) {
     console.error("Error fetching data:", error);
     return null;
+  }
+}
+
+function checkProductUpdateParam(params: { [key: string]: unknown }) {
+  checkStringParam('製品名', params.name, 1, 255);
+  checkStringParam('説明', params.description, null, null);
+  checkNumberParam('価格', params.price, 0, null);
+  checkNumberParam('在庫数', params.stock_quantity, 0, null);
+  checkNumberParam('ブランドID', params.brand_pk, 1, null);
+  checkNumberParam('タイプID', params.clothes_type_pk, 1, null);
+  checkNumberParam('サイズID', params.size_pk, 1, null);
+  checkNumberParam('ターゲットID', params.target_pk, 1, null);
+}
+
+function checkStringParam(
+  paramName: string, value: any, minLength: number | null, maxLength: number | null
+) {
+  if (value === null || typeof value !== 'string') {
+    throw new Error(`${paramName}を文字列で指定してください。`);
+  }
+  const valueString = value as string;
+  if (minLength !== null && valueString.length < minLength) {
+    throw new Error(`${paramName}の最小文字数(${minLength})を下回っています。`);
+  }
+  if (maxLength !== null && valueString.length > maxLength) {
+    throw new Error(`${paramName}の最大文字数(${maxLength})を超えています。`);
+  }
+}
+
+function checkNumberParam(
+  paramName: string, value: any, minNumber: number | null, maxNumber: number | null
+) {
+  if (value === null || typeof value !== 'number') {
+    throw new Error(`${paramName}を数値で指定してください。`);
+  }
+  const valueNumber = value as number;
+  if (minNumber !== null && valueNumber < minNumber) {
+    throw new Error(`${paramName}の最小値(${minNumber})を下回っています。`);
+  }
+  if (maxNumber !== null && valueNumber > maxNumber) {
+    throw new Error(`${paramName}の最大値(${maxNumber})を超えています。`);
   }
 }
