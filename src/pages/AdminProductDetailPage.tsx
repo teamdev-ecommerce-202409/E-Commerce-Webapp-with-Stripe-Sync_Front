@@ -54,8 +54,45 @@ const AdminProductDetailPage = () => {
   const updateProduct = async () => {
     try {
       await updateProductDetail(
-        productId, name, description, price, releaseDate,
-        stockQuantity, brandId, clothesTypeId, sizeId, targetId
+        {
+          productId: productId,
+          name: name,
+          description: description,
+          price: price,
+          releaseDate: releaseDate,
+          stockQuantity: stockQuantity,
+          brandId: brandId,
+          clothTypeId: clothesTypeId,
+          sizeId: sizeId,
+          targetId: targetId,
+          isDeleted: false
+        }
+      );
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert(String(error));
+      }
+    }
+  };
+
+  const deleteProduct = async () => {
+    try {
+      await updateProductDetail(
+        {
+          productId: productId,
+          name: name,
+          description: description,
+          price: price,
+          releaseDate: releaseDate,
+          stockQuantity: stockQuantity,
+          brandId: brandId,
+          clothTypeId: clothesTypeId,
+          sizeId: sizeId,
+          targetId: targetId,
+          isDeleted: true
+        }
       );
     } catch (error) {
       if (error instanceof Error) {
@@ -80,6 +117,7 @@ const AdminProductDetailPage = () => {
   };
 
   const handleDelete = () => {
+    deleteProduct();
     navigate(`/admin/product`);
   };
 

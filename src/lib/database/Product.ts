@@ -6,6 +6,20 @@ import {
 } from "../type/ProductType";
 import { PaginationInfoType } from "../type/GenericType";
 
+interface ProductUpdateParams {
+  productId: number;
+  name: string | null;
+  description: string | null;
+  price: number | null;
+  releaseDate: string | null;
+  stockQuantity: number | null;
+  brandId: number | null;
+  clothTypeId: number | null;
+  sizeId: number | null;
+  targetId: number | null;
+  isDeleted: boolean;
+}
+
 export async function getAllCategories() {
   try {
     const params: { [key: string]: unknown } = {};
@@ -97,35 +111,25 @@ export async function getProductDetailById(productId: number) {
   }
 }
 
-export async function updateProductDetail(
-  productId: number,
-  name: string,
-  description: string,
-  price: number,
-  releaseDate: string,
-  stockQuantity: number,
-  brandId: number,
-  clothTypeId: number,
-  sizeId: number,
-  targetId: number
-) {
+export async function updateProductDetail(productUpdateParams: ProductUpdateParams) {
   try {
-    if (!productId) {
+    if (!productUpdateParams.productId) {
       throw new Error("productId is required");
     }
     const data = {
-      name: name,
-      description: description,
-      price: price,
-      release_date: releaseDate,
-      stock_quantity: stockQuantity,
-      brand_pk: brandId,
-      clothes_type_pk: clothTypeId,
-      size_pk: sizeId,
-      target_pk: targetId
+      name: productUpdateParams.name,
+      description: productUpdateParams.description,
+      price: productUpdateParams.price,
+      release_date: productUpdateParams.releaseDate,
+      stock_quantity: productUpdateParams.stockQuantity,
+      brand_pk: productUpdateParams.brandId,
+      clothes_type_pk: productUpdateParams.clothTypeId,
+      size_pk: productUpdateParams.sizeId,
+      target_pk: productUpdateParams.targetId,
+      is_deleted: productUpdateParams.isDeleted
     };
     checkProductUpdateParam(data);
-    const response = await apiClient.put(`/products/${productId}/`, data);
+    const response = await apiClient.put(`/products/${productUpdateParams.productId}/`, data);
     if (response.status !== 200) {
       throw new Error("Failed to fetch data");
     }
