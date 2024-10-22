@@ -6,7 +6,7 @@ import "../style/AdminProductDetailPage.css";
 import PrimaryButton from "../component/shared/PrimaryButton";
 import { TextField, Box, MenuItem } from "@mui/material";
 import { getAllCategories, getProductDetailById, updateProductDetail } from "../lib/database/Product";
-import { BrandType, CatgoryType, ClothesType, SizeType, TargetType } from "../lib/type/ProductType";
+import { CatgoryType } from "../lib/type/ProductType";
 
 const AdminProductDetailPage = () => {
   const navigate = useNavigate();
@@ -132,14 +132,6 @@ const AdminProductDetailPage = () => {
         </div>
       </div>
       <Box>
-        ID
-        <TextField
-          fullWidth
-          value={productId}
-          InputProps={{ readOnly: true }}
-          variant="filled"
-          margin="normal"
-        />
         製品名
         <TextField
           fullWidth

@@ -5,9 +5,11 @@ import {
   RatingInfoType,
 } from "../type/ProductType";
 import { PaginationInfoType } from "../type/GenericType";
+import { format } from 'date-fns';
+import axios from "axios";
 
 interface ProductUpdateParams {
-  productId: number;
+  productId: number | null;
   name: string | null;
   description: string | null;
   price: number | null;
@@ -111,6 +113,40 @@ export async function getProductDetailById(productId: number) {
   }
 }
 
+export async function createProduct(productUpdateParams: ProductUpdateParams) {
+  try {
+    const data = {
+      name: productUpdateParams.name,
+      description: productUpdateParams.description,
+      price: productUpdateParams.price,
+      release_date: productUpdateParams.releaseDate,
+      stock_quantity: productUpdateParams.stockQuantity,
+      brand_pk: productUpdateParams.brandId,
+      clothes_type_pk: productUpdateParams.clothTypeId,
+      size_pk: productUpdateParams.sizeId,
+      target_pk: productUpdateParams.targetId,
+      category: '服'
+    };
+    checkProductUpdateParam(data);
+    data.release_date = formatDateWithOffset(new Date(data.release_date as string));
+    const response = await apiClient.post(`/products/`, data);
+    return response.data as ProductInfoType;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        console.error("Error Response Data:", error.response.data);
+      } else if (error.request) {
+        console.error("Error Request:", error.request);
+      } else {
+        console.error("Error Message:", error.message);
+      }
+    } else {
+      console.error("Unexpected Error:", error);
+    }
+    throw error;
+  }
+}
+
 export async function updateProductDetail(productUpdateParams: ProductUpdateParams) {
   try {
     if (!productUpdateParams.productId) {
@@ -166,6 +202,12 @@ export async function getProductRatings(productId?: number, userId?: number) {
 }
 
 function checkProductUpdateParam(params: { [key: string]: unknown }) {
+  if (params.release_date !== null) {
+    const date = new Date(params.release_date as string);
+    if (isNaN(date.getTime())) {
+      throw new Error(`正しい日付を指定してください。`);
+    }
+  }
   checkStringParam('製品名', params.name, 1, 255);
   checkStringParam('説明', params.description, null, null);
   checkNumberParam('価格', params.price, 0, null);
@@ -204,4 +246,8 @@ function checkNumberParam(
   if (maxNumber !== null && valueNumber > maxNumber) {
     throw new Error(`${paramName}の最大値(${maxNumber})を超えています。`);
   }
+}
+
+function formatDateWithOffset(date: Date): string {
+  return format(date, "yyyy-MM-dd'T'HH:mm:ssXXX");
 }
