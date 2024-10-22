@@ -1,17 +1,14 @@
 import Layout from "../component/shared/Layout";
 import PrimaryButton from "../component/shared/PrimaryButton";
 import { useNavigate } from "react-router-dom";
-
 import "../style/AdminProductPage.css";
 import "../style/HomePage.css";
 import AdminProductList from "../component/featured/AdminHomePage/AdminProductList";
-import FilterCardList from "../component/featured/HomePage/FilterCardList";
 import { CatgoryType, ProductInfoType } from "../lib/type/ProductType";
 import { useEffect, useState } from "react";
 import { getAllCategories, getProducts } from "../lib/database/Product";
 import { loadNumPerPage } from "../lib/constants";
 import ProductFilter from "../component/featured/HomePage/ProductFilter";
-import ProductList from "../component/featured/HomePage/ProductList";
 import PaginationControl from "../component/shared/PaginationControl";
 
 const AdminProductPage = () => {
@@ -104,9 +101,6 @@ const AdminProductPage = () => {
             />
           </div>
         </div>
-        {/* <div className="adminHomePage_list_container">
-          <AdminProductList />
-        </div> */}
         <div className="homepage_product_container">
           <ProductFilter
             categories={categories}

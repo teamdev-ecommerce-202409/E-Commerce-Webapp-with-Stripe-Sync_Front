@@ -13,10 +13,13 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { ProductInfoType } from "../../../lib/type/ProductType";
+import { updateProductDetail } from "../../../lib/database/Product";
 
 type Props = {
   productList: ProductInfoType[];
 };
+
+const NUM_OF_PRODUCT_PER_PAGE = 10;
 
 const AdminProductList = ({ productList }: Props) => {
   const [checkedProducts, setCheckedProducts] = useState<number[]>([]);
@@ -33,9 +36,52 @@ const AdminProductList = ({ productList }: Props) => {
     setCheckedProducts(newChecked);
   };
 
+  const handleAllTogle = () => {
+    const newChecked = [...checkedProducts];
+    if (newChecked.length === NUM_OF_PRODUCT_PER_PAGE) {
+      newChecked.splice(0);
+    } else {
+      for (const product of productList) {
+        if (checkedProducts.indexOf(product.id) === -1) {
+          newChecked.push(product.id);
+        }
+      }
+    }
+    setCheckedProducts(newChecked);
+  };
+
   const handleEdit = (product: ProductInfoType) => {
     const productId = product.id;
     navigate(`/admin/product/${productId}`, { state: productId });
+  };
+
+  // TODO AdminProductPageから呼び出したい
+  const handleDelete = () => {
+    for (const product of productList) {
+      try {
+        updateProductDetail(
+          {
+            productId: product.id,
+            name: null,
+            description: null,
+            price: null,
+            releaseDate: null,
+            stockQuantity: null,
+            brandId: null,
+            clothTypeId: null,
+            sizeId: null,
+            targetId: null,
+            isDeleted: true
+          }
+        );
+      } catch (error) {
+        if (error instanceof Error) {
+          alert(error.message);
+        } else {
+          alert(String(error));
+        }
+      }
+    }
   };
 
   return (
@@ -44,7 +90,9 @@ const AdminProductList = ({ productList }: Props) => {
         <TableHead>
           <TableRow>
             <TableCell padding="checkbox">
-              <Checkbox />
+              <Checkbox
+                onChange={() => handleAllTogle()}
+              />
             </TableCell>
             <TableCell>製品名</TableCell>
             <TableCell>説明</TableCell>
