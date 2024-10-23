@@ -1,161 +1,188 @@
+import { useEffect, useState } from "react";
 import Layout from "../component/shared/Layout";
-import "../style/AdminProductCreatePage.css";
-import {
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  Button,
-  SelectChangeEvent,
-} from "@mui/material";
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "../style/DetailPage.css";
+import "../style/AdminProductDetailPage.css";
+import { TextField, Box, MenuItem } from "@mui/material";
+import { createProduct, getAllCategories } from "../lib/database/Product";
+import { CatgoryType, ProductInfoType } from "../lib/type/ProductType";
+import PrimaryButton from "../component/shared/PrimaryButton";
 
 const AdminProductCreatePage = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    description: "",
-    size: "",
-    target: "",
-    type: "",
-    brand: "",
-    inventoryCount: "",
-  });
-
-  const handleChange = (
-    e:
-      | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-      | SelectChangeEvent<string>,
-  ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
+  const navigate = useNavigate();
+  const [name, setName] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
+  const [price, setPrice] = useState<number>(0);
+  const [releaseDate, setReleaseDate] = useState<string>('');
+  const [stockQuantity, setStockQuantity] = useState<number>(0);
+  const [brandId, setBrandId] = useState<number>(0);
+  const [clothesTypeId, setClothesTypeId] = useState<number>(0);
+  const [sizeId, setSizeId] = useState<number>(0);
+  const [targetId, setTargetId] = useState<number>(0);
+  const [categories, setCategories] =
+    useState<CatgoryType | null>({
+      sizeCatgory: [],
+      targetCatgory: [],
+      typeCatgory: [],
+      brandCatgory: [],
     });
+
+  const fetchCategories = async () => {
+    const allCategories = await getAllCategories();
+    setCategories(allCategories);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    fetch("/api/clothes/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Success:", data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
+  const createNewProduct = async () => {
+    try {
+      const productInfo = await createProduct({
+        productId: null,
+        name: name,
+        description: description,
+        price: price,
+        releaseDate: releaseDate,
+        stockQuantity: stockQuantity,
+        brandId: brandId,
+        clothTypeId: clothesTypeId,
+        sizeId: sizeId,
+        targetId: targetId,
+        isDeleted: false
       });
+      return productInfo as ProductInfoType;
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert(String(error));
+      }
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const handleCreate = () => {
+    const resp = createNewProduct();
   };
 
   return (
     <Layout>
-      <form
-        className="adminProductCreatePage_container"
-        onSubmit={handleSubmit}
-      >
-        <div>
-          <TextField
-            id="name"
-            name="name"
-            label="製品名"
-            variant="filled"
-            value={formData.name}
-            onChange={handleChange}
-          />
+      <div className="adminProductDetailPage_actions_container">
+        <div className="adminProductDetailPage_button_container">
+          <PrimaryButton onClick={handleCreate} loading={false} text={"作成"} />
         </div>
-        <div>
-          <TextField
-            id="description"
-            name="description"
-            label="説明"
-            variant="filled"
-            value={formData.description}
-            onChange={handleChange}
-          />
-        </div>
-        <InputLabel id="size-label">サイズ</InputLabel>
-        <Select
-          className="selectWrapper"
-          labelId="size-label"
-          id="size"
-          name="size"
-          value={formData.size}
-          onChange={handleChange}
-          autoWidth
-        >
-          <MenuItem value={"S"}>S</MenuItem>
-          <MenuItem value={"M"}>M</MenuItem>
-          <MenuItem value={"L"}>L</MenuItem>
-          <MenuItem value={"XL"}>XL</MenuItem>
-        </Select>
-
-        <InputLabel id="target-label">ターゲット</InputLabel>
-        <Select
-          className="selectWrapper"
-          labelId="target-label"
-          id="target"
-          name="target"
-          value={formData.target}
-          onChange={handleChange}
-          autoWidth
-        >
-          <MenuItem value={"men"}>MEN</MenuItem>
-          <MenuItem value={"women"}>WOMEN</MenuItem>
-          <MenuItem value={"kids"}>KIDS</MenuItem>
-        </Select>
-
-        <InputLabel id="type-label">タイプ</InputLabel>
-        <Select
-          className="selectWrapper"
-          labelId="type-label"
-          id="type"
-          name="type"
-          value={formData.type}
-          onChange={handleChange}
-          autoWidth
-        >
-          <MenuItem value={"tops"}>トップス</MenuItem>
-          <MenuItem value={"bottoms"}>ボトムス</MenuItem>
-          <MenuItem value={"outer"}>アウター</MenuItem>
-          <MenuItem value={"under"}>下着</MenuItem>
-          <MenuItem value={"goods"}>グッズ</MenuItem>
-        </Select>
-
-        <div>
-          <TextField
-            id="brand"
-            name="brand"
-            label="ブランド"
-            variant="filled"
-            value={formData.brand}
-            onChange={handleChange}
-          />
-        </div>
-
+      </div>
+      <Box>
+        製品名
         <TextField
-          id="inventory-count"
-          name="inventoryCount"
-          label="在庫数"
-          variant="outlined"
+          fullWidth
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          variant="filled"
+          margin="normal"
+        />
+        説明
+        <TextField
+          fullWidth
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          variant="filled"
+          margin="normal"
+          multiline
+          rows={4}
+        />
+        価格
+        <TextField
+          fullWidth
           type="number"
-          value={formData.inventoryCount}
-          onChange={handleChange}
+          value={price}
+          onChange={(e) => setPrice(Number(e.target.value))}
+          variant="filled"
+          margin="normal"
+        />
+        発売日
+        <TextField
+          fullWidth
+          type="date"
+          value={releaseDate}
+          onChange={(e) => setReleaseDate(e.target.value)}
+          variant="filled"
+          margin="normal"
           InputLabelProps={{
             shrink: true,
           }}
-          inputProps={{
-            min: 0,
-            step: 1,
-          }}
         />
-
-        <Button type="submit" variant="contained" color="primary">
-          登録
-        </Button>
-      </form>
+        在庫数
+        <TextField
+          fullWidth
+          type="number"
+          value={stockQuantity}
+          onChange={(e) => setStockQuantity(Number(e.target.value))}
+          variant="filled"
+          margin="normal"
+        />
+        ブランド
+        <TextField
+          fullWidth
+          value={brandId}
+          onChange={(e) => setBrandId(Number(e.target.value))}
+          variant="filled"
+          margin="normal"
+          select
+        >
+          {categories?.brandCatgory.map((brand) => (
+            <MenuItem key={brand.id} value={brand.id}>
+              {brand.name}
+            </MenuItem>
+          ))}
+        </TextField>
+        服のタイプ
+        <TextField
+          fullWidth
+          value={clothesTypeId}
+          onChange={(e) => setClothesTypeId(Number(e.target.value))}
+          variant="filled"
+          margin="normal"
+          select
+        >
+          {categories?.typeCatgory.map((type) => (
+            <MenuItem key={type.id} value={type.id}>
+              {type.name}
+            </MenuItem>
+          ))}
+        </TextField>
+        サイズ
+        <TextField
+          fullWidth
+          value={sizeId}
+          onChange={(e) => setSizeId(Number(e.target.value))}
+          variant="filled"
+          margin="normal"
+          select
+        >
+          {categories?.sizeCatgory.map((size) => (
+            <MenuItem key={size.id} value={size.id}>
+              {size.name}
+            </MenuItem>
+          ))}
+        </TextField>
+        ターゲット
+        <TextField
+          fullWidth
+          value={targetId}
+          onChange={(e) => setTargetId(Number(e.target.value))}
+          variant="filled"
+          margin="normal"
+          select
+        >
+          {categories?.targetCatgory.map((target) => (
+            <MenuItem key={target.id} value={target.id}>
+              {target.name}
+            </MenuItem>
+          ))}
+        </TextField>
+      </Box>
     </Layout>
   );
 };
