@@ -1,7 +1,10 @@
 import IconButton from "@mui/material/IconButton";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 const ShoppingCartButton = () => {
-  const handleAddCartClick = () => {
+  const handleAddCartClick = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    event.stopPropagation();
     console.log("カートに入れた！");
   };
 
@@ -9,7 +12,7 @@ const ShoppingCartButton = () => {
     <IconButton
       color="primary"
       aria-label="add to favorites"
-      onClick={handleAddCartClick}
+      onClick={(event) => handleAddCartClick(event)}
     >
       <AddShoppingCartIcon />
     </IconButton>
