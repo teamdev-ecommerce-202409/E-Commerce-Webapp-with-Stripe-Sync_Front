@@ -14,6 +14,7 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import { ProductInfoType } from "../../../lib/type/ProductType";
 import { updateProductDetail } from "../../../lib/database/Product";
+import PrimaryButton from "../../shared/PrimaryButton";
 
 type Props = {
   productList: ProductInfoType[];
@@ -22,32 +23,32 @@ type Props = {
 const NUM_OF_PRODUCT_PER_PAGE = 10;
 
 const AdminProductList = ({ productList }: Props) => {
-  const [checkedProducts, setCheckedProducts] = useState<number[]>([]);
+  const [checkedProductIds, setCheckedProductIds] = useState<number[]>([]);
   const navigate = useNavigate();
 
   const handleToggle = (id: number) => {
-    const currentIndex = checkedProducts.indexOf(id);
-    const newChecked = [...checkedProducts];
+    const currentIndex = checkedProductIds.indexOf(id);
+    const newChecked = [...checkedProductIds];
     if (currentIndex === -1) {
       newChecked.push(id);
     } else {
       newChecked.splice(currentIndex, 1);
     }
-    setCheckedProducts(newChecked);
+    setCheckedProductIds(newChecked);
   };
 
   const handleAllTogle = () => {
-    const newChecked = [...checkedProducts];
+    const newChecked = [...checkedProductIds];
     if (newChecked.length === NUM_OF_PRODUCT_PER_PAGE) {
       newChecked.splice(0);
     } else {
       for (const product of productList) {
-        if (checkedProducts.indexOf(product.id) === -1) {
+        if (checkedProductIds.indexOf(product.id) === -1) {
           newChecked.push(product.id);
         }
       }
     }
-    setCheckedProducts(newChecked);
+    setCheckedProductIds(newChecked);
   };
 
   const handleEdit = (product: ProductInfoType) => {
@@ -55,25 +56,35 @@ const AdminProductList = ({ productList }: Props) => {
     navigate(`/admin/product/${productId}`, { state: productId });
   };
 
-  // TODO AdminProductPageから呼び出したい
   const handleDelete = () => {
-    for (const product of productList) {
+    let deletedProductCount = 0;
+    for (const productId of checkedProductIds) {
+      let productInfo = null;
+      for (const product of productList) {
+        if (product.id === productId) {
+          productInfo = product;
+        }
+      }
+      if (productInfo === null) {
+        continue;
+      }
       try {
         updateProductDetail(
           {
-            productId: product.id,
-            name: null,
-            description: null,
-            price: null,
-            releaseDate: null,
-            stockQuantity: null,
-            brandId: null,
-            clothTypeId: null,
-            sizeId: null,
-            targetId: null,
+            productId: productId,
+            name: productInfo.name,
+            description: productInfo.description,
+            price: productInfo.price,
+            releaseDate: productInfo.release_date,
+            stockQuantity: productInfo.stock_quantity,
+            brandId: productInfo.brand.id,
+            clothTypeId: productInfo.clothes_type.id,
+            sizeId: productInfo.size.id,
+            targetId: productInfo.target.id,
             isDeleted: true
           }
         );
+        deletedProductCount++;
       } catch (error) {
         if (error instanceof Error) {
           alert(error.message);
@@ -82,10 +93,18 @@ const AdminProductList = ({ productList }: Props) => {
         }
       }
     }
+    alert(`${deletedProductCount}件削除しました。`);
   };
 
   return (
     <TableContainer component={Paper}>
+      <div className="adminHomePage_button_container">
+        <PrimaryButton
+          onClick={handleDelete}
+          loading={false}
+          text={"削除"}
+        />
+      </div>
       <Table>
         <TableHead>
           <TableRow>
@@ -111,7 +130,7 @@ const AdminProductList = ({ productList }: Props) => {
             <TableRow key={product.id}>
               <TableCell padding="checkbox">
                 <Checkbox
-                  checked={checkedProducts.indexOf(product.id) !== -1}
+                  checked={checkedProductIds.indexOf(product.id) !== -1}
                   onChange={() => handleToggle(product.id)}
                 />
               </TableCell>

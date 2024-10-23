@@ -164,14 +164,23 @@ export async function updateProductDetail(productUpdateParams: ProductUpdatePara
       target_pk: productUpdateParams.targetId,
       is_deleted: productUpdateParams.isDeleted
     };
-    checkProductUpdateParam(data);
-    const response = await apiClient.put(`/products/${productUpdateParams.productId}/`, data);
-    if (response.status !== 200) {
-      throw new Error("Failed to fetch data");
+    if (!productUpdateParams.isDeleted) {
+      checkProductUpdateParam(data);
     }
+    const response = await apiClient.put(`/products/${productUpdateParams.productId}/`, data);
     return response.data as ProductInfoType;
   } catch (error) {
-    console.error("Error fetching data:", error);
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        console.error("Error Response Data:", error.response.data);
+      } else if (error.request) {
+        console.error("Error Request:", error.request);
+      } else {
+        console.error("Error Message:", error.message);
+      }
+    } else {
+      console.error("Unexpected Error:", error);
+    }
     throw error;
   }
 }

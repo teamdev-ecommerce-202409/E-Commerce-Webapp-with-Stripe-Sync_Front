@@ -93,13 +93,6 @@ const AdminProductPage = () => {
               text={"新規作成"}
             />
           </div>
-          <div className="adminHomePage_button_container">
-            <PrimaryButton
-              onClick={handleDelete}
-              loading={false}
-              text={"削除"}
-            />
-          </div>
         </div>
         <div className="homepage_product_container">
           <ProductFilter
@@ -108,8 +101,8 @@ const AdminProductPage = () => {
             setSelectedCategories={setSelectedCategories}
           />
           <div className="homepage_productList_container">
-            page:{page}
-            allpage:{allPageCount}
+            <p>page:{page}</p>
+            <p>allpage:{allPageCount}</p>
             <AdminProductList productList={productList} />
             <PaginationControl
               allPageCount={allPageCount}
