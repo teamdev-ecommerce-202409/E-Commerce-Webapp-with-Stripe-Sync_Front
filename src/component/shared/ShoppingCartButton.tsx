@@ -10,20 +10,16 @@ type Props = {
   product: ProductInfoType;
 };
 const ShoppingCartButton = ({ product }: Props) => {
-  const [userInfojotai] = useAtom(userInfoAtom); // ユーザー情報
+  const [userInfojotai] = useAtom(userInfoAtom);
   const [cartInfoJotai, setCartInfoJotai] = useAtom(cartInfoAtom);
 
   const handleAddCartClick = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     event.stopPropagation();
-    console.log("カートに入れた！");
     if (userInfojotai.userInfo) {
-      //   // ログイン時
-
       await changeCartItemQuantity(userInfojotai.userInfo.id, product.id);
     } else {
-      //   // ゲスト時
       const cartItems = cartInfoJotai.cartItems;
       if (cartItems.find((cartItem) => cartItem.product.id === product.id)) {
         const newCartItems = cartItems.map((cartItem) => {
@@ -42,6 +38,7 @@ const ShoppingCartButton = ({ product }: Props) => {
         setCartInfoJotai({ cartItems: newCartItems });
       }
     }
+    alert("商品をカートに追加しました。");
   };
 
   return (

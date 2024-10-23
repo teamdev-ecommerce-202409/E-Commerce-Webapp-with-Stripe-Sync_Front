@@ -95,7 +95,6 @@ const ShoppingCartPage = () => {
     } else {
       // ユーザー情報がない＝未ログインの場合→ローカルストレージからカートの中身をとってくる
 
-      // const testCart = [];
       setCartItems(cartInfoJotai.cartItems);
       sumAllCartItems(cartInfoJotai.cartItems);
     }
@@ -124,15 +123,15 @@ const ShoppingCartPage = () => {
               <h3>注文内容</h3>
               <p className="settlement-item">
                 <span>小計:</span>
-                <span>{sumPrice}</span>
+                <span>{sumPrice.toLocaleString() + "円"}</span>
               </p>
               <p className="settlement-item">
                 <span>送料:</span>
-                <span>{shippingFee}</span>
+                <span>{shippingFee.toLocaleString() + "円"}</span>
               </p>
               <p className="settlement-total">
                 <span>合計:</span>
-                <span>{sumPrice + shippingFee}</span>
+                <span>{(sumPrice + shippingFee).toLocaleString() + "円"}</span>
               </p>
               {cartItems.length > 0 && (
                 <div className="shoppingCartPage_settlementButton_container">
