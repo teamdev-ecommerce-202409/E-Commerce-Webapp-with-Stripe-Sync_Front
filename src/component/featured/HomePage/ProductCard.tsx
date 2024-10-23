@@ -28,7 +28,7 @@ const ProductCard = ({ product }: Props) => {
       <p>Price: ${product.price.toFixed(2)}</p>
       <div className="productActions_container">
         <FavoriteButton />
-        <ShoppingCartButton />
+        <ShoppingCartButton product={product} />
       </div>
     </div>
   );

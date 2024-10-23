@@ -32,7 +32,7 @@ export async function getCartItemsByUserId(userId: number) {
 export async function changeCartItemQuantity(
   userId: number,
   productId: number,
-  quantity: number,
+  quantity?: number,
 ) {
   try {
     const data: { [key: string]: unknown } = {};
@@ -47,9 +47,7 @@ export async function changeCartItemQuantity(
     } else {
       data.product_id = productId;
     }
-    if (!quantity) {
-      throw new Error("quantity is required");
-    } else {
+    if (quantity) {
       data.quantity = quantity;
     }
     const headers = {};
