@@ -7,14 +7,19 @@ import { userInfoAtom } from "../lib/jotai/atoms/user";
 import { useAtom } from "jotai";
 import { cartInfoAtom } from "../lib/jotai/atoms/cart";
 import { CartInfoType } from "../lib/type/ProductType";
+import {
+  changeCartItemQuantity,
+  deleteCartItem,
+  getCartItemsByUserId,
+} from "../lib/database/Cart";
+import { CartInfoJotai } from "../lib/jotai/JotaiType";
+import { shippingFeeFreePrice } from "../lib/constants";
 
 const ShoppingCartPage = () => {
-  // const cartItems = Array.from({ length: 10 }, (_, index) => index + 1);
-
   const [userInfoJotai] = useAtom(userInfoAtom);
   console.log("userInfoJotai", userInfoJotai);
 
-  const [cartInfoJotai] = useAtom(cartInfoAtom);
+  const [cartInfoJotai, setCartInfoJotai] = useAtom(cartInfoAtom);
 
   const [cartItems, setCartItems] = useState<CartInfoType[]>([]);
   const [sumPrice, setSumPrice] = useState<number>(0);
@@ -29,16 +34,68 @@ const ShoppingCartPage = () => {
     }
     setSumPrice(sum);
 
-    setShippingFee(sum > 5000 || sum === 0 ? 0 : 500);
+    setShippingFee(sum > shippingFeeFreePrice || sum === 0 ? 0 : shippingFee);
+  };
+
+  const handleChangeQuantity = async (
+    productId: number,
+    quantity: number,
+    userId?: number,
+  ) => {
+    if (userId) {
+      //ユーザーIDがある＝ログインしている→バックエンドとアクセス
+      await changeCartItemQuantity(userId, productId, quantity);
+    } else {
+      // ユーザーIDがない＝ゲストモード→ローカルストレージとやりとり
+      const newCartItems = cartItems.map((cartItem) => {
+        const newCartItem = cartItem;
+        if (newCartItem.product.id === productId) {
+          newCartItem.quantity = quantity;
+        }
+        return newCartItem;
+      });
+      setCartInfoJotai({ cartItems: newCartItems } as CartInfoJotai);
+      setCartItems(newCartItems);
+    }
+  };
+
+  const handleDeleteCartItem = async (productId: number, userId?: number) => {
+    if (userId) {
+      const result = await deleteCartItem(userId, productId);
+      if (!result) {
+        alert("削除失敗");
+      } else {
+        const newCartItems = cartItems.filter((cartItem) => {
+          return cartItem.product.id !== productId;
+        });
+
+        setCartItems(newCartItems);
+      }
+    } else {
+      const newCartItems = cartItems.filter(
+        (cartItem) => cartItem.product.id !== productId,
+      );
+      setCartInfoJotai({ cartItems: newCartItems } as CartInfoJotai);
+      setCartItems(newCartItems);
+    }
+  };
+
+  const getCartItems = async (userId: number) => {
+    const cartItems = await getCartItemsByUserId(userId);
+
+    setCartItems(cartItems);
+    sumAllCartItems(cartItems);
   };
 
   useEffect(() => {
     // グローバルステートからログインユーザー情報を取得
     if (userInfoJotai.userInfo) {
       // ユーザー情報が入っている場合=ログインしている→ユーザーIDをキーにバックエンドからカートの中身を取得
+      getCartItems(userInfoJotai.userInfo.id);
     } else {
       // ユーザー情報がない＝未ログインの場合→ローカルストレージからカートの中身をとってくる
-      console.log("cartInfoJotai", cartInfoJotai);
+
+      // const testCart = [];
       setCartItems(cartInfoJotai.cartItems);
       sumAllCartItems(cartInfoJotai.cartItems);
     }
@@ -52,7 +109,14 @@ const ShoppingCartPage = () => {
         <div className="shoppingCartPage_content_container">
           <div className="shoppingCartPage_cartItems_container">
             {cartItems.map((cartItem) => {
-              return <CartItemCard key={cartItem.product.id} />;
+              return (
+                <CartItemCard
+                  key={cartItem.product.id}
+                  cartItem={cartItem}
+                  handleChangeQuantity={handleChangeQuantity}
+                  handleDeleteCartItem={handleDeleteCartItem}
+                />
+              );
             })}
           </div>
           <div className="shoppingCartPage_settlement_container">
