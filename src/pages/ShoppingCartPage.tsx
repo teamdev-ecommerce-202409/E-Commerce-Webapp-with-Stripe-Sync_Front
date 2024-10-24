@@ -17,7 +17,6 @@ import { shippingFeeFreePrice } from "../lib/constants";
 
 const ShoppingCartPage = () => {
   const [userInfoJotai] = useAtom(userInfoAtom);
-  console.log("userInfoJotai", userInfoJotai);
 
   const [cartInfoJotai, setCartInfoJotai] = useAtom(cartInfoAtom);
 
@@ -56,6 +55,7 @@ const ShoppingCartPage = () => {
       });
       setCartInfoJotai({ cartItems: newCartItems } as CartInfoJotai);
       setCartItems(newCartItems);
+      sumAllCartItems(newCartItems);
     }
   };
 
@@ -70,6 +70,7 @@ const ShoppingCartPage = () => {
         });
 
         setCartItems(newCartItems);
+        sumAllCartItems(newCartItems);
       }
     } else {
       const newCartItems = cartItems.filter(
@@ -77,6 +78,7 @@ const ShoppingCartPage = () => {
       );
       setCartInfoJotai({ cartItems: newCartItems } as CartInfoJotai);
       setCartItems(newCartItems);
+      sumAllCartItems(newCartItems);
     }
   };
 
