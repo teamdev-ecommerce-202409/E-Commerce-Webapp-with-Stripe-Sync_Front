@@ -1,0 +1,30 @@
+/* style/MyPage.css */
+.mypage_container {
+    padding: 20px;
+  }
+  
+  .orderHistories_container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .order_card {
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .order_items {
+    margin-top: 10px;
+  }
+  
+  .order_item {
+    margin-bottom: 5px;
+  }
+  
+  h2, h3, h4 {
+    margin-bottom: 10px;
+  }
+  

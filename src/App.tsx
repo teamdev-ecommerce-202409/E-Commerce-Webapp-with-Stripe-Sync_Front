@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import HomePage from "./pages/HomePage";
 import DetailPage from "./pages/DetailPage";
+import MyPage from "./pages/MyPage";
 import AdminHomePage from "./pages/AdminHomePage";
 import AdminProductDetailPage from "./pages/AdminProductDetailPage";
 import AdminProductCreatePage from "./pages/AdminProductCreatePage";
@@ -30,6 +31,7 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/product/:productId" element={<DetailPage />} />
+            <Route path="/mypage" element={<MyPage />} />
             <Route path="/admin" element={<AdminHomePage />} />
             <Route path="/admin/product" element={<AdminProductPage />} />
             <Route
