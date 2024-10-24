@@ -7,6 +7,7 @@ import AdminHomePage from "./pages/AdminHomePage";
 import AdminProductDetailPage from "./pages/AdminProductDetailPage";
 import AdminProductCreatePage from "./pages/AdminProductCreatePage";
 import AdminProductPage from "./pages/AdminProductPage";
+import ShoppingCartPage from "./pages/ShoppingCartPage";
 
 const theme = createTheme({
   palette: {
@@ -40,6 +41,7 @@ function App() {
               path="/admin/product/:productId"
               element={<AdminProductDetailPage />}
             />
+            <Route path="/shoppingcart" element={<ShoppingCartPage />} />
           </Routes>
         </Router>
       </div>

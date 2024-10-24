@@ -6,7 +6,11 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 const FavoriteButton = () => {
   const [isFavorite, setIsFavorite] = useState(false);
 
-  const handleFavoriteClick = () => {
+  const handleFavoriteClick = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    event.stopPropagation();
+    console.log("fav!");
     setIsFavorite(!isFavorite);
   };
 
@@ -14,7 +18,7 @@ const FavoriteButton = () => {
     <IconButton
       color="primary"
       aria-label="add to favorites"
-      onClick={handleFavoriteClick}
+      onClick={(event) => handleFavoriteClick(event)}
     >
       {isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
     </IconButton>

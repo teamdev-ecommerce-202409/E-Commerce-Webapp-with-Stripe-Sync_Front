@@ -9,7 +9,6 @@ type Props = {
 const ProductCard = ({ product }: Props) => {
   const navigate = useNavigate();
 
-  // カードクリック時に詳細ページに遷移
   const handleCardClick = () => {
     navigate(`/product/${product.id}`);
   };
@@ -25,10 +24,10 @@ const ProductCard = ({ product }: Props) => {
         className="productImage"
       />
       <h3>{product.name}</h3>
-      <p>Price: ${product.price.toFixed(2)}</p>
+      <p> ¥{product.price.toLocaleString()}</p>
       <div className="productActions_container">
         <FavoriteButton />
-        <ShoppingCartButton />
+        <ShoppingCartButton product={product} />
       </div>
     </div>
   );

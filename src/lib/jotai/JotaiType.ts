@@ -1,3 +1,5 @@
+import { CartInfoType } from "../type/ProductType";
+
 export type UserInfoJotai = {
   id?: number;
   uid?: string;
@@ -6,4 +8,8 @@ export type UserInfoJotai = {
   email?: string;
   isAuth: boolean;
   isAdmin: boolean;
+};
+
+export type CartInfoJotai = {
+  cartItems: CartInfoType[];
 };

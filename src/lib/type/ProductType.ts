@@ -57,3 +57,9 @@ export type CommentInfoType = {
   comment: string;
   created_at: string;
 };
+
+export type CartInfoType = {
+  userId?: number;
+  product: ProductInfoType;
+  quantity: number;
+};
