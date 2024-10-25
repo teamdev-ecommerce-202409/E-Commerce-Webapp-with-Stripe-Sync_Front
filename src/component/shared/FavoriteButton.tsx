@@ -15,10 +15,11 @@ const FavoriteButton = ({ product }: Props) => {
     registerLikeState,
   } = useLikeState(product);
 
-  const handleFavoriteClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handleFavoriteClick = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    event.stopPropagation();
     setLikeState(!likeState);
-
     registerLikeState();
   };
 
@@ -26,9 +27,7 @@ const FavoriteButton = ({ product }: Props) => {
     <IconButton
       color="primary"
       aria-label="add to favorites"
-      onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
-        handleFavoriteClick(e)
-      }
+      onClick={(event) => handleFavoriteClick(event)}
     >
       {likeState ? <FavoriteIcon /> : <FavoriteBorderIcon />}
     </IconButton>

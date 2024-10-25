@@ -57,7 +57,7 @@ const DetailPage = () => {
               <div className="detailpage_info_action_container">
                 {product && (
                   <>
-                    <ShoppingCartButton />
+                    <ShoppingCartButton product={product} />
                     <FavoriteButton product={product} />
                   </>
                 )}
