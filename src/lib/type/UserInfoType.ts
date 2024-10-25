@@ -1,19 +1,5 @@
 import { ProductInfoType } from "./ProductType";
 
-// ↓はモック用テーブル。モックを全部消したら削除
-// export type UserInfoType = {
-//   id?: number;
-//   name?: string;
-//   userImg?: string;
-//   email?: string;
-//   isAdmin?: boolean;
-//   introduction?: string;
-//   followers?: number[];
-//   followings?: number[];
-// };
-
-// 以下から本番用の型。今後の開発は原則以下を試用
-// User 型定義
 export type UserInfoType = {
   id: number;
   user_name: string;
@@ -29,6 +15,7 @@ export type UserInfoType = {
 export type UserInfoTypeJotai = {
   userInfo?: UserInfoType;
   authtoken?: string;
+  favList?: number[];
 };
 
 export type FavoriteInfo = {

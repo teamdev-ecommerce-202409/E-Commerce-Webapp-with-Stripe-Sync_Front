@@ -55,8 +55,12 @@ const DetailPage = () => {
 
               <p>{product?.description}</p>
               <div className="detailpage_info_action_container">
-                <ShoppingCartButton />
-                <FavoriteButton />
+                {product && (
+                  <>
+                    <ShoppingCartButton />
+                    <FavoriteButton product={product} />
+                  </>
+                )}
               </div>
             </div>
             <div className="detailpage_itemReviews">

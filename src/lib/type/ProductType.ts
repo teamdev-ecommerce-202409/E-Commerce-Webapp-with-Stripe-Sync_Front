@@ -26,7 +26,6 @@ export type BrandType = {
   name: string;
 };
 
-// Product 型定義
 export type ProductInfoType = {
   id: number;
   size: SizeType; // ForeignKey: Size の情報
@@ -42,6 +41,7 @@ export type ProductInfoType = {
   is_deleted: boolean;
   created_at: string; // DateTimeField は string で扱う
   updated_at: string; // DateTimeField は string で扱う
+  fav?: boolean;
 };
 
 export type RatingInfoType = {

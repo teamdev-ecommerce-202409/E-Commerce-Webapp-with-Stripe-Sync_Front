@@ -152,3 +152,52 @@ export async function getProductRatings(productId?: number, userId?: number) {
     return null;
   }
 }
+
+export async function registerLike(
+  productId: number,
+  userId: number,
+  fav: boolean,
+  token: string | undefined | null,
+) {
+  try {
+    const params: { [key: string]: unknown } = {
+      productId,
+      userId,
+      fav,
+    };
+
+    // TODO 認証機能作成後、解放
+    // if (!token) {
+    //   throw new Error("token is required");
+    // }
+
+    if (productId) {
+      params.product_id = productId;
+    } else {
+      throw new Error("productId is required.");
+    }
+
+    if (userId) {
+      params.user_id = userId;
+    } else {
+      throw new Error("userId is required.");
+    }
+
+    params.fav = fav;
+
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+    const response = await apiClient.post("/favorites/", params, {
+      headers,
+    });
+    if (response.status !== 200) {
+      throw new Error("Something wrong with registering like state");
+    }
+    return response.data as boolean;
+  } catch (error) {
+    console.error("Error registering data:", error);
+
+    return null;
+  }
+}
