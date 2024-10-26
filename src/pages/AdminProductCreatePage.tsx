@@ -9,7 +9,6 @@ import { CatgoryType, ProductInfoType } from "../lib/type/ProductType";
 import PrimaryButton from "../component/shared/PrimaryButton";
 
 const AdminProductCreatePage = () => {
-  const navigate = useNavigate();
   const [name, setName] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [price, setPrice] = useState<number>(0);
@@ -81,6 +80,7 @@ const AdminProductCreatePage = () => {
           onChange={(e) => setName(e.target.value)}
           variant="filled"
           margin="normal"
+          inputProps={{ minLength: 1, maxLength: 255 }}
         />
         説明
         <TextField
@@ -100,6 +100,7 @@ const AdminProductCreatePage = () => {
           onChange={(e) => setPrice(Number(e.target.value))}
           variant="filled"
           margin="normal"
+          InputProps={{ inputProps: { min: 0 } }}
         />
         発売日
         <TextField
@@ -121,6 +122,7 @@ const AdminProductCreatePage = () => {
           onChange={(e) => setStockQuantity(Number(e.target.value))}
           variant="filled"
           margin="normal"
+          InputProps={{ inputProps: { min: 0 } }}
         />
         ブランド
         <TextField

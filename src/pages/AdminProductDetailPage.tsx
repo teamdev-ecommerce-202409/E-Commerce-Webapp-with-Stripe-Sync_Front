@@ -139,6 +139,7 @@ const AdminProductDetailPage = () => {
           onChange={(e) => setName(e.target.value)}
           variant="filled"
           margin="normal"
+          inputProps={{ minLength: 1, maxLength: 255 }}
         />
         説明
         <TextField
@@ -158,6 +159,7 @@ const AdminProductDetailPage = () => {
           onChange={(e) => setPrice(Number(e.target.value))}
           variant="filled"
           margin="normal"
+          InputProps={{ inputProps: { min: 0 } }}
         />
         発売日
         <TextField
@@ -179,6 +181,7 @@ const AdminProductDetailPage = () => {
           onChange={(e) => setStockQuantity(Number(e.target.value))}
           variant="filled"
           margin="normal"
+          InputProps={{ inputProps: { min: 0 } }}
         />
         ブランド
         <TextField
