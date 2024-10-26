@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Layout from "../component/shared/Layout";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "../style/DetailPage.css";
 import "../style/AdminProductDetailPage.css";
 import PrimaryButton from "../component/shared/PrimaryButton";
@@ -10,8 +10,7 @@ import { CatgoryType } from "../lib/type/ProductType";
 
 const AdminProductDetailPage = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const productId = Number(location.state);
+  const { productId } = useParams();
   const [name, setName] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [price, setPrice] = useState<number>(0);
@@ -30,7 +29,10 @@ const AdminProductDetailPage = () => {
     });
 
   const setProductDetailInfo = async () => {
-    const productDetail = await getProductDetailById(productId);
+    if (productId == undefined) {
+      return;
+    }
+    const productDetail = await getProductDetailById(Number(productId));
     console.log({ productDetail });
     if (productDetail === null) {
       return;
@@ -55,7 +57,7 @@ const AdminProductDetailPage = () => {
     try {
       await updateProductDetail(
         {
-          productId: productId,
+          productId: Number(productId),
           name: name,
           description: description,
           price: price,
@@ -81,7 +83,7 @@ const AdminProductDetailPage = () => {
     try {
       await updateProductDetail(
         {
-          productId: productId,
+          productId: Number(productId),
           name: name,
           description: description,
           price: price,
@@ -104,9 +106,6 @@ const AdminProductDetailPage = () => {
   };
 
   useEffect(() => {
-    if (isNaN(productId)) {
-      return;
-    }
     setProductDetailInfo();
     fetchCategories();
   }, []);
