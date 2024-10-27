@@ -25,7 +25,7 @@ const atomWithLocalStorage = (key: string, initialValue: UserInfoTypeJotai) => {
 export const jotaiInitialValue: UserInfoTypeJotai = {
   userInfo: {
     id: 1,
-    user_name: "doinkya",
+    user_name: "",
     email_address: "",
     role: "guest",
     email_validated_at: new Date().toISOString(),
@@ -34,7 +34,7 @@ export const jotaiInitialValue: UserInfoTypeJotai = {
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   },
-  authtoken: "sample-token", // グローバルなauthtoken
+  authtoken: "sample-token",
 };
 const userInfoAtom = atomWithLocalStorage("userInfo", jotaiInitialValue);
 export { userInfoAtom };
