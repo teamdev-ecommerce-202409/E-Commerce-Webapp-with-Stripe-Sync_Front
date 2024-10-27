@@ -30,8 +30,6 @@ const AdminProductPage = () => {
     navigate(`/admin/product/new`);
   };
 
-  const handleDelete = () => { };
-
   const fetchFilteredProducts = async (currentPage = page) => {
     const allCategories = await getAllCategories();
     setCategories(allCategories);

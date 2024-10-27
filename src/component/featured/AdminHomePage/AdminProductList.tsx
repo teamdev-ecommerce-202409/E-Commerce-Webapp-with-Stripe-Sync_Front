@@ -59,13 +59,8 @@ const AdminProductList = ({ productList }: Props) => {
   const handleDelete = () => {
     let deletedProductCount = 0;
     for (const productId of checkedProductIds) {
-      let productInfo = null;
-      for (const product of productList) {
-        if (product.id === productId) {
-          productInfo = product;
-        }
-      }
-      if (productInfo === null) {
+      const productInfo = productList.find((product) => product.id === productId);
+      if (productInfo === undefined) {
         continue;
       }
       try {
