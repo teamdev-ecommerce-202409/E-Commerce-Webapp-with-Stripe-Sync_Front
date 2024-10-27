@@ -110,13 +110,13 @@ const AdminProductDetailPage = () => {
     fetchCategories();
   }, []);
 
-  const handleUpdate = () => {
-    updateProduct();
+  const handleUpdate = async () => {
+    await updateProduct();
     navigate(`/admin/product`);
   };
 
-  const handleDelete = () => {
-    deleteProduct();
+  const handleDelete = async () => {
+    await deleteProduct();
     navigate(`/admin/product`);
   };
 
