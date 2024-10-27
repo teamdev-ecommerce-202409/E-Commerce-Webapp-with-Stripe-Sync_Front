@@ -90,6 +90,26 @@ export async function getProducts(
   }
 }
 
+export async function deleteProducts(productIds: number[]) {
+  try {
+    const payload = { product_ids: productIds };
+    await apiClient.delete(`/products/`, { data: payload });
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        console.error("Error Response Data:", error.response.data);
+      } else if (error.request) {
+        console.error("Error Request:", error.request);
+      } else {
+        console.error("Error Message:", error.message);
+      }
+    } else {
+      console.error("Unexpected Error:", error);
+    }
+    throw error;
+  }
+}
+
 export async function getProductDetailById(productId: number) {
   try {
     const params: { [key: string]: unknown } = {};

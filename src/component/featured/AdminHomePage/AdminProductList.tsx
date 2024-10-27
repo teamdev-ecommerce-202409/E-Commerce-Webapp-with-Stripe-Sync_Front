@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { ProductInfoType } from "../../../lib/type/ProductType";
-import { updateProductDetail } from "../../../lib/database/Product";
+import { deleteProducts, updateProductDetail } from "../../../lib/database/Product";
 import PrimaryButton from "../../shared/PrimaryButton";
 
 type Props = {
@@ -57,38 +57,16 @@ const AdminProductList = ({ productList }: Props) => {
   };
 
   const handleDelete = () => {
-    let deletedProductCount = 0;
-    for (const productId of checkedProductIds) {
-      const productInfo = productList.find((product) => product.id === productId);
-      if (productInfo === undefined) {
-        continue;
-      }
-      try {
-        updateProductDetail(
-          {
-            productId: productId,
-            name: productInfo.name,
-            description: productInfo.description,
-            price: productInfo.price,
-            releaseDate: productInfo.release_date,
-            stockQuantity: productInfo.stock_quantity,
-            brandId: productInfo.brand.id,
-            clothTypeId: productInfo.clothes_type.id,
-            sizeId: productInfo.size.id,
-            targetId: productInfo.target.id,
-            isDeleted: true
-          }
-        );
-        deletedProductCount++;
-      } catch (error) {
-        if (error instanceof Error) {
-          alert(error.message);
-        } else {
-          alert(String(error));
-        }
+    try {
+      deleteProducts(checkedProductIds);
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert(String(error));
       }
     }
-    alert(`${deletedProductCount}件削除しました。`);
+    alert(`${checkedProductIds.length}件削除しました。`);
   };
 
   return (
