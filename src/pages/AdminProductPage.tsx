@@ -101,7 +101,7 @@ const AdminProductPage = () => {
           <div className="homepage_productList_container">
             <p>page:{page}</p>
             <p>allpage:{allPageCount}</p>
-            <AdminProductList productList={productList} />
+            <AdminProductList productList={productList} setProductList={setProductList} />
             <PaginationControl
               allPageCount={allPageCount}
               handlePageChange={setPage}

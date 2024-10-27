@@ -18,11 +18,12 @@ import PrimaryButton from "../../shared/PrimaryButton";
 
 type Props = {
   productList: ProductInfoType[];
+  setProductList: React.Dispatch<React.SetStateAction<ProductInfoType[]>>;
 };
 
 const NUM_OF_PRODUCT_PER_PAGE = 10;
 
-const AdminProductList = ({ productList }: Props) => {
+const AdminProductList = ({ productList, setProductList }: Props) => {
   const [checkedProductIds, setCheckedProductIds] = useState<number[]>([]);
   const navigate = useNavigate();
 
@@ -66,7 +67,10 @@ const AdminProductList = ({ productList }: Props) => {
         alert(String(error));
       }
     }
+    const newProductList = productList.filter(product => !checkedProductIds.includes(product.id));
     alert(`${checkedProductIds.length}件削除しました。`);
+    setCheckedProductIds([]);
+    setProductList(newProductList);
   };
 
   return (
