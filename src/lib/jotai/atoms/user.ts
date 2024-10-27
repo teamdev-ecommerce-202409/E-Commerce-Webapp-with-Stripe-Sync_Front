@@ -22,30 +22,17 @@ const atomWithLocalStorage = (key: string, initialValue: UserInfoTypeJotai) => {
   return derivedAtom;
 };
 
-// export const jotaiInitialValue: UserInfoTypeJotai = {};
-// export const jotaiInitialValue: UserInfoTypeJotai = {
-//   id: 1,
-//   uid: "sample-uid",
-//   nickname: "sample-nickname",
-//   userImg: "sample-image",
-//   email: "sample@example.com",
-//   isAuth: true,
-//   isAdmin: false,
-// };
 export const jotaiInitialValue: UserInfoTypeJotai = {
   userInfo: {
     id: 1,
-    username: "guest",
-    email: "",
-    role: "user",
-    is_active: false,
-    is_staff: false,
-    is_superuser: false,
-    date_joined: "",
-    last_login: null,
-    authtoken: "sample-token", 
-    created_at: new Date().toISOString(), // 仮の日付
-    updated_at: new Date().toISOString(), // 仮の日付
+    user_name: "doinkya",
+    email_address: "",
+    role: "guest",
+    email_validated_at: new Date().toISOString(),
+    address: "hogehoge1-2",
+    is_deleted: false,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
   },
   authtoken: "sample-token", // グローバルなauthtoken
 };
