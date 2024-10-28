@@ -1,7 +1,6 @@
 import { OrderInfoType } from "../type/OrderType";
 import apiClient from "./apiClient";
 
-// UserIDからorder historyを取得する
 export async function getOrderHistoryByUserId(userId: number) {
     try {
       const params = { user_id: userId };
