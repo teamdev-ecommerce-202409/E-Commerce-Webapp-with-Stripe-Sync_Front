@@ -19,7 +19,7 @@ const FilterCardList = <T extends { id: number; name: string }>({
 }: Props<T>) => {
   return (
     selectedCategory &&
-    selectedCategory.length > 0 && (
+    selectedCategory.length > 0 ? (
       <div className="filterCardList_container">
         <div className="filterCardList_label">{categoryLabel}：</div>
         <div className="filterCardList_cards_content">
@@ -28,7 +28,7 @@ const FilterCardList = <T extends { id: number; name: string }>({
           ))}
         </div>
       </div>
-    )
+    ) : null
   );
 };
 

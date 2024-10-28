@@ -10,6 +10,7 @@ export type OrderInfoType = {
   order_date: string; // DateTimeField は string で扱う
   order_status: string; // 注文ステータス
   total_price: number; // DecimalField は number で扱う
+  order_items: OrderItemInfoType[];
   created_at: string; // DateTimeField は string で扱う
   updated_at: string; // 同じく string で扱う
 };

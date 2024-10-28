@@ -43,8 +43,8 @@ export const MenuListButton = () => {
           "aria-labelledby": "basic-button",
         }}
       >
-        <MenuItem onClick={() => handleMenuItemClick("/profile")}>
-          Profile
+        <MenuItem onClick={() => handleMenuItemClick("/mypage")}>
+          Mypage
         </MenuItem>
         <MenuItem onClick={() => handleMenuItemClick("/admin")}>Admin</MenuItem>
         <MenuItem onClick={handleClose}>Logout</MenuItem>

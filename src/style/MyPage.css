@@ -1,0 +1,29 @@
+.mypage_container {
+  padding: 1rem;
+}
+
+.mypage_title {
+  margin: 10px 0;
+}
+
+.orderHistories_table_container {
+  margin-top: 20px;
+}
+
+.MuiTableHead-root th {
+  font-weight: bold;
+  background-color: #f5f5f5;
+}
+
+.MuiTableBody-root tr {
+  border-bottom: 1px solid #ddd;
+}
+
+.MuiTableBody-root td {
+  padding: 10px;
+}
+
+.total_price {
+  font-weight: bold;
+  color: #333;
+}

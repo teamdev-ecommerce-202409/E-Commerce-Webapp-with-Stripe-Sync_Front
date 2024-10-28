@@ -22,6 +22,19 @@ const atomWithLocalStorage = (key: string, initialValue: UserInfoTypeJotai) => {
   return derivedAtom;
 };
 
-export const jotaiInitialValue: UserInfoTypeJotai = {};
+export const jotaiInitialValue: UserInfoTypeJotai = {
+  userInfo: {
+    id: 1,
+    user_name: "",
+    email_address: "",
+    role: "guest",
+    email_validated_at: new Date().toISOString(),
+    address: "hogehoge1-2",
+    is_deleted: false,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+  authtoken: "sample-token",
+};
 const userInfoAtom = atomWithLocalStorage("userInfo", jotaiInitialValue);
 export { userInfoAtom };
