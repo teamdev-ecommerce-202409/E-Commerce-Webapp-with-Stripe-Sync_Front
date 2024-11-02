@@ -57,9 +57,9 @@ const AdminProductList = ({ productList, setProductList }: Props) => {
     navigate(`/admin/product/${productId}`, { state: productId });
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     try {
-      deleteProducts(checkedProductIds);
+      await deleteProducts(checkedProductIds);
     } catch (error) {
       if (error instanceof Error) {
         alert(error.message);
