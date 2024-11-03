@@ -8,13 +8,16 @@
 
 .adminHomePage_actions_container {
   display: flex;
-  justify-content: flex-start;
-  gap: 1;
+  justify-content: space-around;
 }
 
 .adminHomePage_button_container {
-  width: 150px;
+  width: 300px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
 }
+
 .adminHomePage_list_container {
   margin-top: 20px;
 }
