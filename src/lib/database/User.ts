@@ -3,7 +3,8 @@ import apiClient from "./apiClient";
 import { UserInfoType } from "../type/UserInfoType";
 
 type ResponseFromAPI = {
-  token?: string;
+  access?: string;
+  refresh?: string;
   user?: UserInfoType;
   error?: string;
 };
@@ -32,17 +33,17 @@ export async function signUpAPI(
   }
 }
 
-// ユーザー情報取得
+// ログイン機能
 export async function loginAPI(email: string, password: string) {
   try {
-    // クエリパラメータを用意
     const params: { [key: string]: unknown } = { email, password };
     if (!email || !password) {
       throw new Error("email and password are necessary.");
     }
-    // データを取得する
-    const response = await apiClient.post("/user/login", params);
 
+    // データを取得する
+    const response = await apiClient.post("/token/", params);
+    console.log("ログイン結果", response.data);
     return response.data as ResponseFromAPI;
   } catch (error: unknown) {
     console.error("Error fetching data:", error);

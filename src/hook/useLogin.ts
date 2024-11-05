@@ -115,24 +115,28 @@ const useLogin = () => {
         throw new Error("email and password are necessary to log in.");
       }
       const data = await loginAPI(email, password);
-
-      if (data?.error) {
-        console.error(data.error);
-        throw new Error(data.error);
+      if (data?.detail) {
+        console.error(data.detail);
+        throw new Error("emailとpasswordが不正です。");
       }
 
-      if (!data || !data.token || !data.user) {
+      if (!data || !data.access || !data.refresh || !data.user) {
         throw new Error("Something wrong with login API");
       }
       const loginUser: UserInfoType = data.user;
       //ログイン成功時はユーザー情報をjotaiに入れる
-      setuserInfoJotai({ userInfo: loginUser, authtoken: data.token });
+      setuserInfoJotai({
+        userInfo: loginUser,
+        access: data.access,
+        refresh: data.refresh,
+      });
 
-      //home画面に移動
-      navigate("/");
+      // ログイン情報を反映させるためにページにリフレッシュをかける
+      window.location.reload();
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.error(error.message);
+        alert(error.message);
       } else {
         console.error("Unknown error", error);
       }
@@ -159,7 +163,7 @@ const useLogin = () => {
     return isValid;
   };
   const checkLogin = async () => {
-    const token = userInfoJotai.authtoken;
+    const token = userInfoJotai.access;
     const isValidToken = await validateToken(token);
 
     if (
@@ -223,7 +227,7 @@ const useLogin = () => {
         name,
         introduction,
         userImg,
-        userInfoJotai.authtoken,
+        userInfoJotai.access,
       );
 
       if (!data) {
@@ -233,7 +237,7 @@ const useLogin = () => {
       //アップデート成功時はユーザー情報をjotaiに入れる
       setuserInfoJotai({
         userInfo: updatedUserInfo,
-        authtoken: userInfoJotai.authtoken,
+        authtoken: userInfoJotai.access,
       });
 
       return updatedUserInfo;
