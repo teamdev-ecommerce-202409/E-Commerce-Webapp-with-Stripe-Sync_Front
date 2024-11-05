@@ -5,11 +5,14 @@ import { IconButton } from "@mui/material";
 import { useState } from "react";
 import "../../style/MenuListButton.css";
 import { useNavigate } from "react-router-dom";
+import useLogin from "../../hook/useLogin";
 
 export const MenuListButton = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const navigate = useNavigate();
   const open = Boolean(anchorEl);
+  const { logout, loading } = useLogin();
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -20,6 +23,10 @@ export const MenuListButton = () => {
   const handleMenuItemClick = (path: string) => {
     navigate(path);
     handleClose();
+  };
+
+  const handleLogout = () => {
+    logout();
   };
 
   return (
@@ -47,7 +54,9 @@ export const MenuListButton = () => {
           Mypage
         </MenuItem>
         <MenuItem onClick={() => handleMenuItemClick("/admin")}>Admin</MenuItem>
-        <MenuItem onClick={handleClose}>Logout</MenuItem>
+        <MenuItem onClick={handleLogout} disabled={loading}>
+          Logout
+        </MenuItem>
       </Menu>
     </div>
   );

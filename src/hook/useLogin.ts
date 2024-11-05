@@ -151,8 +151,8 @@ const useLogin = () => {
     resetJotai(); //グローバルステート初期化
     setLoading(false);
 
-    //login画面に移動
-    navigate("/login");
+    // ログイン情報を反映させるためにページにリフレッシュをかける
+    window.location.reload();
   };
 
   const validateToken = async (token: string | undefined | null) => {
