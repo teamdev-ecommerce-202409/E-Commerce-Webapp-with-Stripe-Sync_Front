@@ -2,8 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAtom } from "jotai";
 import {
-  checkTokenAPI,
   loginAPI,
+  refreshTokenAPI,
   signUpAPI,
   updateUserInfoAPI,
   verifyEmailAPI,
@@ -155,31 +155,37 @@ const useLogin = () => {
     window.location.reload();
   };
 
-  const validateToken = async (token: string | undefined | null) => {
-    const isValid = await checkTokenAPI(token);
-    if (token && !isValid) {
-      return false;
+  //トークンのリフレッシュ処理
+  const refreshToken = async () => {
+    try {
+      setLoading(true);
+      // アクセストークンが有効期限切れの場合に、リフレッシュトークンを使用して新しくアクセストークンを取得
+      const refresh = userInfoJotai.refresh;
+      if (!refresh) {
+        // リフレッシュトークンがない場合はログアウト処理
+        logout();
+      }
+
+      // リフレッシュトークンがある場合
+      const newTokenObj = await refreshTokenAPI(refresh);
+      // 取得した新たなトークンをjotaiにセット
+      setuserInfoJotai({
+        userInfo: userInfoJotai.userInfo,
+        access: newTokenObj.access,
+        refresh: newTokenObj.refresh,
+      });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error(error.message);
+        alert("トークンの再生成に失敗しました。ログアウトします。");
+      } else {
+        console.error("Unknown error", error);
+      }
+      logout();
+    } finally {
+      setLoading(false);
     }
-    return isValid;
   };
-  const checkLogin = async () => {
-    const token = userInfoJotai.access;
-    const isValidToken = await validateToken(token);
-
-    if (
-      !isValidToken ||
-      !userInfoJotai ||
-      !userInfoJotai.userInfo ||
-      userInfoJotai.userInfo.id
-    ) {
-      resetJotai(); //グローバルステート初期化
-
-      return false;
-    } else {
-      return true;
-    }
-  };
-
   const updateUserInfo = async (
     name: string,
     introduction: string,
@@ -259,7 +265,7 @@ const useLogin = () => {
     login,
     logout,
     verifiyEmail,
-    checkLogin,
+    refreshToken,
     updateUserInfo,
   };
 };
