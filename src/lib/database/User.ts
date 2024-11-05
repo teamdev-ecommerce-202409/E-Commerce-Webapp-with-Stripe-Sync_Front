@@ -3,7 +3,8 @@ import apiClient from "./apiClient";
 import { UserInfoType } from "../type/UserInfoType";
 
 type ResponseFromAPI = {
-  token?: string;
+  access?: string;
+  refresh?: string;
   user?: UserInfoType;
   error?: string;
 };
@@ -32,17 +33,17 @@ export async function signUpAPI(
   }
 }
 
-// ユーザー情報取得
+// ログイン機能
 export async function loginAPI(email: string, password: string) {
   try {
-    // クエリパラメータを用意
     const params: { [key: string]: unknown } = { email, password };
     if (!email || !password) {
       throw new Error("email and password are necessary.");
     }
-    // データを取得する
-    const response = await apiClient.post("/user/login", params);
 
+    // データを取得する
+    const response = await apiClient.post("/token/", params);
+    console.log("ログイン結果", response.data);
     return response.data as ResponseFromAPI;
   } catch (error: unknown) {
     console.error("Error fetching data:", error);
@@ -53,34 +54,24 @@ export async function loginAPI(email: string, password: string) {
     return null;
   }
 }
-// トークン有効確認機能
-export async function checkTokenAPI(token: string | undefined | null) {
+// トークンリフレッシュ機能
+export async function refreshTokenAPI(refresh: string | undefined | null) {
   try {
-    if (!token) {
-      throw new Error("トークンがありません");
+    if (!refresh) {
+      throw new Error("リフレッシュトークンがありません");
     }
+    const params: { [key: string]: unknown } = { refresh };
 
-    // リクエストヘッダーにJWTを含める
-    const headers = {
-      Authorization: `Bearer ${token}`,
-    };
+    const response = await apiClient.post("/token/refresh/", params);
+    console.log(response.data);
 
-    // トークンを登録する
-    const response = await apiClient.post("/user/checkToken", {}, { headers });
-    if (response.status === 200) {
-      // トークン有効
-      return true;
-    } else {
-      //トークン無効
-
-      return false;
-    }
+    return { access: response.data.access, refresh: response.data.refresh };
   } catch (error: unknown) {
-    console.error("Error check token:", error);
+    console.error("Error refresh token:", error);
     if (isAxiosError(error)) {
-      console.error("Error check token:", error.response?.data);
+      console.error("Error refresh token:", error.response?.data);
     }
-    return false;
+    throw new Error("トークンの再生成失敗");
   }
 }
 

@@ -45,13 +45,7 @@ const LoginForm = ({ handleClose }: Props) => {
             <CloseIcon />
           </IconButton>
         </span>
-        {/* <div className="loginForm_image_container">
-          <img
-            src="/assets/karukan_icon.svg"
-            className="responsive-img"
-            alt="icon"
-          />
-        </div> */}
+
         <div className="loginForm_title_container">
           {signUpFlag ? <h1>アカウント作成</h1> : <h1>ログイン</h1>}
         </div>

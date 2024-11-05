@@ -14,21 +14,23 @@ import { ProductInfoType } from "./ProductType";
 
 // 以下から本番用の型。今後の開発は原則以下を試用
 // User 型定義
+
 export type UserInfoType = {
   id: number;
-  user_name: string;
-  email_address: string;
+  name: string;
+  email: string;
   role: string;
   email_validated_at?: string | null;
-  address: string;
-  is_deleted: boolean;
-  created_at: string; // DateTimeField は string 型で扱う
-  updated_at: string; // DateTimeField は string 型で扱う
+  address?: string;
+  // is_deleted: boolean;
+  // created_at: string; // DateTimeField は string 型で扱う
+  // updated_at: string; // DateTimeField は string 型で扱う
 };
 
 export type UserInfoTypeJotai = {
   userInfo?: UserInfoType;
-  authtoken?: string;
+  access?: string;
+  refresh?: string;
 };
 
 export type FavoriteInfo = {
