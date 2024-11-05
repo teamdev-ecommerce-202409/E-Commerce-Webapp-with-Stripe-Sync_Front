@@ -18,7 +18,7 @@ const CartItemCard = ({
 }: Props) => {
   const [itemQuantity, setItemQuantity] = useState(cartItem.quantity);
   return (
-    <div className="cartItemCard_container">
+    <div className="cartItemCard_container" key={cartItem.product.id}>
       <div className="cartItemCard_image_container">
         <img
           src={cartItem.product.imgUrl || "/no_image_square.jpg"}
