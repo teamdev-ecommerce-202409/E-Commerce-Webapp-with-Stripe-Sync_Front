@@ -6,6 +6,7 @@ type ResponseFromAPI = {
   access?: string;
   refresh?: string;
   user?: UserInfoType;
+  fav?: number[];
   error?: string;
 };
 

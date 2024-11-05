@@ -3,10 +3,14 @@ import ShoppingCartButton from "../../shared/ShoppingCartButton";
 import "../../../style/ProductCard.css";
 import { useNavigate } from "react-router-dom";
 import { ProductInfoType } from "../../../lib/type/ProductType";
+import { useAtom } from "jotai";
+import { userInfoAtom } from "../../../lib/jotai/atoms/user";
 type Props = {
   product: ProductInfoType;
 };
 const ProductCard = ({ product }: Props) => {
+  const [userInfoJotai] = useAtom(userInfoAtom);
+
   const navigate = useNavigate();
 
   const handleCardClick = () => {
@@ -26,7 +30,7 @@ const ProductCard = ({ product }: Props) => {
       <h3>{product.name}</h3>
       <p> ¥{product.price.toLocaleString()}</p>
       <div className="productActions_container">
-        <FavoriteButton />
+        {userInfoJotai.userInfo && <FavoriteButton productId={product.id} />}
         <ShoppingCartButton product={product} />
       </div>
     </div>
