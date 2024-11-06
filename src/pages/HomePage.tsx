@@ -9,8 +9,11 @@ import ProductList from "../component/featured/HomePage/ProductList";
 import PaginationControl from "../component/shared/PaginationControl";
 import { loadNumPerPage } from "../lib/constants";
 import SearchInput from "../component/shared/SearchInput";
+import { useAtom } from "jotai";
+import { userInfoAtom } from "../lib/jotai/atoms/user";
 
 const HomePage = () => {
+  const [userInfoJotai] = useAtom(userInfoAtom);
   const [categories, setCategories] = useState<CatgoryType | null>(null);
   const [selectedCategories, setSelectedCategories] =
     useState<CatgoryType | null>({
@@ -41,12 +44,19 @@ const HomePage = () => {
     ) {
       // フィルタ条件に基づいて商品リストを取得
       const filteredProducts = await getProducts(
-        currentPage,
-        selectedCategories?.sizeCatgory.map((size) => size.id),
-        selectedCategories?.targetCatgory.map((target) => target.id),
-        selectedCategories?.typeCatgory.map((clothType) => clothType.id),
-        selectedCategories?.brandCatgory.map((brand) => brand.id),
-        keyword,
+        {
+          page: currentPage,
+          sizeId: selectedCategories?.sizeCatgory.map((size) => size.id),
+          targetId: selectedCategories?.targetCatgory.map(
+            (target) => target.id,
+          ),
+          clothesTypeId: selectedCategories?.typeCatgory.map(
+            (clothType) => clothType.id,
+          ),
+          brandId: selectedCategories?.brandCatgory.map((brand) => brand.id),
+          keyword: keyword,
+        },
+        userInfoJotai.access,
       );
 
       // 商品リストを更新
@@ -63,7 +73,11 @@ const HomePage = () => {
       setFilterTitle("検索結果");
     } else {
       // フィルタがない場合は全ての商品を取得
-      const allProducts = await getProducts(currentPage);
+      const allProducts = await getProducts(
+        { page: currentPage },
+
+        userInfoJotai.access,
+      );
       setProductList(allProducts ? allProducts.results : []);
       // ページネーション設定
       if (allProducts?.count) {

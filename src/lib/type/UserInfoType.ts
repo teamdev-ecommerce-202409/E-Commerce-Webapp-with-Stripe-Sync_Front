@@ -31,7 +31,6 @@ export type UserInfoTypeJotai = {
   userInfo?: UserInfoType;
   access?: string;
   refresh?: string;
-  fav?: number[];
 };
 
 export type FavoriteInfo = {
