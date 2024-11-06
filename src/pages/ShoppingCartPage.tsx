@@ -101,7 +101,7 @@ const ShoppingCartPage = () => {
     }));
     try {
       const redirectUrl = await checkout(checkoutData);
-      clearCart();
+      clearCart(); // チェックアウト画面でキャンセルした場合にもカートの中身が消える
       window.location.href = redirectUrl;
     } catch (error) {
       alert('チェックアウトに失敗しました。')
