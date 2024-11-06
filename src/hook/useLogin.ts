@@ -129,7 +129,6 @@ const useLogin = () => {
         userInfo: loginUser,
         access: data.access,
         refresh: data.refresh,
-        fav: data.fav,
       });
 
       // ログイン情報を反映させるためにページにリフレッシュをかける
