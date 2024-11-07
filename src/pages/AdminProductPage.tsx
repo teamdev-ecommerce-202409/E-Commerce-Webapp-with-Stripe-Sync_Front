@@ -40,13 +40,15 @@ const AdminProductPage = () => {
         selectedCategories.targetCatgory.length > 0 ||
         selectedCategories.sizeCatgory.length > 0)
     ) {
-      const filteredProducts = await getProducts(
-        currentPage,
-        selectedCategories.sizeCatgory.map((size) => size.id),
-        selectedCategories.targetCatgory.map((target) => target.id),
-        selectedCategories.typeCatgory.map((clothType) => clothType.id),
-        selectedCategories.brandCatgory.map((brand) => brand.id),
-      );
+      const filteredProducts = await getProducts({
+        page: currentPage,
+        sizeId: selectedCategories.sizeCatgory.map((size) => size.id),
+        targetId: selectedCategories.targetCatgory.map((target) => target.id),
+        clothesTypeId: selectedCategories.typeCatgory.map(
+          (clothType) => clothType.id,
+        ),
+        brandId: selectedCategories.brandCatgory.map((brand) => brand.id),
+      });
       setProductList(filteredProducts ? filteredProducts.results : []);
       if (filteredProducts?.count) {
         setAllPageCount(Math.ceil(filteredProducts?.count / loadNumPerPage));
@@ -55,7 +57,7 @@ const AdminProductPage = () => {
       }
       setFilterTitle("検索結果");
     } else {
-      const allProducts = await getProducts(currentPage);
+      const allProducts = await getProducts({ page: currentPage });
       setProductList(allProducts ? allProducts.results : []);
       if (allProducts?.count) {
         setAllPageCount(Math.ceil(allProducts?.count / loadNumPerPage));
@@ -101,7 +103,10 @@ const AdminProductPage = () => {
           <div className="homepage_productList_container">
             <p>page:{page}</p>
             <p>allpage:{allPageCount}</p>
-            <AdminProductList productList={productList} setProductList={setProductList} />
+            <AdminProductList
+              productList={productList}
+              setProductList={setProductList}
+            />
             <PaginationControl
               allPageCount={allPageCount}
               handlePageChange={setPage}

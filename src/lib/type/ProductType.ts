@@ -42,6 +42,7 @@ export type ProductInfoType = {
   is_deleted: boolean;
   created_at: string; // DateTimeField は string で扱う
   updated_at: string; // DateTimeField は string で扱う
+  fav?: boolean;
 };
 
 export type RatingInfoType = {

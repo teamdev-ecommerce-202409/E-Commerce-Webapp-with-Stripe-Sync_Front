@@ -5,7 +5,7 @@ import {
   RatingInfoType,
 } from "../type/ProductType";
 import { PaginationInfoType } from "../type/GenericType";
-import { format } from 'date-fns';
+import { format } from "date-fns";
 import axios from "axios";
 
 interface ProductUpdateParams {
@@ -41,14 +41,26 @@ export async function getAllCategories() {
 }
 
 export async function getProducts(
-  page: number = 1,
-  sizeId?: number[],
-  targetId?: number[],
-  clothesTypeId?: number[],
-  brandId?: number[],
-  keyword?: string,
-  isDeleted?: string,
-  releaseDate?: string,
+  {
+    page = 1,
+    sizeId,
+    targetId,
+    clothesTypeId,
+    brandId,
+    keyword,
+    isDeleted,
+    releaseDate,
+  }: {
+    page?: number;
+    sizeId?: number[];
+    targetId?: number[];
+    clothesTypeId?: number[];
+    brandId?: number[];
+    keyword?: string;
+    isDeleted?: string;
+    releaseDate?: string;
+  } = {},
+  access?: string,
 ) {
   try {
     const params: { [key: string]: unknown } = { page };
@@ -73,7 +85,13 @@ export async function getProducts(
     if (releaseDate) {
       params.release_date = releaseDate;
     }
-    const headers = {};
+    let headers = {};
+    if (access) {
+      headers = {
+        Authorization: `Bearer ${access}`,
+      };
+    }
+
     const response = await apiClient.get("/products/", {
       headers,
       params,
@@ -146,10 +164,12 @@ export async function createProduct(productUpdateParams: ProductUpdateParams) {
       clothes_type_pk: productUpdateParams.clothTypeId,
       size_pk: productUpdateParams.sizeId,
       target_pk: productUpdateParams.targetId,
-      category: '服'
+      category: "服",
     };
     checkProductUpdateParam(data);
-    data.release_date = formatDateWithOffset(new Date(data.release_date as string));
+    data.release_date = formatDateWithOffset(
+      new Date(data.release_date as string),
+    );
     const response = await apiClient.post(`/products/`, data);
     return response.data as ProductInfoType;
   } catch (error) {
@@ -168,7 +188,9 @@ export async function createProduct(productUpdateParams: ProductUpdateParams) {
   }
 }
 
-export async function updateProductDetail(productUpdateParams: ProductUpdateParams) {
+export async function updateProductDetail(
+  productUpdateParams: ProductUpdateParams,
+) {
   try {
     if (!productUpdateParams.productId) {
       throw new Error("productId is required");
@@ -183,12 +205,15 @@ export async function updateProductDetail(productUpdateParams: ProductUpdatePara
       clothes_type_pk: productUpdateParams.clothTypeId,
       size_pk: productUpdateParams.sizeId,
       target_pk: productUpdateParams.targetId,
-      is_deleted: productUpdateParams.isDeleted
+      is_deleted: productUpdateParams.isDeleted,
     };
     if (!productUpdateParams.isDeleted) {
       checkProductUpdateParam(data);
     }
-    const response = await apiClient.put(`/products/${productUpdateParams.productId}/`, data);
+    const response = await apiClient.put(
+      `/products/${productUpdateParams.productId}/`,
+      data,
+    );
     return response.data as ProductInfoType;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -238,20 +263,23 @@ function checkProductUpdateParam(params: { [key: string]: unknown }) {
       throw new Error(`正しい日付を指定してください。`);
     }
   }
-  checkStringParam('製品名', params.name, 1, 255);
-  checkStringParam('説明', params.description, null, null);
-  checkNumberParam('価格', params.price, 0, null);
-  checkNumberParam('在庫数', params.stock_quantity, 0, null);
-  checkNumberParam('ブランドID', params.brand_pk, 1, null);
-  checkNumberParam('タイプID', params.clothes_type_pk, 1, null);
-  checkNumberParam('サイズID', params.size_pk, 1, null);
-  checkNumberParam('ターゲットID', params.target_pk, 1, null);
+  checkStringParam("製品名", params.name, 1, 255);
+  checkStringParam("説明", params.description, null, null);
+  checkNumberParam("価格", params.price, 0, null);
+  checkNumberParam("在庫数", params.stock_quantity, 0, null);
+  checkNumberParam("ブランドID", params.brand_pk, 1, null);
+  checkNumberParam("タイプID", params.clothes_type_pk, 1, null);
+  checkNumberParam("サイズID", params.size_pk, 1, null);
+  checkNumberParam("ターゲットID", params.target_pk, 1, null);
 }
 
 function checkStringParam(
-  paramName: string, value: any, minLength: number | null, maxLength: number | null
+  paramName: string,
+  value: any,
+  minLength: number | null,
+  maxLength: number | null,
 ) {
-  if (value === null || typeof value !== 'string') {
+  if (value === null || typeof value !== "string") {
     throw new Error(`${paramName}を文字列で指定してください。`);
   }
   const valueString = value as string;
@@ -264,9 +292,12 @@ function checkStringParam(
 }
 
 function checkNumberParam(
-  paramName: string, value: any, minNumber: number | null, maxNumber: number | null
+  paramName: string,
+  value: any,
+  minNumber: number | null,
+  maxNumber: number | null,
 ) {
-  if (value === null || typeof value !== 'number') {
+  if (value === null || typeof value !== "number") {
     throw new Error(`${paramName}を数値で指定してください。`);
   }
   const valueNumber = value as number;
@@ -280,4 +311,41 @@ function checkNumberParam(
 
 function formatDateWithOffset(date: Date): string {
   return format(date, "yyyy-MM-dd'T'HH:mm:ssXXX");
+}
+
+export async function registerFav(
+  productId: number,
+  fav: boolean,
+  access: string | undefined | null,
+) {
+  try {
+    const params: { [key: string]: unknown } = {};
+
+    if (!access) {
+      throw new Error("access token is required");
+    }
+
+    if (productId) {
+      params.product_id = productId;
+    } else {
+      throw new Error("productId is required.");
+    }
+
+    params.fav = fav;
+
+    const headers = {
+      Authorization: `Bearer ${access}`,
+    };
+    const response = await apiClient.post("/favorites/", params, {
+      headers,
+    });
+    if (response.status !== 200) {
+      throw new Error("Something wrong with registering fav state");
+    }
+    return response.data as number;
+  } catch (error) {
+    console.error("Error registering data:", error);
+
+    return null;
+  }
 }

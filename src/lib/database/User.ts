@@ -6,6 +6,7 @@ type ResponseFromAPI = {
   access?: string;
   refresh?: string;
   user?: UserInfoType;
+  fav?: number[];
   error?: string;
 };
 
@@ -41,9 +42,7 @@ export async function loginAPI(email: string, password: string) {
       throw new Error("email and password are necessary.");
     }
 
-    // データを取得する
     const response = await apiClient.post("/token/", params);
-    console.log("ログイン結果", response.data);
     return response.data as ResponseFromAPI;
   } catch (error: unknown) {
     console.error("Error fetching data:", error);

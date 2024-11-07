@@ -2,15 +2,23 @@ import { useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { userInfoAtom } from "../../lib/jotai/atoms/user";
+import { useAtom } from "jotai";
+import { registerFav } from "../../lib/database/Product";
+import { ProductInfoType } from "../../lib/type/ProductType";
 
-const FavoriteButton = () => {
-  const [isFavorite, setIsFavorite] = useState(false);
+type Props = {
+  product: ProductInfoType;
+};
+const FavoriteButton = ({ product }: Props) => {
+  const [userInfoJotai] = useAtom(userInfoAtom);
+  const [isFavorite, setIsFavorite] = useState(product.fav || false);
 
-  const handleFavoriteClick = (
+  const handleFavoriteClick = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     event.stopPropagation();
-    console.log("fav!");
+    await registerFav(product.id, !isFavorite, userInfoJotai.access);
     setIsFavorite(!isFavorite);
   };
 
