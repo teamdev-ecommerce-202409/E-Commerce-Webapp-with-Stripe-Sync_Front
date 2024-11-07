@@ -9,6 +9,8 @@ import AdminProductDetailPage from "./pages/AdminProductDetailPage";
 import AdminProductCreatePage from "./pages/AdminProductCreatePage";
 import AdminProductPage from "./pages/AdminProductPage";
 import ShoppingCartPage from "./pages/ShoppingCartPage";
+import CheckoutSuccessPage from "./pages/CheckoutSuccessPage";
+import CheckoutCancelPage from "./pages/CheckoutCancelPage";
 
 const theme = createTheme({
   palette: {
@@ -44,6 +46,8 @@ function App() {
               element={<AdminProductDetailPage />}
             />
             <Route path="/shoppingcart" element={<ShoppingCartPage />} />
+            <Route path="/checkout/success" element={<CheckoutSuccessPage />} />
+            <Route path="/checkout/cancel" element={<CheckoutCancelPage />} />
           </Routes>
         </Router>
       </div>

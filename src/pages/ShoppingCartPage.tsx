@@ -14,15 +14,15 @@ import {
 } from "../lib/database/Cart";
 import { CartInfoJotai } from "../lib/jotai/JotaiType";
 import { shippingFeeFreePrice } from "../lib/constants";
+import { checkout, CheckoutData } from "../lib/database/Order";
 
 const ShoppingCartPage = () => {
   const [userInfoJotai] = useAtom(userInfoAtom);
-
   const [cartInfoJotai, setCartInfoJotai] = useAtom(cartInfoAtom);
-
   const [cartItems, setCartItems] = useState<CartInfoType[]>([]);
   const [sumPrice, setSumPrice] = useState<number>(0);
   const [shippingFee, setShippingFee] = useState<number>(0);
+  const [checkoutLoading, setCheckoutLoading] = useState<boolean>(false);
 
   const sumAllCartItems = (cartItems: CartInfoType[]) => {
     //カートに入っているすべての商品の合計値を算出してセットする関数
@@ -32,7 +32,6 @@ const ShoppingCartPage = () => {
       sum += cartItem.product.price * cartItem.quantity;
     }
     setSumPrice(sum);
-
     setShippingFee(sum > shippingFeeFreePrice || sum === 0 ? 0 : shippingFee);
   };
 
@@ -68,7 +67,6 @@ const ShoppingCartPage = () => {
         const newCartItems = cartItems.filter((cartItem) => {
           return cartItem.product.id !== productId;
         });
-
         setCartItems(newCartItems);
         sumAllCartItems(newCartItems);
       }
@@ -82,9 +80,38 @@ const ShoppingCartPage = () => {
     }
   };
 
+  const clearCart = () => {
+    const isGuestUser = userInfoJotai.userInfo?.id === undefined;
+    if (isGuestUser) {
+      const newCartItems: CartInfoType[] = [];
+      setCartInfoJotai({ cartItems: newCartItems } as CartInfoJotai);
+      setCartItems(newCartItems);
+      sumAllCartItems(newCartItems);
+    } else {
+      // NOP
+      // ログインユーザーのカート情報はDBにあり、決済時にバックエンドで削除される
+    }
+  };
+
+  const handleCheckout = async () => {
+    setCheckoutLoading(true);
+    const checkoutData: CheckoutData[] = cartItems.map((item) => ({
+      product_id: item.product.id,
+      amount: item.quantity,
+    }));
+    try {
+      const redirectUrl = await checkout(checkoutData);
+      clearCart(); // チェックアウト画面でキャンセルした場合にもカートの中身が消える
+      window.location.href = redirectUrl;
+    } catch (error) {
+      alert('チェックアウトに失敗しました。')
+    } finally {
+      setCheckoutLoading(false);
+    }
+  };
+
   const getCartItems = async (userId: number) => {
     const cartItems = await getCartItemsByUserId(userId);
-
     setCartItems(cartItems);
     sumAllCartItems(cartItems);
   };
@@ -96,11 +123,11 @@ const ShoppingCartPage = () => {
       getCartItems(userInfoJotai.userInfo.id);
     } else {
       // ユーザー情報がない＝未ログインの場合→ローカルストレージからカートの中身をとってくる
-
       setCartItems(cartInfoJotai.cartItems);
       sumAllCartItems(cartInfoJotai.cartItems);
     }
   }, []);
+
   return (
     <Layout>
       <div className="shoppingCartPage_container">
@@ -138,8 +165,8 @@ const ShoppingCartPage = () => {
               {cartItems.length > 0 && (
                 <div className="shoppingCartPage_settlementButton_container">
                   <PrimaryButton
-                    onClick={() => alert("settlement click")}
-                    loading={false}
+                    onClick={handleCheckout}
+                    loading={checkoutLoading}
                     text={"レジに進む"}
                   />
                 </div>
