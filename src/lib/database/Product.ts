@@ -235,13 +235,13 @@ export async function getProductRatings(productId?: number, userId?: number) {
   try {
     const params: { [key: string]: unknown } = {};
     if (productId) {
-      params.productId = productId;
+      params.product_Id = productId;
     }
     if (userId) {
       params.userId = userId;
     }
     const headers = {};
-    const response = await apiClient.get("/ratings/", {
+    const response = await apiClient.get("/reviews/", {
       headers,
       params,
     });
@@ -275,7 +275,7 @@ function checkProductUpdateParam(params: { [key: string]: unknown }) {
 
 function checkStringParam(
   paramName: string,
-  value: any,
+  value: unknown,
   minLength: number | null,
   maxLength: number | null,
 ) {
@@ -293,7 +293,7 @@ function checkStringParam(
 
 function checkNumberParam(
   paramName: string,
-  value: any,
+  value: unknown,
   minNumber: number | null,
   maxNumber: number | null,
 ) {

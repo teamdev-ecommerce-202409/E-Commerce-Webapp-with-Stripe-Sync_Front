@@ -58,7 +58,7 @@ const DetailPage = () => {
                 {product && (
                   <>
                     <ShoppingCartButton product={product} />
-                    <FavoriteButton />
+                    <FavoriteButton product={product} />
                   </>
                 )}
               </div>
@@ -71,7 +71,7 @@ const DetailPage = () => {
                 readOnly
                 defaultValue={0}
               />
-              {rating?.comments.map((comment) => {
+              {rating?.comments?.map((comment) => {
                 return <CommentCard key={comment.id} comment={comment} />;
               })}
             </div>

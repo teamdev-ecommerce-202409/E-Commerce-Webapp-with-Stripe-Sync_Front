@@ -10,7 +10,7 @@ import { CartInfoType } from "../lib/type/ProductType";
 import {
   changeCartItemQuantity,
   deleteCartItem,
-  getCartItemsByUserId,
+  getCartItemsByUser,
 } from "../lib/database/Cart";
 import { CartInfoJotai } from "../lib/jotai/JotaiType";
 import { shippingFeeFreePrice } from "../lib/constants";
@@ -38,11 +38,12 @@ const ShoppingCartPage = () => {
   const handleChangeQuantity = async (
     productId: number,
     quantity: number,
-    userId?: number,
+    access?: string,
   ) => {
-    if (userId) {
+    console.log("handleChangeQuantity", { productId, quantity, access });
+    if (access) {
       //ユーザーIDがある＝ログインしている→バックエンドとアクセス
-      await changeCartItemQuantity(userId, productId, quantity);
+      await changeCartItemQuantity(access, productId, quantity);
     } else {
       // ユーザーIDがない＝ゲストモード→ローカルストレージとやりとり
       const newCartItems = cartItems.map((cartItem) => {
@@ -58,9 +59,10 @@ const ShoppingCartPage = () => {
     }
   };
 
-  const handleDeleteCartItem = async (productId: number, userId?: number) => {
-    if (userId) {
-      const result = await deleteCartItem(userId, productId);
+  const handleDeleteCartItem = async (productId: number, access?: string) => {
+    console.log("handleDeleteCartItem", { productId, access });
+    if (access) {
+      const result = await deleteCartItem(access, productId);
       if (!result) {
         alert("削除失敗");
       } else {
@@ -104,23 +106,24 @@ const ShoppingCartPage = () => {
       clearCart(); // チェックアウト画面でキャンセルした場合にもカートの中身が消える
       window.location.href = redirectUrl;
     } catch (error) {
-      alert('チェックアウトに失敗しました。')
+      console.error(error);
+      alert("チェックアウトに失敗しました。");
     } finally {
       setCheckoutLoading(false);
     }
   };
 
-  const getCartItems = async (userId: number) => {
-    const cartItems = await getCartItemsByUserId(userId);
+  const getCartItems = async (access: string) => {
+    const cartItems = await getCartItemsByUser(access);
     setCartItems(cartItems);
     sumAllCartItems(cartItems);
   };
 
   useEffect(() => {
     // グローバルステートからログインユーザー情報を取得
-    if (userInfoJotai.userInfo) {
-      // ユーザー情報が入っている場合=ログインしている→ユーザーIDをキーにバックエンドからカートの中身を取得
-      getCartItems(userInfoJotai.userInfo.id);
+    if (userInfoJotai.access) {
+      // ユーザー情報が入っている場合=ログインしている
+      getCartItems(userInfoJotai.access);
     } else {
       // ユーザー情報がない＝未ログインの場合→ローカルストレージからカートの中身をとってくる
       setCartItems(cartInfoJotai.cartItems);
