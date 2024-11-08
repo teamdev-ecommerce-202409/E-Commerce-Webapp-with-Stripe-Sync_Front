@@ -2,17 +2,19 @@ import { CartInfoType } from "../type/ProductType";
 import apiClient from "./apiClient";
 
 // userIDからカート情報を取得する
-export async function getCartItemsByUserId(userId: number) {
+export async function getCartItemsByUser(access: string) {
   try {
     const params: { [key: string]: unknown } = {};
 
-    if (!userId) {
-      throw new Error("userId is required");
+    let headers = {};
+    if (access) {
+      headers = {
+        Authorization: `Bearer ${access}`,
+      };
     } else {
-      params.user = userId;
+      throw new Error("access is required");
     }
 
-    const headers = {};
     const response = await apiClient.get("/cartitems/", {
       headers,
       params,
@@ -30,17 +32,20 @@ export async function getCartItemsByUserId(userId: number) {
 }
 
 export async function changeCartItemQuantity(
-  userId: number,
+  access: string,
   productId: number,
   quantity?: number,
 ) {
   try {
     const data: { [key: string]: unknown } = {};
 
-    if (!userId) {
-      throw new Error("userId is required");
+    let headers = {};
+    if (access) {
+      headers = {
+        Authorization: `Bearer ${access}`,
+      };
     } else {
-      data.user_id = userId;
+      throw new Error("access is required");
     }
     if (!productId) {
       throw new Error("productId is required");
@@ -50,7 +55,6 @@ export async function changeCartItemQuantity(
     if (quantity) {
       data.quantity = quantity;
     }
-    const headers = {};
 
     const response = await apiClient.post("/cartitems/", data, {
       headers,
@@ -66,22 +70,23 @@ export async function changeCartItemQuantity(
   }
 }
 
-export async function deleteCartItem(userId: number, productId: number) {
+export async function deleteCartItem(access: string, productId: number) {
   try {
     const data: { [key: string]: unknown } = {};
 
-    if (!userId) {
-      throw new Error("userId is required");
+    let headers = {};
+    if (access) {
+      headers = {
+        Authorization: `Bearer ${access}`,
+      };
     } else {
-      data.user_id = userId;
+      throw new Error("access is required");
     }
     if (!productId) {
       throw new Error("productId is required");
     } else {
       data.product_id = productId;
     }
-
-    const headers = {};
 
     const response = await apiClient.delete("/cartitems/", {
       data,

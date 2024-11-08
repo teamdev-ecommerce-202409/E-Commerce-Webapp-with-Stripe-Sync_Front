@@ -2,20 +2,23 @@ import { useState } from "react";
 import { CartInfoType } from "../../../lib/type/ProductType";
 import "../../../style/CartItemCard.css";
 import PrimaryButton from "../../shared/PrimaryButton";
+import { userInfoAtom } from "../../../lib/jotai/atoms/user";
+import { useAtom } from "jotai";
 type Props = {
   cartItem: CartInfoType;
   handleChangeQuantity: (
     productId: number,
     quantity: number,
-    userId?: number,
+    access?: string,
   ) => void;
-  handleDeleteCartItem: (productId: number, userId?: number) => void;
+  handleDeleteCartItem: (productId: number, access?: string) => void;
 };
 const CartItemCard = ({
   cartItem,
   handleChangeQuantity,
   handleDeleteCartItem,
 }: Props) => {
+  const [userInfoJotai] = useAtom(userInfoAtom);
   const [itemQuantity, setItemQuantity] = useState(cartItem.quantity);
   return (
     <div className="cartItemCard_container" key={cartItem.product.id}>
@@ -47,10 +50,17 @@ const CartItemCard = ({
               className="cartItemCard_quantity_button"
               onClick={() => {
                 if (itemQuantity - 1 === 0) {
-                  handleDeleteCartItem(cartItem.product.id);
+                  handleDeleteCartItem(
+                    cartItem.product.id,
+                    userInfoJotai.access,
+                  );
                 } else {
                   setItemQuantity(itemQuantity - 1);
-                  handleChangeQuantity(cartItem.product.id, itemQuantity - 1);
+                  handleChangeQuantity(
+                    cartItem.product.id,
+                    itemQuantity - 1,
+                    userInfoJotai.access,
+                  );
                 }
               }}
             >
@@ -65,7 +75,11 @@ const CartItemCard = ({
               className="cartItemCard_quantity_button"
               onClick={() => {
                 setItemQuantity(itemQuantity + 1);
-                handleChangeQuantity(cartItem.product.id, itemQuantity + 1);
+                handleChangeQuantity(
+                  cartItem.product.id,
+                  itemQuantity + 1,
+                  userInfoJotai.access,
+                );
               }}
             >
               +
@@ -73,7 +87,9 @@ const CartItemCard = ({
           </div>
           <div className="cartItemCard_delete_button_container">
             <PrimaryButton
-              onClick={() => handleDeleteCartItem(cartItem.product.id)}
+              onClick={() =>
+                handleDeleteCartItem(cartItem.product.id, userInfoJotai.access)
+              }
               loading={false}
               text={"削除"}
             />
