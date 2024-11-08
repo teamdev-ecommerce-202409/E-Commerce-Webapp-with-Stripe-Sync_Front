@@ -47,7 +47,7 @@ export type ProductInfoType = {
 
 export type RatingInfoType = {
   average_rating: number;
-  comments: CommentInfoType[];
+  comments?: CommentInfoType[];
 };
 
 export type CommentInfoType = {
