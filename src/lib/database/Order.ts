@@ -1,3 +1,4 @@
+import { PaginationInfoType } from "../type/GenericType";
 import { OrderInfoType } from "../type/OrderType";
 import apiClient from "./apiClient";
 import axios from "axios";
@@ -40,6 +41,39 @@ export async function getOrderHistoryByUserId(userId: number) {
     }
     console.log(response.data);
     return response.data as OrderInfoType[];
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return null;
+  }
+}
+
+export async function getOrders(
+  {
+    page = 1,
+  }: {
+    page?: number;
+  } = {},
+  access?: string,
+) {
+  try {
+    const params: { [key: string]: unknown } = { page };
+
+    let headers = {};
+    if (access) {
+      headers = {
+        Authorization: `Bearer ${access}`,
+      };
+    }
+
+    const response = await apiClient.get("/orders/", {
+      headers,
+      params,
+    });
+    if (response.status !== 200) {
+      throw new Error("Failed to fetch data");
+    }
+    console.log(response.data);
+    return response.data as PaginationInfoType<OrderInfoType>;
   } catch (error) {
     console.error("Error fetching data:", error);
     return null;

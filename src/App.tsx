@@ -11,6 +11,7 @@ import AdminProductPage from "./pages/AdminProductPage";
 import ShoppingCartPage from "./pages/ShoppingCartPage";
 import CheckoutSuccessPage from "./pages/CheckoutSuccessPage";
 import CheckoutCancelPage from "./pages/CheckoutCancelPage";
+import AdminOrderPage from "./pages/AdminOrderPage";
 
 const theme = createTheme({
   palette: {
@@ -37,6 +38,8 @@ function App() {
             <Route path="/mypage" element={<MyPage />} />
             <Route path="/admin" element={<AdminHomePage />} />
             <Route path="/admin/product" element={<AdminProductPage />} />
+            <Route path="/admin/order" element={<AdminOrderPage />} />
+
             <Route
               path="/admin/product/new"
               element={<AdminProductCreatePage />}
