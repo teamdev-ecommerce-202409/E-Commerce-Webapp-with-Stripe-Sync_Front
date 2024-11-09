@@ -27,7 +27,6 @@ const AdminOrderPage = () => {
       },
       userInfoJotai.access,
     );
-
     // 注文リストを更新
     setOrderList(orders ? orders.results : []);
 
@@ -38,10 +37,6 @@ const AdminOrderPage = () => {
       setAllPageCount(0);
     }
   };
-  //   useEffect(() => {
-  //     // ページ番号が変更された時、次ページの製品リストを新たに取得する
-  //     fetchOrders();
-  //   }, [page]);
   useEffect(() => {
     const authCheckAdmin = async () => {
       const authResult = await checkLogin(true);
@@ -50,29 +45,37 @@ const AdminOrderPage = () => {
       }
     };
     authCheckAdmin();
-    fetchOrders(1);
-  }, []);
+    fetchOrders(page);
+  }, [page]);
+  //   useEffect(() => {
+  //     const authCheckAdmin = async () => {
+  //       const authResult = await checkLogin(true);
+  //       if (!authResult) {
+  //         navigate("/");
+  //       }
+  //     };
+  //     authCheckAdmin();
+  //     fetchOrders(1);
+  //   }, []);
   return (
     <Layout>
       <div className="adminOrderPage_container">
         <div className="adminOrderPage_title_container">
           <h2>注文状況照会</h2>
         </div>
-        <div className="homepage_product_container">
-          <div className="homepage_productList_container">
-            {orderList && orderList.length > 0 ? (
-              <>
-                <AdminOrderList orderList={orderList} />
-                <PaginationControl
-                  allPageCount={allPageCount} //総ページ数
-                  handlePageChange={setPage} //変更されたときに走る関数。第2引数にページ番号が入る
-                  page={page} //現在のページ番号
-                />
-              </>
-            ) : (
-              <div>照会できる注文リストはありません。</div>
-            )}
-          </div>
+        <div className="adminOrderPage_orderList_container">
+          {orderList && orderList.length > 0 ? (
+            <>
+              <AdminOrderList orderList={orderList} />
+              <PaginationControl
+                allPageCount={allPageCount} //総ページ数
+                handlePageChange={setPage} //変更されたときに走る関数。第2引数にページ番号が入る
+                page={page} //現在のページ番号
+              />
+            </>
+          ) : (
+            <div>照会できる注文リストはありません。</div>
+          )}
         </div>
       </div>
     </Layout>
