@@ -8,8 +8,11 @@ import { createProduct, getAllCategories } from "../lib/database/Product";
 import { CatgoryType, ProductInfoType } from "../lib/type/ProductType";
 import PrimaryButton from "../component/shared/PrimaryButton";
 import useLogin from "../hook/useLogin";
+import { userInfoAtom } from "../lib/jotai/atoms/user";
+import { useAtom } from "jotai";
 
 const AdminProductCreatePage = () => {
+  const [userInfoJotai] = useAtom(userInfoAtom);
   const { checkLogin } = useLogin();
   const navigate = useNavigate();
 
@@ -36,19 +39,22 @@ const AdminProductCreatePage = () => {
 
   const createNewProduct = async () => {
     try {
-      const productInfo = await createProduct({
-        productId: null,
-        name: name,
-        description: description,
-        price: price,
-        releaseDate: releaseDate,
-        stockQuantity: stockQuantity,
-        brandId: brandId,
-        clothTypeId: clothesTypeId,
-        sizeId: sizeId,
-        targetId: targetId,
-        isDeleted: false,
-      });
+      const productInfo = await createProduct(
+        {
+          productId: null,
+          name: name,
+          description: description,
+          price: price,
+          releaseDate: releaseDate,
+          stockQuantity: stockQuantity,
+          brandId: brandId,
+          clothTypeId: clothesTypeId,
+          sizeId: sizeId,
+          targetId: targetId,
+          isDeleted: false,
+        },
+        userInfoJotai.access,
+      );
       return productInfo as ProductInfoType;
     } catch (error) {
       if (error instanceof Error) {

@@ -12,8 +12,11 @@ import {
 } from "../lib/database/Product";
 import { CatgoryType } from "../lib/type/ProductType";
 import useLogin from "../hook/useLogin";
+import { userInfoAtom } from "../lib/jotai/atoms/user";
+import { useAtom } from "jotai";
 
 const AdminProductDetailPage = () => {
+  const [userInfoJotai] = useAtom(userInfoAtom);
   const { checkLogin } = useLogin();
   const navigate = useNavigate();
   const { productId } = useParams();
@@ -60,19 +63,22 @@ const AdminProductDetailPage = () => {
 
   const updateProduct = async () => {
     try {
-      await updateProductDetail({
-        productId: Number(productId),
-        name: name,
-        description: description,
-        price: price,
-        releaseDate: releaseDate,
-        stockQuantity: stockQuantity,
-        brandId: brandId,
-        clothTypeId: clothesTypeId,
-        sizeId: sizeId,
-        targetId: targetId,
-        isDeleted: false,
-      });
+      await updateProductDetail(
+        {
+          productId: Number(productId),
+          name: name,
+          description: description,
+          price: price,
+          releaseDate: releaseDate,
+          stockQuantity: stockQuantity,
+          brandId: brandId,
+          clothTypeId: clothesTypeId,
+          sizeId: sizeId,
+          targetId: targetId,
+          isDeleted: false,
+        },
+        userInfoJotai.access,
+      );
     } catch (error) {
       if (error instanceof Error) {
         alert(error.message);
@@ -84,19 +90,22 @@ const AdminProductDetailPage = () => {
 
   const deleteProduct = async () => {
     try {
-      await updateProductDetail({
-        productId: Number(productId),
-        name: name,
-        description: description,
-        price: price,
-        releaseDate: releaseDate,
-        stockQuantity: stockQuantity,
-        brandId: brandId,
-        clothTypeId: clothesTypeId,
-        sizeId: sizeId,
-        targetId: targetId,
-        isDeleted: true,
-      });
+      await updateProductDetail(
+        {
+          productId: Number(productId),
+          name: name,
+          description: description,
+          price: price,
+          releaseDate: releaseDate,
+          stockQuantity: stockQuantity,
+          brandId: brandId,
+          clothTypeId: clothesTypeId,
+          sizeId: sizeId,
+          targetId: targetId,
+          isDeleted: true,
+        },
+        userInfoJotai.access,
+      );
     } catch (error) {
       if (error instanceof Error) {
         alert(error.message);
