@@ -8,15 +8,18 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { OrderInfoType } from "../../../lib/type/OrderType";
+import { OrderInfoType, OrderStatus } from "../../../lib/type/OrderType";
 import "../../../style/AdminOrderList.css";
 import { EditNotifications } from "@mui/icons-material";
+import AdminOrderStatus from "./AdminOrderStatus";
 
 type Props = {
   orderList: OrderInfoType[];
 };
 
 const AdminOrderList = ({ orderList }: Props) => {
+  console.log(OrderStatus);
+
   return (
     <div className="adminOrderList_container">
       <TableContainer component={Paper}>
@@ -36,7 +39,9 @@ const AdminOrderList = ({ orderList }: Props) => {
               <TableRow key={order.id}>
                 <TableCell>{order.id}</TableCell>
                 <TableCell>{order.order_date}</TableCell>
-                <TableCell>{order.order_status}</TableCell>
+                <TableCell>
+                  <AdminOrderStatus order={order} />
+                </TableCell>
                 <TableCell>{`${order.total_price.toFixed(2)}`}</TableCell>
                 <TableCell>{order.user.name}</TableCell>
 

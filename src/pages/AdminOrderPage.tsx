@@ -47,16 +47,6 @@ const AdminOrderPage = () => {
     authCheckAdmin();
     fetchOrders(page);
   }, [page]);
-  //   useEffect(() => {
-  //     const authCheckAdmin = async () => {
-  //       const authResult = await checkLogin(true);
-  //       if (!authResult) {
-  //         navigate("/");
-  //       }
-  //     };
-  //     authCheckAdmin();
-  //     fetchOrders(1);
-  //   }, []);
   return (
     <Layout>
       <div className="adminOrderPage_container">
