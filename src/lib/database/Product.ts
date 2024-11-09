@@ -108,10 +108,18 @@ export async function getProducts(
   }
 }
 
-export async function deleteProducts(productIds: number[]) {
+export async function deleteProducts(productIds: number[], access?: string) {
   try {
+    let headers = {};
+    if (access) {
+      headers = {
+        Authorization: `Bearer ${access}`,
+      };
+    } else {
+      throw new Error("no access token");
+    }
     const payload = { product_ids: productIds };
-    await apiClient.delete(`/products/`, { data: payload });
+    await apiClient.delete(`/products/`, { headers, data: payload });
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response) {

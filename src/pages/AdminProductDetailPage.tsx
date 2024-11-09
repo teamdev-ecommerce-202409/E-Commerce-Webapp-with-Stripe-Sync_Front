@@ -5,28 +5,33 @@ import "../style/DetailPage.css";
 import "../style/AdminProductDetailPage.css";
 import PrimaryButton from "../component/shared/PrimaryButton";
 import { TextField, Box, MenuItem } from "@mui/material";
-import { getAllCategories, getProductDetailById, updateProductDetail } from "../lib/database/Product";
+import {
+  getAllCategories,
+  getProductDetailById,
+  updateProductDetail,
+} from "../lib/database/Product";
 import { CatgoryType } from "../lib/type/ProductType";
+import useLogin from "../hook/useLogin";
 
 const AdminProductDetailPage = () => {
+  const { checkLogin } = useLogin();
   const navigate = useNavigate();
   const { productId } = useParams();
-  const [name, setName] = useState<string>('');
-  const [description, setDescription] = useState<string>('');
+  const [name, setName] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
   const [price, setPrice] = useState<number>(0);
-  const [releaseDate, setReleaseDate] = useState<string>('');
+  const [releaseDate, setReleaseDate] = useState<string>("");
   const [stockQuantity, setStockQuantity] = useState<number>(0);
   const [brandId, setBrandId] = useState<number>(0);
   const [clothesTypeId, setClothesTypeId] = useState<number>(0);
   const [sizeId, setSizeId] = useState<number>(0);
   const [targetId, setTargetId] = useState<number>(0);
-  const [categories, setCategories] =
-    useState<CatgoryType | null>({
-      sizeCatgory: [],
-      targetCatgory: [],
-      typeCatgory: [],
-      brandCatgory: [],
-    });
+  const [categories, setCategories] = useState<CatgoryType | null>({
+    sizeCatgory: [],
+    targetCatgory: [],
+    typeCatgory: [],
+    brandCatgory: [],
+  });
 
   const setProductDetailInfo = async () => {
     if (productId == undefined) {
@@ -46,7 +51,7 @@ const AdminProductDetailPage = () => {
     setClothesTypeId(productDetail.clothes_type.id);
     setSizeId(productDetail.size.id);
     setTargetId(productDetail.target.id);
-  }
+  };
 
   const fetchCategories = async () => {
     const allCategories = await getAllCategories();
@@ -55,21 +60,19 @@ const AdminProductDetailPage = () => {
 
   const updateProduct = async () => {
     try {
-      await updateProductDetail(
-        {
-          productId: Number(productId),
-          name: name,
-          description: description,
-          price: price,
-          releaseDate: releaseDate,
-          stockQuantity: stockQuantity,
-          brandId: brandId,
-          clothTypeId: clothesTypeId,
-          sizeId: sizeId,
-          targetId: targetId,
-          isDeleted: false
-        }
-      );
+      await updateProductDetail({
+        productId: Number(productId),
+        name: name,
+        description: description,
+        price: price,
+        releaseDate: releaseDate,
+        stockQuantity: stockQuantity,
+        brandId: brandId,
+        clothTypeId: clothesTypeId,
+        sizeId: sizeId,
+        targetId: targetId,
+        isDeleted: false,
+      });
     } catch (error) {
       if (error instanceof Error) {
         alert(error.message);
@@ -81,21 +84,19 @@ const AdminProductDetailPage = () => {
 
   const deleteProduct = async () => {
     try {
-      await updateProductDetail(
-        {
-          productId: Number(productId),
-          name: name,
-          description: description,
-          price: price,
-          releaseDate: releaseDate,
-          stockQuantity: stockQuantity,
-          brandId: brandId,
-          clothTypeId: clothesTypeId,
-          sizeId: sizeId,
-          targetId: targetId,
-          isDeleted: true
-        }
-      );
+      await updateProductDetail({
+        productId: Number(productId),
+        name: name,
+        description: description,
+        price: price,
+        releaseDate: releaseDate,
+        stockQuantity: stockQuantity,
+        brandId: brandId,
+        clothTypeId: clothesTypeId,
+        sizeId: sizeId,
+        targetId: targetId,
+        isDeleted: true,
+      });
     } catch (error) {
       if (error instanceof Error) {
         alert(error.message);
@@ -106,6 +107,14 @@ const AdminProductDetailPage = () => {
   };
 
   useEffect(() => {
+    const authCheckAdmin = async () => {
+      const authResult = await checkLogin(true);
+      if (!authResult) {
+        navigate("/");
+      }
+    };
+    authCheckAdmin();
+
     setProductDetailInfo();
     fetchCategories();
   }, []);
