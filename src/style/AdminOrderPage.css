@@ -1,0 +1,13 @@
+.adminOrderPage_container {
+  padding: 1rem;
+}
+
+.adminOrderPage_title_container {
+  margin: 10px 0;
+}
+
+.adminOrderPage_orderList_container {
+  width: 100%;
+  display: block;
+  box-sizing: border-box;
+}
