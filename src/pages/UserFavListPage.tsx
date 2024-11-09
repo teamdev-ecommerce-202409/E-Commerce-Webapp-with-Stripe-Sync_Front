@@ -8,8 +8,8 @@ import { ProductInfoType } from "../lib/type/ProductType";
 import { getFavListByUser } from "../lib/database/Product";
 import { loadNumPerPage } from "../lib/constants";
 import PaginationControl from "../component/shared/PaginationControl";
-import ProductList from "../component/featured/HomePage/ProductList";
 import "../style/UserFavListPage.css";
+import FavList from "../component/featured/UserFavListPage/FavList";
 
 const UserFavListPage = () => {
   const [userInfoJotai] = useAtom(userInfoAtom);
@@ -21,13 +21,20 @@ const UserFavListPage = () => {
   const navigate = useNavigate();
 
   const fetchFavs = async (currentPage = page) => {
-    const orders = await getFavListByUser(currentPage, userInfoJotai.access);
+    const favs = await getFavListByUser(currentPage, userInfoJotai.access);
+    console.log({ favs });
+    const newFavs = [];
+    if (favs) {
+      for (const res of favs.results) {
+        newFavs.push(res.product);
+      }
+    }
     // いいねリストを更新
-    setFavList(orders ? orders.results : []);
+    setFavList(newFavs);
 
     // ページネーション設定
-    if (orders?.count) {
-      setAllPageCount(Math.ceil(orders?.count / loadNumPerPage));
+    if (favs?.count) {
+      setAllPageCount(Math.ceil(favs?.count / loadNumPerPage));
     } else {
       setAllPageCount(0);
     }
@@ -52,7 +59,7 @@ const UserFavListPage = () => {
         <div className="userFavListPage_favList_container">
           {favList && favList.length > 0 ? (
             <>
-              <ProductList productList={favList} />
+              <FavList productList={favList} />
               <PaginationControl
                 allPageCount={allPageCount} //総ページ数
                 handlePageChange={setPage} //変更されたときに走る関数。第2引数にページ番号が入る

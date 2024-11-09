@@ -11,9 +11,9 @@ import ShoppingCartPage from "./pages/ShoppingCartPage";
 import CheckoutSuccessPage from "./pages/CheckoutSuccessPage";
 import CheckoutCancelPage from "./pages/CheckoutCancelPage";
 import AdminOrderPage from "./pages/AdminOrderPage";
-import MyPage from "./pages/MyPage";
 import UserOrderListPage from "./pages/UserOrderListPage";
-import UserFavListPage from "./style/UserFavListPage";
+import UserFavListPage from "./pages/UserFavListPage";
+import MyPage from "./pages/Mypage";
 
 const theme = createTheme({
   palette: {
