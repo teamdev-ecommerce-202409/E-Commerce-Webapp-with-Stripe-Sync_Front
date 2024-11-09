@@ -258,6 +258,36 @@ const useLogin = () => {
     }
   };
 
+  const checkLogin = async (checkAdminFlag?: boolean) => {
+    try {
+      setLoading(true);
+      if (!userInfoJotai.access) {
+        throw new Error("No access token");
+      }
+      if (!userInfoJotai.refresh) {
+        throw new Error("No refresh token");
+      }
+
+      if (checkAdminFlag) {
+        //adminか確認したい場合
+        if (userInfoJotai.userInfo?.role !== "admin") {
+          throw new Error("Not admin");
+        }
+      }
+      return true;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error(error.message);
+      } else {
+        console.error("Unknown error", error);
+      }
+      alert("権限エラー");
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     loading,
     signUp,
@@ -267,6 +297,7 @@ const useLogin = () => {
     verifiyEmail,
     refreshToken,
     updateUserInfo,
+    checkLogin,
   };
 };
 

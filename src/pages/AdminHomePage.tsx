@@ -3,8 +3,12 @@ import PrimaryButton from "../component/shared/PrimaryButton";
 import { useNavigate } from "react-router-dom";
 
 import "../style/AdminHomePage.css";
+import { useEffect } from "react";
+import useLogin from "../hook/useLogin";
 
 const AdminHomePage = () => {
+  const { checkLogin } = useLogin();
+
   const navigate = useNavigate();
 
   const handleProduct = () => {
@@ -14,6 +18,15 @@ const AdminHomePage = () => {
   const handleOrder = () => {
     navigate(`/admin/order`);
   };
+  useEffect(() => {
+    const authCheckAdmin = async () => {
+      const authResult = await checkLogin();
+      if (!authResult) {
+        navigate("/");
+      }
+    };
+    authCheckAdmin();
+  }, []);
 
   return (
     <Layout>
