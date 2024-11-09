@@ -7,24 +7,30 @@ import { TextField, Box, MenuItem } from "@mui/material";
 import { createProduct, getAllCategories } from "../lib/database/Product";
 import { CatgoryType, ProductInfoType } from "../lib/type/ProductType";
 import PrimaryButton from "../component/shared/PrimaryButton";
+import useLogin from "../hook/useLogin";
+import { userInfoAtom } from "../lib/jotai/atoms/user";
+import { useAtom } from "jotai";
 
 const AdminProductCreatePage = () => {
-  const [name, setName] = useState<string>('');
-  const [description, setDescription] = useState<string>('');
+  const [userInfoJotai] = useAtom(userInfoAtom);
+  const { checkLogin } = useLogin();
+  const navigate = useNavigate();
+
+  const [name, setName] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
   const [price, setPrice] = useState<number>(0);
-  const [releaseDate, setReleaseDate] = useState<string>('');
+  const [releaseDate, setReleaseDate] = useState<string>("");
   const [stockQuantity, setStockQuantity] = useState<number>(0);
   const [brandId, setBrandId] = useState<number>(0);
   const [clothesTypeId, setClothesTypeId] = useState<number>(0);
   const [sizeId, setSizeId] = useState<number>(0);
   const [targetId, setTargetId] = useState<number>(0);
-  const [categories, setCategories] =
-    useState<CatgoryType | null>({
-      sizeCatgory: [],
-      targetCatgory: [],
-      typeCatgory: [],
-      brandCatgory: [],
-    });
+  const [categories, setCategories] = useState<CatgoryType | null>({
+    sizeCatgory: [],
+    targetCatgory: [],
+    typeCatgory: [],
+    brandCatgory: [],
+  });
 
   const fetchCategories = async () => {
     const allCategories = await getAllCategories();
@@ -33,19 +39,22 @@ const AdminProductCreatePage = () => {
 
   const createNewProduct = async () => {
     try {
-      const productInfo = await createProduct({
-        productId: null,
-        name: name,
-        description: description,
-        price: price,
-        releaseDate: releaseDate,
-        stockQuantity: stockQuantity,
-        brandId: brandId,
-        clothTypeId: clothesTypeId,
-        sizeId: sizeId,
-        targetId: targetId,
-        isDeleted: false
-      });
+      const productInfo = await createProduct(
+        {
+          productId: null,
+          name: name,
+          description: description,
+          price: price,
+          releaseDate: releaseDate,
+          stockQuantity: stockQuantity,
+          brandId: brandId,
+          clothTypeId: clothesTypeId,
+          sizeId: sizeId,
+          targetId: targetId,
+          isDeleted: false,
+        },
+        userInfoJotai.access,
+      );
       return productInfo as ProductInfoType;
     } catch (error) {
       if (error instanceof Error) {
@@ -58,11 +67,18 @@ const AdminProductCreatePage = () => {
   };
 
   useEffect(() => {
+    const authCheckAdmin = async () => {
+      const authResult = await checkLogin(true);
+      if (!authResult) {
+        navigate("/");
+      }
+    };
+    authCheckAdmin();
     fetchCategories();
   }, []);
 
-  const handleCreate = () => {
-    const resp = createNewProduct();
+  const handleCreate = async () => {
+    await createNewProduct();
   };
 
   return (

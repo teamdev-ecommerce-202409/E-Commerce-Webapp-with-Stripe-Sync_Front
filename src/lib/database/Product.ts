@@ -108,10 +108,18 @@ export async function getProducts(
   }
 }
 
-export async function deleteProducts(productIds: number[]) {
+export async function deleteProducts(productIds: number[], access?: string) {
   try {
+    let headers = {};
+    if (access) {
+      headers = {
+        Authorization: `Bearer ${access}`,
+      };
+    } else {
+      throw new Error("no access token");
+    }
     const payload = { product_ids: productIds };
-    await apiClient.delete(`/products/`, { data: payload });
+    await apiClient.delete(`/products/`, { headers, data: payload });
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response) {
@@ -152,8 +160,19 @@ export async function getProductDetailById(productId: number) {
   }
 }
 
-export async function createProduct(productUpdateParams: ProductUpdateParams) {
+export async function createProduct(
+  productUpdateParams: ProductUpdateParams,
+  access?: string,
+) {
   try {
+    let headers = {};
+    if (access) {
+      headers = {
+        Authorization: `Bearer ${access}`,
+      };
+    } else {
+      throw new Error("no access token");
+    }
     const data = {
       name: productUpdateParams.name,
       description: productUpdateParams.description,
@@ -170,7 +189,9 @@ export async function createProduct(productUpdateParams: ProductUpdateParams) {
     data.release_date = formatDateWithOffset(
       new Date(data.release_date as string),
     );
-    const response = await apiClient.post(`/products/`, data);
+    const response = await apiClient.post(`/products/`, data, {
+      headers,
+    });
     return response.data as ProductInfoType;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -190,10 +211,20 @@ export async function createProduct(productUpdateParams: ProductUpdateParams) {
 
 export async function updateProductDetail(
   productUpdateParams: ProductUpdateParams,
+  access?: string,
 ) {
   try {
     if (!productUpdateParams.productId) {
       throw new Error("productId is required");
+    }
+
+    let headers = {};
+    if (access) {
+      headers = {
+        Authorization: `Bearer ${access}`,
+      };
+    } else {
+      throw new Error("no access token");
     }
     const data = {
       name: productUpdateParams.name,
@@ -213,6 +244,7 @@ export async function updateProductDetail(
     const response = await apiClient.put(
       `/products/${productUpdateParams.productId}/`,
       data,
+      { headers },
     );
     return response.data as ProductInfoType;
   } catch (error) {
