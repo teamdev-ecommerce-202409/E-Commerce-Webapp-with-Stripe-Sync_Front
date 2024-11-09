@@ -1,6 +1,8 @@
 import {
   IconButton,
+  MenuItem,
   Paper,
+  Select,
   Table,
   TableBody,
   TableCell,
@@ -8,7 +10,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { OrderInfoType } from "../../../lib/type/OrderType";
+import { OrderInfoType, OrderStatus } from "../../../lib/type/OrderType";
 import "../../../style/AdminOrderList.css";
 import { EditNotifications } from "@mui/icons-material";
 
@@ -17,6 +19,13 @@ type Props = {
 };
 
 const AdminOrderList = ({ orderList }: Props) => {
+  console.log(OrderStatus);
+  const handleStatusChange = (
+    orderId: number,
+    statusVal: string | OrderStatus,
+  ) => {
+    console.log(orderId, statusVal);
+  };
   return (
     <div className="adminOrderList_container">
       <TableContainer component={Paper}>
@@ -36,7 +45,23 @@ const AdminOrderList = ({ orderList }: Props) => {
               <TableRow key={order.id}>
                 <TableCell>{order.id}</TableCell>
                 <TableCell>{order.order_date}</TableCell>
-                <TableCell>{order.order_status}</TableCell>
+                {/* <TableCell>{order.order_status}</TableCell> */}
+                <TableCell>
+                  {" "}
+                  <Select
+                    value={order.order_status}
+                    onChange={(event) =>
+                      handleStatusChange(order.id, event.target.value)
+                    }
+                    variant="outlined"
+                  >
+                    {Object.keys(OrderStatus).map((key) => (
+                      <MenuItem key={`${order.id}+${key}`} value={key}>
+                        {key}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </TableCell>
                 <TableCell>{`${order.total_price.toFixed(2)}`}</TableCell>
                 <TableCell>{order.user.name}</TableCell>
 
