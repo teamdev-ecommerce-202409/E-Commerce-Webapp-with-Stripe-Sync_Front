@@ -1,5 +1,5 @@
 import { PaginationInfoType } from "../type/GenericType";
-import { OrderInfoType } from "../type/OrderType";
+import { OrderInfoType, OrderStatus } from "../type/OrderType";
 import apiClient from "./apiClient";
 import axios from "axios";
 
@@ -77,5 +77,43 @@ export async function getOrders(
   } catch (error) {
     console.error("Error fetching data:", error);
     return null;
+  }
+}
+export async function changeOrderStatus(
+  orderId: number,
+  status: OrderStatus,
+  access?: string,
+) {
+  try {
+    const data: { [key: string]: unknown } = {};
+
+    let headers = {};
+    if (access) {
+      headers = {
+        Authorization: `Bearer ${access}`,
+      };
+    } else {
+      throw new Error("access is required");
+    }
+    if (!orderId) {
+      throw new Error("orderId is required");
+    } else {
+      data.order_Id = orderId;
+    }
+    if (status) {
+      data.status = status;
+    }
+
+    const response = await apiClient.put(`/orders/${orderId}/`, data, {
+      headers,
+    });
+    if (response.status !== 200) {
+      throw new Error("Failed to fetch data");
+    }
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+
+    return [];
   }
 }
