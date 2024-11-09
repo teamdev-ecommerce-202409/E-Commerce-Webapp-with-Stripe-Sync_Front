@@ -20,7 +20,7 @@ const AdminHomePage = () => {
   };
   useEffect(() => {
     const authCheckAdmin = async () => {
-      const authResult = await checkLogin();
+      const authResult = await checkLogin(true);
       if (!authResult) {
         navigate("/");
       }

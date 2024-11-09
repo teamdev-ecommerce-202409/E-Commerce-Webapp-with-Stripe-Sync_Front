@@ -7,24 +7,27 @@ import { TextField, Box, MenuItem } from "@mui/material";
 import { createProduct, getAllCategories } from "../lib/database/Product";
 import { CatgoryType, ProductInfoType } from "../lib/type/ProductType";
 import PrimaryButton from "../component/shared/PrimaryButton";
+import useLogin from "../hook/useLogin";
 
 const AdminProductCreatePage = () => {
-  const [name, setName] = useState<string>('');
-  const [description, setDescription] = useState<string>('');
+  const { checkLogin } = useLogin();
+  const navigate = useNavigate();
+
+  const [name, setName] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
   const [price, setPrice] = useState<number>(0);
-  const [releaseDate, setReleaseDate] = useState<string>('');
+  const [releaseDate, setReleaseDate] = useState<string>("");
   const [stockQuantity, setStockQuantity] = useState<number>(0);
   const [brandId, setBrandId] = useState<number>(0);
   const [clothesTypeId, setClothesTypeId] = useState<number>(0);
   const [sizeId, setSizeId] = useState<number>(0);
   const [targetId, setTargetId] = useState<number>(0);
-  const [categories, setCategories] =
-    useState<CatgoryType | null>({
-      sizeCatgory: [],
-      targetCatgory: [],
-      typeCatgory: [],
-      brandCatgory: [],
-    });
+  const [categories, setCategories] = useState<CatgoryType | null>({
+    sizeCatgory: [],
+    targetCatgory: [],
+    typeCatgory: [],
+    brandCatgory: [],
+  });
 
   const fetchCategories = async () => {
     const allCategories = await getAllCategories();
@@ -44,7 +47,7 @@ const AdminProductCreatePage = () => {
         clothTypeId: clothesTypeId,
         sizeId: sizeId,
         targetId: targetId,
-        isDeleted: false
+        isDeleted: false,
       });
       return productInfo as ProductInfoType;
     } catch (error) {
@@ -58,11 +61,18 @@ const AdminProductCreatePage = () => {
   };
 
   useEffect(() => {
+    const authCheckAdmin = async () => {
+      const authResult = await checkLogin(true);
+      if (!authResult) {
+        navigate("/");
+      }
+    };
+    authCheckAdmin();
     fetchCategories();
   }, []);
 
-  const handleCreate = () => {
-    const resp = createNewProduct();
+  const handleCreate = async () => {
+    await createNewProduct();
   };
 
   return (

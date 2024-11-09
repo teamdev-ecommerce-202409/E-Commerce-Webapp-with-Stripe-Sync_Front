@@ -10,9 +10,12 @@ import { getAllCategories, getProducts } from "../lib/database/Product";
 import { loadNumPerPage } from "../lib/constants";
 import ProductFilter from "../component/featured/HomePage/ProductFilter";
 import PaginationControl from "../component/shared/PaginationControl";
+import useLogin from "../hook/useLogin";
 
 const AdminProductPage = () => {
   const navigate = useNavigate();
+  const { checkLogin } = useLogin();
+
   const [categories, setCategories] = useState<CatgoryType | null>(null);
   const [selectedCategories, setSelectedCategories] =
     useState<CatgoryType | null>({
@@ -77,6 +80,16 @@ const AdminProductPage = () => {
   useEffect(() => {
     fetchFilteredProducts();
   }, [page]);
+  useEffect(() => {
+    const authCheckAdmin = async () => {
+      console.log("authCheckAdmin");
+      const authResult = await checkLogin(true);
+      if (!authResult) {
+        navigate("/");
+      }
+    };
+    authCheckAdmin();
+  }, []);
 
   return (
     <Layout>
@@ -101,8 +114,6 @@ const AdminProductPage = () => {
             setSelectedCategories={setSelectedCategories}
           />
           <div className="homepage_productList_container">
-            <p>page:{page}</p>
-            <p>allpage:{allPageCount}</p>
             <AdminProductList
               productList={productList}
               setProductList={setProductList}

@@ -13,8 +13,13 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { ProductInfoType } from "../../../lib/type/ProductType";
-import { deleteProducts, updateProductDetail } from "../../../lib/database/Product";
+import {
+  deleteProducts,
+  // updateProductDetail,
+} from "../../../lib/database/Product";
 import PrimaryButton from "../../shared/PrimaryButton";
+import { useAtom } from "jotai";
+import { userInfoAtom } from "../../../lib/jotai/atoms/user";
 
 type Props = {
   productList: ProductInfoType[];
@@ -24,6 +29,8 @@ type Props = {
 const NUM_OF_PRODUCT_PER_PAGE = 10;
 
 const AdminProductList = ({ productList, setProductList }: Props) => {
+  const [userInfoJotai] = useAtom(userInfoAtom);
+
   const [checkedProductIds, setCheckedProductIds] = useState<number[]>([]);
   const navigate = useNavigate();
 
@@ -59,7 +66,7 @@ const AdminProductList = ({ productList, setProductList }: Props) => {
 
   const handleDelete = async () => {
     try {
-      await deleteProducts(checkedProductIds);
+      await deleteProducts(checkedProductIds, userInfoJotai.access);
     } catch (error) {
       if (error instanceof Error) {
         alert(error.message);
@@ -67,7 +74,9 @@ const AdminProductList = ({ productList, setProductList }: Props) => {
         alert(String(error));
       }
     }
-    const newProductList = productList.filter(product => !checkedProductIds.includes(product.id));
+    const newProductList = productList.filter(
+      (product) => !checkedProductIds.includes(product.id),
+    );
     alert(`${checkedProductIds.length}件削除しました。`);
     setCheckedProductIds([]);
     setProductList(newProductList);
@@ -76,19 +85,13 @@ const AdminProductList = ({ productList, setProductList }: Props) => {
   return (
     <TableContainer component={Paper}>
       <div className="adminHomePage_button_container">
-        <PrimaryButton
-          onClick={handleDelete}
-          loading={false}
-          text={"削除"}
-        />
+        <PrimaryButton onClick={handleDelete} loading={false} text={"削除"} />
       </div>
       <Table>
         <TableHead>
           <TableRow>
             <TableCell padding="checkbox">
-              <Checkbox
-                onChange={() => handleAllTogle()}
-              />
+              <Checkbox onChange={() => handleAllTogle()} />
             </TableCell>
             <TableCell>製品名</TableCell>
             <TableCell>説明</TableCell>
