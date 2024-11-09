@@ -66,7 +66,7 @@ const MyPage = () => {
 
           <div className="mypage_user_infolink_container">
             <PrimaryButton
-              onClick={() => alert()}
+              onClick={() => navigate("/mypage/favorites")}
               loading={false}
               text={"Favorites"}
             />

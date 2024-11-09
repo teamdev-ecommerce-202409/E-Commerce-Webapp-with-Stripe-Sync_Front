@@ -1,0 +1,14 @@
+.userFavListPage_container {
+  padding: 1rem;
+}
+
+.userFavListPage_title_container {
+  margin: 10px 0;
+  display: flex;
+}
+
+.userFavListPage_favList_container {
+  width: 100%;
+  display: block;
+  box-sizing: border-box;
+}

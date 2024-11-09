@@ -39,7 +39,7 @@ function App() {
             <Route path="/product/:productId" element={<DetailPage />} />
             <Route path="/mypage" element={<MyPage />} />
             <Route path="/mypage/orders" element={<UserOrderListPage />} />
-            <Route path="/mypage/orders" element={<UserFavListPage />} />
+            <Route path="/mypage/favorites" element={<UserFavListPage />} />
 
             <Route path="/admin" element={<AdminHomePage />} />
             <Route path="/admin/product" element={<AdminProductPage />} />
