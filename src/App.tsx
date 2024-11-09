@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import HomePage from "./pages/HomePage";
 import DetailPage from "./pages/DetailPage";
-import MyPage from "./pages/MyPage";
 import AdminHomePage from "./pages/AdminHomePage";
 import AdminProductDetailPage from "./pages/AdminProductDetailPage";
 import AdminProductCreatePage from "./pages/AdminProductCreatePage";
@@ -12,6 +11,9 @@ import ShoppingCartPage from "./pages/ShoppingCartPage";
 import CheckoutSuccessPage from "./pages/CheckoutSuccessPage";
 import CheckoutCancelPage from "./pages/CheckoutCancelPage";
 import AdminOrderPage from "./pages/AdminOrderPage";
+import MyPage from "./pages/MyPage";
+import UserOrderListPage from "./pages/UserOrderListPage";
+import UserFavListPage from "./style/UserFavListPage";
 
 const theme = createTheme({
   palette: {
@@ -36,6 +38,9 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/product/:productId" element={<DetailPage />} />
             <Route path="/mypage" element={<MyPage />} />
+            <Route path="/mypage/orders" element={<UserOrderListPage />} />
+            <Route path="/mypage/favorites" element={<UserFavListPage />} />
+
             <Route path="/admin" element={<AdminHomePage />} />
             <Route path="/admin/product" element={<AdminProductPage />} />
             <Route path="/admin/order" element={<AdminOrderPage />} />

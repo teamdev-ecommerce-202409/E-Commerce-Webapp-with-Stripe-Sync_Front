@@ -381,3 +381,32 @@ export async function registerFav(
     return null;
   }
 }
+
+export async function getFavListByUser(
+  page: number,
+  access: string | undefined | null,
+) {
+  try {
+    const params: { [key: string]: unknown } = { page };
+
+    if (!access) {
+      throw new Error("access token is required");
+    }
+
+    const headers = {
+      Authorization: `Bearer ${access}`,
+    };
+    const response = await apiClient.get("/favorites/", {
+      headers,
+      params,
+    });
+    if (response.status !== 200) {
+      throw new Error("Something wrong with getting fav list");
+    }
+    return response.data as PaginationInfoType<ProductInfoType>;
+  } catch (error) {
+    console.error("Error registering data:", error);
+
+    return null;
+  }
+}

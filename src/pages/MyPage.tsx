@@ -1,96 +1,87 @@
-import { useEffect, useState } from "react";
-import { useAtomValue } from "jotai";
-import { userInfoAtom } from "../lib/jotai/atoms/user"; // Jotaiからユーザー情報を取得
-import { getOrderHistoryByUserId } from "../lib/database/Order";
-import { OrderInfoType } from "../lib/type/OrderType";
+import { useAtom } from "jotai";
 import Layout from "../component/shared/Layout";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Paper,
-  } from "@mui/material";
+import { userInfoAtom } from "../lib/jotai/atoms/user";
 import "../style/MyPage.css";
+import PrimaryButton from "../component/shared/PrimaryButton";
+import { useEffect } from "react";
+import useLogin from "../hook/useLogin";
+import { useNavigate } from "react-router-dom";
+import { IconButton } from "@mui/material";
+import { EditNotifications } from "@mui/icons-material";
 
 const MyPage = () => {
-  const userState = useAtomValue(userInfoAtom); // グローバルステートからユーザー情報を取得
-  const [orderHistories, setOrderHistories] = useState<OrderInfoType[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [userInfoJotai] = useAtom(userInfoAtom);
+  const { checkLogin } = useLogin();
 
-  const userId = userState.userInfo ? userState.userInfo.id : 1;
+  const navigate = useNavigate();
 
+  //TODO EditNotificationsのアイコンボタンにユーザープロフィール変更ページにとぶようにして
   useEffect(() => {
-    const fetchOrderHistories = async () => {
-      setLoading(true);
-      const data = await getOrderHistoryByUserId(userId);
-      if (data) {
-        setOrderHistories(data);
+    const authCheckLogin = async () => {
+      const authResult = await checkLogin();
+      if (!authResult) {
+        navigate("/");
       }
-      setLoading(false);
     };
 
-    fetchOrderHistories();
-  }, [userId]);
-
-return (
+    //TODO バックエンドからユーザー情報を取得する
+    authCheckLogin();
+  }, []);
+  return (
     <Layout>
       <div className="mypage_container">
-        <h2>注文履歴</h2>
-        {loading ? (
-          <p>読み込み中...</p>
-        ) : (
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>注文番号</TableCell>
-                  <TableCell>注文日</TableCell>
-                  <TableCell>ステータス</TableCell>
-                  <TableCell>商品名</TableCell>
-                  <TableCell>数量</TableCell>
-                  <TableCell>単価</TableCell>
-                  <TableCell>合計金額</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {orderHistories.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={7}>注文履歴がありません。</TableCell>
-                  </TableRow>
-                ) : (
-                  orderHistories.map((order) => (
-                    <TableRow key={order.id}>
-                      <TableCell>{order.id}</TableCell>
-                      <TableCell>
-                        {new Date(order.order_date).toLocaleDateString()}
-                      </TableCell>
-                      <TableCell>{order.order_status}</TableCell>
-                      <TableCell>
-                        {order.order_items.map((item) => (
-                          <div key={item.id}>{item.product.name}</div>
-                        ))}
-                      </TableCell>
-                      <TableCell>
-                        {order.order_items.map((item) => (
-                          <div key={item.id}>{item.quantity}</div>
-                        ))}
-                      </TableCell>
-                      <TableCell>
-                        {order.order_items.map((item) => (
-                          <div key={item.id}>${item.unit_price.toFixed(2)}</div>
-                        ))}
-                      </TableCell>
-                      <TableCell>${order.total_price.toFixed(2)}</TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
+        <div className="mypage_title_container">
+          <h2>{userInfoJotai.userInfo?.name} 様のマイページ</h2>
+        </div>
+
+        <div>
+          <div className="mypage_user_info_container">
+            <div className="mypage_title_container">
+              <h3>登録情報</h3>
+              <IconButton onClick={() => alert("edit")}>
+                <EditNotifications />
+              </IconButton>
+            </div>
+            <div className="mypage_user_info_content_container">
+              <div className="mypage_user_info_content_title">名前</div>
+              <div className="mypage_user_info_content">
+                {userInfoJotai.userInfo?.name}
+              </div>
+            </div>
+
+            <div className="mypage_user_info_content_container">
+              <div className="mypage_user_info_content_title">email</div>
+              <div className="mypage_user_info_content">
+                {userInfoJotai.userInfo?.email}
+              </div>
+            </div>
+
+            <div className="mypage_user_info_content_container">
+              <div className="mypage_user_info_content_title">住所</div>
+              <div className="mypage_user_info_content">
+                {userInfoJotai.userInfo?.address}
+              </div>
+            </div>
+          </div>
+
+          <div className="mypage_user_infolink_container">
+            <PrimaryButton
+              onClick={() => navigate("/mypage/favorites")}
+              loading={false}
+              text={"Favorites"}
+            />
+            {/* <PrimaryButton
+              onClick={() => alert()}
+              loading={false}
+              text={"WishList"}
+            /> */}
+            <PrimaryButton
+              onClick={() => navigate("/mypage/orders")}
+              loading={false}
+              text={"Orders"}
+            />
+          </div>
+        </div>
       </div>
     </Layout>
   );
