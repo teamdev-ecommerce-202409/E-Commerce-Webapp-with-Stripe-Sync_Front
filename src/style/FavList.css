@@ -1,0 +1,9 @@
+.favList_container {
+  box-sizing: border-box;
+
+  flex: 5;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 150px);
+  gap: 16px;
+  padding: 16px;
+}

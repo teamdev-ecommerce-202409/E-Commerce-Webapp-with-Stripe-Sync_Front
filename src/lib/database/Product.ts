@@ -403,9 +403,12 @@ export async function getFavListByUser(
     if (response.status !== 200) {
       throw new Error("Something wrong with getting fav list");
     }
-    return response.data as PaginationInfoType<ProductInfoType>;
+    return response.data as PaginationInfoType<{
+      user: number;
+      product: ProductInfoType;
+    }>;
   } catch (error) {
-    console.error("Error registering data:", error);
+    console.error("Error getting fav data:", error);
 
     return null;
   }
