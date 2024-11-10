@@ -38,7 +38,7 @@ const MyPage = () => {
           <div className="mypage_user_info_container">
             <div className="mypage_title_container">
               <h3>登録情報</h3>
-              <IconButton onClick={() => alert("edit")}>
+              <IconButton onClick={() => navigate("/mypage/edit-profile")}>
                 <EditNotifications />
               </IconButton>
             </div>

@@ -143,6 +143,39 @@ export async function updateUserInfoAPI(
   }
 }
 
+// ユーザープロフィール情報取得
+export async function getUserProfileAPI(token: string) {
+  try {
+    const response = await apiClient.get("/profile/", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data as UserInfoType;
+  } catch (error) {
+    console.error("Error fetching user info:", error);
+    return null;
+  }
+}
+
+// ユーザープロフィール更新
+export async function updateUserProfileAPI(
+  token: string,
+  updatedData: { name: string; email: string; address: string }
+) {
+  try {
+    const response = await apiClient.patch("/profile/", updatedData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data as UserInfoType;
+  } catch (error) {
+    console.error("Error updating user profile:", error);
+    return null;
+  }
+}
+
 export async function getFollowersList(
   token: string | undefined | null,
   count: number = 6,
