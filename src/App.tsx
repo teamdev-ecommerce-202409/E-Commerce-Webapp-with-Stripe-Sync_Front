@@ -13,7 +13,7 @@ import CheckoutCancelPage from "./pages/CheckoutCancelPage";
 import AdminOrderPage from "./pages/AdminOrderPage";
 import UserOrderListPage from "./pages/UserOrderListPage";
 import UserFavListPage from "./pages/UserFavListPage";
-import MyPage from "./pages/Mypage";
+import MyPage from "./pages/MyPage";
 
 const theme = createTheme({
   palette: {
