@@ -83,7 +83,7 @@ const ShoppingCartPage = () => {
   };
 
   const clearCart = () => {
-    const isGuestUser = userInfoJotai.userInfo?.id === undefined;
+    const isGuestUser = userInfoJotai.access === undefined;
     if (isGuestUser) {
       const newCartItems: CartInfoType[] = [];
       setCartInfoJotai({ cartItems: newCartItems } as CartInfoJotai);
