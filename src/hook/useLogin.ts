@@ -5,7 +5,6 @@ import {
   loginAPI,
   refreshTokenAPI,
   signUpAPI,
-  updateUserInfoAPI,
   verifyEmailAPI,
 } from "../lib/database/User";
 import { jotaiInitialValue, userInfoAtom } from "../lib/jotai/atoms/user";
@@ -186,77 +185,6 @@ const useLogin = () => {
       setLoading(false);
     }
   };
-  const updateUserInfo = async (
-    name: string,
-    introduction: string,
-    userImg?: File | null,
-  ) => {
-    setLoading(true);
-    setErrorMsg("");
-    try {
-      if (!name) {
-        throw new Error("name is necessary");
-      }
-      if (name.length > 25) {
-        throw new Error("name should be less than 25");
-      }
-      if (introduction.length > 200) {
-        throw new Error("introduction should be less than 200");
-      }
-      if (!userInfoJotai.userInfo?.id) {
-        throw new Error("no user id in storage");
-      }
-      const id = userInfoJotai.userInfo?.id;
-
-      // 以下、ファイルが添付されている場合のvalidation
-      if (userImg) {
-        // 画像ファイルかチェック
-        if (
-          !userImg.type.startsWith("image/jpeg") &&
-          !userImg.type.startsWith("image/png") &&
-          !userImg.type.startsWith("image/svg+xml")
-        ) {
-          throw new Error("File must be an image");
-        }
-
-        // ファイルサイズチェック
-        if (userImg.size > 5000000) {
-          // 5MBを超える場合はエラー
-          throw new Error("Image must be less than 5MB");
-        }
-      } else {
-        userImg = null;
-      }
-
-      const data = await updateUserInfoAPI(
-        id,
-        name,
-        introduction,
-        userImg,
-        userInfoJotai.access,
-      );
-
-      if (!data) {
-        throw new Error("Something wrong with updateUserInfo API");
-      }
-      const updatedUserInfo: UserInfoType = data;
-      //アップデート成功時はユーザー情報をjotaiに入れる
-      setuserInfoJotai({
-        userInfo: updatedUserInfo,
-        authtoken: userInfoJotai.access,
-      });
-
-      return updatedUserInfo;
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.error(error.message);
-      } else {
-        console.error("Unknown error", error);
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const checkLogin = async (checkAdminFlag?: boolean) => {
     try {
@@ -296,7 +224,6 @@ const useLogin = () => {
     logout,
     verifiyEmail,
     refreshToken,
-    updateUserInfo,
     checkLogin,
   };
 };
