@@ -14,6 +14,7 @@ import AdminOrderPage from "./pages/AdminOrderPage";
 import UserOrderListPage from "./pages/UserOrderListPage";
 import UserFavListPage from "./pages/UserFavListPage";
 import MyPage from "./pages/MyPage";
+import UserOrderDetailPage from "./pages/UserOrderDetailPage";
 
 const theme = createTheme({
   palette: {
@@ -41,7 +42,7 @@ function App() {
             <Route path="/mypage/orders" element={<UserOrderListPage />} />
             <Route
               path="/mypage/orders/detail/:orderId"
-              element={<UserOrderListPage />}
+              element={<UserOrderDetailPage />}
             />
             <Route path="/mypage/favorites" element={<UserFavListPage />} />
 

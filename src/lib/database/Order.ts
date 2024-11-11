@@ -64,6 +64,39 @@ export async function getOrders(
     return null;
   }
 }
+
+export async function getOrderDetail(orderId: number, access?: string) {
+  try {
+    const params: { [key: string]: unknown } = {};
+
+    let headers = {};
+    if (access) {
+      headers = {
+        Authorization: `Bearer ${access}`,
+      };
+    } else {
+      throw new Error("access is required");
+    }
+    if (!orderId) {
+      throw new Error("orderId is required");
+    } else {
+      params.product_id = orderId;
+    }
+
+    const response = await apiClient.get(`/orders/${orderId}/`, {
+      headers,
+      params,
+    });
+    if (response.status !== 200) {
+      throw new Error("Failed to fetch data");
+    }
+    console.log(response.data);
+    return response.data as OrderInfoType;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return null;
+  }
+}
 export async function changeOrderStatus(
   orderId: number,
   status: OrderStatus,
