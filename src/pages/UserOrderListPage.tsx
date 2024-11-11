@@ -1,40 +1,59 @@
 import { useEffect, useState } from "react";
-import { useAtomValue } from "jotai";
 import { userInfoAtom } from "../lib/jotai/atoms/user"; // Jotaiからユーザー情報を取得
-import { getOrderHistoryByUserId } from "../lib/database/Order";
+import { getOrders } from "../lib/database/Order";
 import { OrderInfoType } from "../lib/type/OrderType";
 import Layout from "../component/shared/Layout";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-} from "@mui/material";
 import "../style/MyPage.css";
+import { loadNumPerPage } from "../lib/constants";
+import { useNavigate } from "react-router-dom";
+import PaginationControl from "../component/shared/PaginationControl";
+import { useAtom } from "jotai";
+import useLogin from "../hook/useLogin";
+import UserOrderList from "../component/featured/UserOrderListPage/UserOrderList";
 
 const UserOrderListPage = () => {
-  const userState = useAtomValue(userInfoAtom); // グローバルステートからユーザー情報を取得
-  const [orderHistories, setOrderHistories] = useState<OrderInfoType[]>([]);
   const [loading, setLoading] = useState(true);
+  const [userInfoJotai] = useAtom(userInfoAtom);
+  const { checkLogin } = useLogin();
+  const [orderHistories, setOrderHistories] = useState<OrderInfoType[]>([]);
+  const [page, setPage] = useState(1);
+  const [allPageCount, setAllPageCount] = useState(1);
 
-  const userId = userState.userInfo ? userState.userInfo.id : 1;
+  const navigate = useNavigate();
+
+  const fetchUserOrders = async (currentPage = page) => {
+    setLoading(true);
+    const orders = await getOrders(
+      { page: currentPage },
+      userInfoJotai.access,
+      true,
+    );
+    console.log({ orders });
+    // 注文情報リストを更新
+    setOrderHistories(orders ? orders.results : []);
+
+    // ページネーション設定
+    if (orders?.count) {
+      setAllPageCount(Math.ceil(orders?.count / loadNumPerPage));
+    } else {
+      setAllPageCount(0);
+    }
+
+    setLoading(false);
+  };
+  useEffect(() => {
+    fetchUserOrders(page);
+  }, [page]);
 
   useEffect(() => {
-    const fetchOrderHistories = async () => {
-      setLoading(true);
-      const data = await getOrderHistoryByUserId(userId);
-      if (data) {
-        setOrderHistories(data);
+    const authCheckLogin = async () => {
+      const authResult = await checkLogin();
+      if (!authResult) {
+        navigate("/");
       }
-      setLoading(false);
     };
-
-    fetchOrderHistories();
-  }, [userId]);
-
+    authCheckLogin();
+  }, []);
   return (
     <Layout>
       <div className="mypage_container">
@@ -42,54 +61,20 @@ const UserOrderListPage = () => {
         {loading ? (
           <p>読み込み中...</p>
         ) : (
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>注文番号</TableCell>
-                  <TableCell>注文日</TableCell>
-                  <TableCell>ステータス</TableCell>
-                  <TableCell>商品名</TableCell>
-                  <TableCell>数量</TableCell>
-                  <TableCell>単価</TableCell>
-                  <TableCell>合計金額</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {orderHistories.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={7}>注文履歴がありません。</TableCell>
-                  </TableRow>
-                ) : (
-                  orderHistories.map((order) => (
-                    <TableRow key={order.id}>
-                      <TableCell>{order.id}</TableCell>
-                      <TableCell>
-                        {new Date(order.order_date).toLocaleDateString()}
-                      </TableCell>
-                      <TableCell>{order.order_status}</TableCell>
-                      <TableCell>
-                        {order.order_items.map((item) => (
-                          <div key={item.id}>{item.product.name}</div>
-                        ))}
-                      </TableCell>
-                      <TableCell>
-                        {order.order_items.map((item) => (
-                          <div key={item.id}>{item.quantity}</div>
-                        ))}
-                      </TableCell>
-                      <TableCell>
-                        {order.order_items.map((item) => (
-                          <div key={item.id}>${item.unit_price.toFixed(2)}</div>
-                        ))}
-                      </TableCell>
-                      <TableCell>${order.total_price.toFixed(2)}</TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <div className="adminOrderPage_orderList_container">
+            {orderHistories && orderHistories.length > 0 ? (
+              <>
+                <UserOrderList orderList={orderHistories} />
+                <PaginationControl
+                  allPageCount={allPageCount} //総ページ数
+                  handlePageChange={setPage} //変更されたときに走る関数。第2引数にページ番号が入る
+                  page={page} //現在のページ番号
+                />
+              </>
+            ) : (
+              <div>照会できる注文リストはありません。</div>
+            )}
+          </div>
         )}
       </div>
     </Layout>

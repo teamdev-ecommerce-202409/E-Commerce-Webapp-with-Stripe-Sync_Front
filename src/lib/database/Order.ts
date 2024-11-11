@@ -28,25 +28,6 @@ export async function checkout(checkoutDataList: CheckoutData[]) {
   }
 }
 
-export async function getOrderHistoryByUserId(userId: number) {
-  try {
-    const params = { user_id: userId };
-    const headers = {};
-    const response = await apiClient.get("/orders-with-items/", {
-      headers,
-      params,
-    });
-    if (response.status !== 200) {
-      throw new Error("Failed to fetch data");
-    }
-    console.log(response.data);
-    return response.data as OrderInfoType[];
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    return null;
-  }
-}
-
 export async function getOrders(
   {
     page = 1,
@@ -54,10 +35,14 @@ export async function getOrders(
     page?: number;
   } = {},
   access?: string,
+  mypageFlag?: boolean,
 ) {
   try {
     const params: { [key: string]: unknown } = { page };
 
+    if (mypageFlag) {
+      params.mypage_flag = mypageFlag;
+    }
     let headers = {};
     if (access) {
       headers = {

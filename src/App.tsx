@@ -13,7 +13,7 @@ import CheckoutCancelPage from "./pages/CheckoutCancelPage";
 import AdminOrderPage from "./pages/AdminOrderPage";
 import UserOrderListPage from "./pages/UserOrderListPage";
 import UserFavListPage from "./pages/UserFavListPage";
-import MyPage from "./pages/Mypage";
+import MyPage from "./pages/MyPage";
 
 const theme = createTheme({
   palette: {
@@ -39,6 +39,10 @@ function App() {
             <Route path="/product/:productId" element={<DetailPage />} />
             <Route path="/mypage" element={<MyPage />} />
             <Route path="/mypage/orders" element={<UserOrderListPage />} />
+            <Route
+              path="/mypage/orders/detail/:orderId"
+              element={<UserOrderListPage />}
+            />
             <Route path="/mypage/favorites" element={<UserFavListPage />} />
 
             <Route path="/admin" element={<AdminHomePage />} />

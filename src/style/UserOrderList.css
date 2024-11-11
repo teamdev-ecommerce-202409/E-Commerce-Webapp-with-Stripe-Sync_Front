@@ -1,0 +1,7 @@
+.userOrderList_container {
+  margin-bottom: 2rem;
+}
+
+.userOrderList_row:hover {
+  background-color: var(--ecommerce-background);
+}
