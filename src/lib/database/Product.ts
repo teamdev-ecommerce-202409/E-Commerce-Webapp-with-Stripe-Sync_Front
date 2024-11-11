@@ -3,6 +3,7 @@ import {
   CatgoryType,
   ProductInfoType,
   RatingInfoType,
+  validProductImgTypes,
 } from "../type/ProductType";
 import { PaginationInfoType } from "../type/GenericType";
 import { format } from "date-fns";
@@ -10,6 +11,7 @@ import axios from "axios";
 
 interface ProductUpdateParams {
   productId: number | null;
+  imgFile: File | null;
   name: string | null;
   description: string | null;
   price: number | null;
@@ -175,6 +177,7 @@ export async function createProduct(
     }
     const data = {
       name: productUpdateParams.name,
+      imgFile: productUpdateParams.imgFile,
       description: productUpdateParams.description,
       price: productUpdateParams.price,
       release_date: productUpdateParams.releaseDate,
@@ -186,6 +189,7 @@ export async function createProduct(
       category: "服",
     };
     checkProductUpdateParam(data);
+    checkImgFileParam(productUpdateParams.imgFile);
     data.release_date = formatDateWithOffset(
       new Date(data.release_date as string),
     );
@@ -228,6 +232,7 @@ export async function updateProductDetail(
     }
     const data = {
       name: productUpdateParams.name,
+      imgFile: productUpdateParams.imgFile,
       description: productUpdateParams.description,
       price: productUpdateParams.price,
       release_date: productUpdateParams.releaseDate,
@@ -240,6 +245,7 @@ export async function updateProductDetail(
     };
     if (!productUpdateParams.isDeleted) {
       checkProductUpdateParam(data);
+      checkImgFileParam(productUpdateParams.imgFile);
     }
     const response = await apiClient.put(
       `/products/${productUpdateParams.productId}/`,
@@ -320,6 +326,19 @@ function checkStringParam(
   }
   if (maxLength !== null && valueString.length > maxLength) {
     throw new Error(`${paramName}の最大文字数(${maxLength})を超えています。`);
+  }
+}
+
+function checkImgFileParam(img: File | null) {
+  if (img) {
+    if (!Object.keys(validProductImgTypes).includes(img.type)) {
+      throw new Error("画像の形式は JPEG, PNG に限ります。");
+    }
+
+    if (img.size > 5000000) {
+      // 5MBを超える場合はエラー
+      throw new Error("画像サイズは5MB以下です。");
+    }
   }
 }
 

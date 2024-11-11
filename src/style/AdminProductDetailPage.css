@@ -7,3 +7,20 @@
 .adminProductDetailPage_button_container {
   width: 2150px;
 }
+
+.adminProductDeatilPage_photo__preview__container {
+  width: fit-content;
+  max-width: 400px;
+  max-height: 300px;
+  display: flex;
+  justify-content: flex-start;
+  position: relative;
+  margin: 0 auto;
+}
+
+.adminProductCreatePage_product_img__preview {
+  min-width: 150px;
+  max-width: 200px;
+  min-height: 150px;
+  max-height: 200px;
+}

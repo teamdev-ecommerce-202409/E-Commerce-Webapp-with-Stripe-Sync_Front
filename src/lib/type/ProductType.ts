@@ -44,6 +44,10 @@ export type ProductInfoType = {
   updated_at: string; // DateTimeField は string で扱う
   fav?: boolean;
 };
+export enum validProductImgTypes {
+  "image/jpeg",
+  "image/png",
+}
 
 export type RatingInfoType = {
   average_rating: number;
