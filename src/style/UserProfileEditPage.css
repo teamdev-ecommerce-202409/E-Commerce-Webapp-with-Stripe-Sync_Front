@@ -17,7 +17,10 @@ border-color: #333;
 
 /* 保存ボタンのコンテナ */
 .mypage_save_button_container {
-display: flex;
-justify-content: center;
-margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    box-sizing: border-box;
 }
