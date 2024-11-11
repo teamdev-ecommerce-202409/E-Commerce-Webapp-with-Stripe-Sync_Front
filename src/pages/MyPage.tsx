@@ -8,9 +8,11 @@ import useLogin from "../hook/useLogin";
 import { useNavigate } from "react-router-dom";
 import { IconButton } from "@mui/material";
 import { EditNotifications } from "@mui/icons-material";
+import { getUserProfileAPI } from "../lib/database/User";
+import { UserInfoTypeJotai } from "../lib/type/UserInfoType";
 
 const MyPage = () => {
-  const [userInfoJotai] = useAtom(userInfoAtom);
+  const [userInfoJotai, setUserInfoJotai] = useAtom(userInfoAtom);
   const { checkLogin } = useLogin();
 
   const navigate = useNavigate();
@@ -22,9 +24,17 @@ const MyPage = () => {
       if (!authResult) {
         navigate("/");
       }
+      //TODO バックエンドからユーザー情報を取得する
+      if (userInfoJotai.access) {
+        const userData = await getUserProfileAPI(userInfoJotai.access);
+        if (userData) {
+          setUserInfoJotai((prev: UserInfoTypeJotai) => ({
+            ...prev,
+            userInfo: userData,
+          }));
+        }
+      }
     };
-
-    //TODO バックエンドからユーザー情報を取得する
     authCheckLogin();
   }, []);
   return (

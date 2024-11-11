@@ -1,0 +1,23 @@
+/* 入力フィールドのスタイル */
+.mypage_user_info_input {
+width: 100%;
+padding: 0.75rem;
+border: 1px solid #ddd;
+border-radius: 4px;
+font-size: 1rem;
+color: #333;
+background-color: #fafafa;
+outline: none;
+transition: border-color 0.3s ease;
+}
+
+.mypage_user_info_input:focus {
+border-color: #333;
+}
+
+/* 保存ボタンのコンテナ */
+.mypage_save_button_container {
+display: flex;
+justify-content: center;
+margin-top: 1.5rem;
+}
