@@ -17,8 +17,8 @@ const ShoppingCartButton = ({ product }: Props) => {
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     event.stopPropagation();
-    if (userInfojotai.userInfo) {
-      await changeCartItemQuantity(userInfojotai.userInfo.id, product.id);
+    if (userInfojotai.access) {
+      await changeCartItemQuantity(userInfojotai.access, product.id);
     } else {
       const cartItems = cartInfoJotai.cartItems;
       if (cartItems.find((cartItem) => cartItem.product.id === product.id)) {
