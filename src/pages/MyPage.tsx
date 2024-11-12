@@ -30,14 +30,12 @@ const MyPage = () => {
     }
   };
 
-  //TODO EditNotificationsのアイコンボタンにユーザープロフィール変更ページにとぶようにして
   useEffect(() => {
     const authCheckLogin = async () => {
       const authResult = await checkLogin();
       if (!authResult) {
         navigate("/");
       }
-      //TODO バックエンドからユーザー情報を取得する
       await fetchUserInfo();
     };
     authCheckLogin();
