@@ -1,15 +1,20 @@
 import { useEffect, useState } from "react";
 import Layout from "../component/shared/Layout";
 import { useNavigate } from "react-router-dom";
-import "../style/DetailPage.css";
-import "../style/AdminProductDetailPage.css";
-import { TextField, Box, MenuItem } from "@mui/material";
+import "../style/AdminProductCreatePage.css";
+import { TextField, Box, MenuItem, Button, IconButton } from "@mui/material";
 import { createProduct, getAllCategories } from "../lib/database/Product";
-import { CatgoryType, ProductInfoType } from "../lib/type/ProductType";
+import {
+  CatgoryType,
+  ProductInfoType,
+  validProductImgTypes,
+} from "../lib/type/ProductType";
 import PrimaryButton from "../component/shared/PrimaryButton";
 import useLogin from "../hook/useLogin";
 import { userInfoAtom } from "../lib/jotai/atoms/user";
 import { useAtom } from "jotai";
+import { PhotoCamera } from "@mui/icons-material";
+import CloseIcon from "@mui/icons-material/Close";
 
 const AdminProductCreatePage = () => {
   const [userInfoJotai] = useAtom(userInfoAtom);
@@ -17,6 +22,8 @@ const AdminProductCreatePage = () => {
   const navigate = useNavigate();
 
   const [name, setName] = useState<string>("");
+  const [imgFile, setImgFile] = useState<File | null>(null);
+
   const [description, setDescription] = useState<string>("");
   const [price, setPrice] = useState<number>(0);
   const [releaseDate, setReleaseDate] = useState<string>("");
@@ -31,6 +38,7 @@ const AdminProductCreatePage = () => {
     typeCatgory: [],
     brandCatgory: [],
   });
+  const [imagePreviewUrl, setImagePreviewUrl] = useState("");
 
   const fetchCategories = async () => {
     const allCategories = await getAllCategories();
@@ -42,6 +50,7 @@ const AdminProductCreatePage = () => {
       const productInfo = await createProduct(
         {
           productId: null,
+          imgFile,
           name: name,
           description: description,
           price: price,
@@ -80,6 +89,30 @@ const AdminProductCreatePage = () => {
   const handleCreate = async () => {
     await createNewProduct();
   };
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
+      setImgFile(file);
+
+      if (!Object.keys(validProductImgTypes).includes(file.type)) {
+        alert("File must be a JPEG, PNG image.");
+        return; // ファイルが許可された形式でない場合は処理を中止
+      }
+
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        const previewUrl = reader.result as string;
+        setImagePreviewUrl(previewUrl);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setImagePreviewUrl(""); // 画像URLをクリアしてプレビューを削除
+    setImgFile(null);
+  };
 
   return (
     <Layout>
@@ -98,6 +131,42 @@ const AdminProductCreatePage = () => {
           margin="normal"
           inputProps={{ minLength: 1, maxLength: 255 }}
         />
+        <Button
+          component="label" // Buttonをlabelタグとして機能させる
+          className="postBox_photo__button"
+        >
+          <PhotoCamera />
+          <input
+            // {...register("postImage")}
+            type="file"
+            hidden // ファイル入力を隠す
+            accept="image/*,video/*" // 画像と動画ファイルのみ受け入れる
+            onChange={handleFileChange} // ファイル選択時の処理
+          />
+          商品画像
+        </Button>
+        <div className="adminProductCreatePage_photo__preview__container">
+          {imagePreviewUrl && (
+            <>
+              <span className="photo__preview__close">
+                <IconButton onClick={handleRemoveImage} aria-label="delete">
+                  <CloseIcon />
+                </IconButton>
+              </span>
+              <span>
+                <IconButton />
+              </span>
+
+              {imagePreviewUrl && (
+                <img
+                  src={imagePreviewUrl}
+                  alt="Preview"
+                  className="adminProductCreatePage_product_img__preview"
+                />
+              )}
+            </>
+          )}
+        </div>
         説明
         <TextField
           fullWidth
