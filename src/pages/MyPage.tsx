@@ -17,6 +17,19 @@ const MyPage = () => {
 
   const navigate = useNavigate();
 
+  const fetchUserInfo = async () => {
+    if (userInfoJotai.access) {
+      // ユーザー情報の取得処理
+      const userData = await getUserProfileAPI(userInfoJotai.access);
+      if (userData) {
+        setUserInfoJotai((prev: UserInfoTypeJotai) => ({
+          ...prev,
+          userInfo: userData,
+        }));
+      }
+    }
+  };
+
   //TODO EditNotificationsのアイコンボタンにユーザープロフィール変更ページにとぶようにして
   useEffect(() => {
     const authCheckLogin = async () => {
@@ -25,15 +38,7 @@ const MyPage = () => {
         navigate("/");
       }
       //TODO バックエンドからユーザー情報を取得する
-      if (userInfoJotai.access) {
-        const userData = await getUserProfileAPI(userInfoJotai.access);
-        if (userData) {
-          setUserInfoJotai((prev: UserInfoTypeJotai) => ({
-            ...prev,
-            userInfo: userData,
-          }));
-        }
-      }
+      await fetchUserInfo();
     };
     authCheckLogin();
   }, []);
