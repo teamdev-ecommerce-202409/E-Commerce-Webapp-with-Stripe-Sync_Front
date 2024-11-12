@@ -154,7 +154,6 @@ export async function getProductDetailById(productId: number) {
     if (response.status !== 200) {
       throw new Error("Failed to fetch data");
     }
-    console.log(response.data);
     return response.data as ProductInfoType;
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -167,35 +166,50 @@ export async function createProduct(
   access?: string,
 ) {
   try {
-    let headers = {};
-    if (access) {
-      headers = {
-        Authorization: `Bearer ${access}`,
-      };
-    } else {
+    if (!access) {
       throw new Error("no access token");
     }
-    const data = {
-      name: productUpdateParams.name,
-      imgFile: productUpdateParams.imgFile,
-      description: productUpdateParams.description,
-      price: productUpdateParams.price,
-      release_date: productUpdateParams.releaseDate,
-      stock_quantity: productUpdateParams.stockQuantity,
-      brand_pk: productUpdateParams.brandId,
-      clothes_type_pk: productUpdateParams.clothTypeId,
-      size_pk: productUpdateParams.sizeId,
-      target_pk: productUpdateParams.targetId,
-      category: "服",
+
+    const headers = {
+      Authorization: `Bearer ${access}`,
+      "Content-Type": "multipart/form-data",
     };
-    checkProductUpdateParam(data);
-    checkImgFileParam(productUpdateParams.imgFile);
-    data.release_date = formatDateWithOffset(
-      new Date(data.release_date as string),
+
+    // FormDataを使ってデータと画像ファイルを追加
+    const formData = new FormData();
+    formData.append("name", productUpdateParams.name!);
+    formData.append("description", productUpdateParams.description!);
+    formData.append("price", productUpdateParams.price!.toString());
+    formData.append(
+      "release_date",
+      formatDateWithOffset(new Date(productUpdateParams.releaseDate!)),
     );
-    const response = await apiClient.post(`/products/`, data, {
+    formData.append(
+      "stock_quantity",
+      productUpdateParams.stockQuantity!.toString(),
+    );
+    formData.append("brand_pk", productUpdateParams.brandId!.toString());
+    formData.append(
+      "clothes_type_pk",
+      productUpdateParams.clothTypeId!.toString(),
+    );
+    formData.append("size_pk", productUpdateParams.sizeId!.toString());
+    formData.append("target_pk", productUpdateParams.targetId!.toString());
+    formData.append("category", "服");
+
+    // 画像ファイルを追加
+    if (productUpdateParams.imgFile) {
+      formData.append("imgFile", productUpdateParams.imgFile);
+    }
+
+    checkProductUpdateParam(formData);
+    checkImgFileParam(productUpdateParams.imgFile);
+
+    // APIリクエストを送信
+    const response = await apiClient.post(`/products/`, formData, {
       headers,
     });
+
     return response.data as ProductInfoType;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -226,27 +240,32 @@ export async function updateProductDetail(
     if (access) {
       headers = {
         Authorization: `Bearer ${access}`,
+        "content-type": "multipart/form-data",
       };
     } else {
       throw new Error("no access token");
     }
-    const data = {
-      name: productUpdateParams.name,
-      imgFile: productUpdateParams.imgFile,
-      description: productUpdateParams.description,
-      price: productUpdateParams.price,
-      release_date: productUpdateParams.releaseDate,
-      stock_quantity: productUpdateParams.stockQuantity,
-      brand_pk: productUpdateParams.brandId,
-      clothes_type_pk: productUpdateParams.clothTypeId,
-      size_pk: productUpdateParams.sizeId,
-      target_pk: productUpdateParams.targetId,
-      is_deleted: productUpdateParams.isDeleted,
-    };
-    if (!productUpdateParams.isDeleted) {
-      checkProductUpdateParam(data);
-      checkImgFileParam(productUpdateParams.imgFile);
+
+    const data = new FormData();
+    data.append("name", productUpdateParams.name!);
+    data.append("description", productUpdateParams.description!);
+    data.append("price", String(productUpdateParams.price));
+    data.append("release_date", productUpdateParams.releaseDate!);
+    data.append("stock_quantity", String(productUpdateParams.stockQuantity));
+    data.append("brand_pk", String(productUpdateParams.brandId));
+    data.append("clothes_type_pk", String(productUpdateParams.clothTypeId));
+    data.append("size_pk", String(productUpdateParams.sizeId));
+    data.append("target_pk", String(productUpdateParams.targetId));
+    data.append("is_deleted", String(productUpdateParams.isDeleted));
+
+    // 画像ファイルを追加
+    if (productUpdateParams.imgFile) {
+      data.append("imgFile", productUpdateParams.imgFile);
     }
+
+    checkProductUpdateParam(data);
+    checkImgFileParam(productUpdateParams.imgFile);
+
     const response = await apiClient.put(
       `/products/${productUpdateParams.productId}/`,
       data,
@@ -293,22 +312,23 @@ export async function getProductRatings(productId?: number, userId?: number) {
     return null;
   }
 }
-
-function checkProductUpdateParam(params: { [key: string]: unknown }) {
-  if (params.release_date !== null) {
-    const date = new Date(params.release_date as string);
+function checkProductUpdateParam(params: FormData) {
+  const releaseDate = params.get("release_date") as string | null;
+  if (releaseDate !== null) {
+    const date = new Date(releaseDate);
     if (isNaN(date.getTime())) {
       throw new Error(`正しい日付を指定してください。`);
     }
   }
-  checkStringParam("製品名", params.name, 1, 255);
-  checkStringParam("説明", params.description, null, null);
-  checkNumberParam("価格", params.price, 0, null);
-  checkNumberParam("在庫数", params.stock_quantity, 0, null);
-  checkNumberParam("ブランドID", params.brand_pk, 1, null);
-  checkNumberParam("タイプID", params.clothes_type_pk, 1, null);
-  checkNumberParam("サイズID", params.size_pk, 1, null);
-  checkNumberParam("ターゲットID", params.target_pk, 1, null);
+
+  checkStringParam("製品名", params.get("name"), 1, 255);
+  checkStringParam("説明", params.get("description"), null, null);
+  checkNumberParam("価格", params.get("price"), 0, null);
+  checkNumberParam("在庫数", params.get("stock_quantity"), 0, null);
+  checkNumberParam("ブランドID", params.get("brand_pk"), 1, null);
+  checkNumberParam("タイプID", params.get("clothes_type_pk"), 1, null);
+  checkNumberParam("サイズID", params.get("size_pk"), 1, null);
+  checkNumberParam("ターゲットID", params.get("target_pk"), 1, null);
 }
 
 function checkStringParam(
@@ -329,6 +349,32 @@ function checkStringParam(
   }
 }
 
+function checkNumberParam(
+  paramName: string,
+  value: unknown,
+  minValue: number | null,
+  maxValue: number | null,
+) {
+  const parsedValue = typeof value === "string" ? parseFloat(value) : value;
+  if (
+    parsedValue === null ||
+    typeof parsedValue !== "number" ||
+    isNaN(parsedValue)
+  ) {
+    throw new Error(`${paramName}を数値で指定してください。`);
+  }
+  if (minValue !== null && parsedValue < minValue) {
+    throw new Error(
+      `${paramName}は最小値(${minValue})以上である必要があります。`,
+    );
+  }
+  if (maxValue !== null && parsedValue > maxValue) {
+    throw new Error(
+      `${paramName}は最大値(${maxValue})以下である必要があります。`,
+    );
+  }
+}
+
 function checkImgFileParam(img: File | null) {
   if (img) {
     if (!Object.keys(validProductImgTypes).includes(img.type)) {
@@ -339,24 +385,6 @@ function checkImgFileParam(img: File | null) {
       // 5MBを超える場合はエラー
       throw new Error("画像サイズは5MB以下です。");
     }
-  }
-}
-
-function checkNumberParam(
-  paramName: string,
-  value: unknown,
-  minNumber: number | null,
-  maxNumber: number | null,
-) {
-  if (value === null || typeof value !== "number") {
-    throw new Error(`${paramName}を数値で指定してください。`);
-  }
-  const valueNumber = value as number;
-  if (minNumber !== null && valueNumber < minNumber) {
-    throw new Error(`${paramName}の最小値(${minNumber})を下回っています。`);
-  }
-  if (maxNumber !== null && valueNumber > maxNumber) {
-    throw new Error(`${paramName}の最大値(${maxNumber})を超えています。`);
   }
 }
 
