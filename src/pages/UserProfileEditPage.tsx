@@ -42,6 +42,20 @@ const EditProfilePage = () => {
   }, [userInfoJotai]);
 
   const handleSaveChanges = async () => {
+    // 入力チェック
+    if (name.length < 1 || name.length > 255) {
+        alert("名前は1〜255文字で入力してください");
+        return;
+      }
+      if (!/^[\w\-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+        alert("正しいメール形式で入力してください");
+        return;
+      }
+      if (address.length > 500) { // フロントエンドで任意の制限（500文字）を適用
+        alert("住所は500文字以下で入力してください");
+        return;
+      }
+
     const accessToken = userInfoJotai?.access;
     if (accessToken) {
       const updatedData = { name, email, address };
@@ -73,6 +87,7 @@ const EditProfilePage = () => {
               className="mypage_user_info_input"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              maxLength={255}
             />
           </div>
           <div className="mypage_user_info_content_container">
@@ -91,6 +106,7 @@ const EditProfilePage = () => {
               className="mypage_user_info_input"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
+              maxLength={500}
             />
           </div>
           <div className="mypage_save_button_container">
