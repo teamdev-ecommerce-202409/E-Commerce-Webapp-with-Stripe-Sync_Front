@@ -3,6 +3,7 @@ import Layout from "../component/shared/Layout";
 import { userInfoAtom } from "../lib/jotai/atoms/user";
 import { useState, useEffect } from "react";
 import { getUserProfileAPI, updateUserProfileAPI } from "../lib/database/User";
+import useLogin from "../hook/useLogin";
 import { useNavigate } from "react-router-dom";
 import "../style/UserProfileEditPage.css";
 import PrimaryButton from "../component/shared/PrimaryButton";
@@ -10,10 +11,18 @@ import { UserInfoTypeJotai } from "../lib/type/UserInfoType";
 
 const EditProfilePage = () => {
   const [userInfoJotai, setUserInfoJotai] = useAtom(userInfoAtom);
+  const { checkLogin } = useLogin();
   const [name, setName] = useState(userInfoJotai.userInfo?.name || "");
   const [email, setEmail] = useState(userInfoJotai.userInfo?.email || "");
   const [address, setAddress] = useState(userInfoJotai.userInfo?.address || "");
   const navigate = useNavigate();
+
+  const authCheckLogin = async () => {
+    const authResult = await checkLogin();
+    if (!authResult) {
+      navigate("/");
+    }
+  };
 
   useEffect(() => {
     // 認証トークンがある場合のみユーザー情報を取得
@@ -27,6 +36,8 @@ const EditProfilePage = () => {
         }
       }
     };
+
+    authCheckLogin();
     fetchUserInfo();
   }, [userInfoJotai]);
 
