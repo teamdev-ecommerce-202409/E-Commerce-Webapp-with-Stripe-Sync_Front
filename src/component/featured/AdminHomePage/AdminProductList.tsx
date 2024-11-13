@@ -121,7 +121,7 @@ const AdminProductList = ({ productList, setProductList }: Props) => {
                   ? product.description.slice(0, 10) + "..."
                   : product.description}
               </TableCell>
-              <TableCell>{`$${product.price.toFixed(2)}`}</TableCell>
+              <TableCell>{`$${product.price.toLocaleString()}`}</TableCell>
               <TableCell>{product.release_date}</TableCell>
               <TableCell>{product.stock_quantity}</TableCell>
               <TableCell>{product.size.name}</TableCell>

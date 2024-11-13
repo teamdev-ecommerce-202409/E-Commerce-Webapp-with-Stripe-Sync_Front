@@ -1,13 +1,13 @@
 import apiClient from "./apiClient";
 import {
   CatgoryType,
+  CommentInfoType,
   ProductInfoType,
-  RatingInfoType,
   validProductImgTypes,
 } from "../type/ProductType";
 import { PaginationInfoType } from "../type/GenericType";
-import { format } from "date-fns";
 import axios from "axios";
+import { formatDateWithOffset } from "../util";
 
 interface ProductUpdateParams {
   productId: number | null;
@@ -288,16 +288,19 @@ export async function updateProductDetail(
   }
 }
 
-export async function getProductRatings(productId?: number, userId?: number) {
+export async function getProductRatings(productId?: number, access?: string) {
   try {
     const params: { [key: string]: unknown } = {};
     if (productId) {
       params.product_Id = productId;
     }
-    if (userId) {
-      params.userId = userId;
+
+    let headers = {};
+    if (access) {
+      headers = {
+        Authorization: `Bearer ${access}`,
+      };
     }
-    const headers = {};
     const response = await apiClient.get("/reviews/", {
       headers,
       params,
@@ -306,9 +309,89 @@ export async function getProductRatings(productId?: number, userId?: number) {
       throw new Error("Failed to fetch data");
     }
     console.log("ratings", response.data);
-    return response.data as RatingInfoType;
+    return response.data as PaginationInfoType<CommentInfoType>;
   } catch (error) {
     console.error("Error fetching data:", error);
+    return null;
+  }
+}
+
+export async function getProductReviewOfLoginUser(
+  productId: number,
+  access: string | undefined | null,
+) {
+  try {
+    const params: { [key: string]: unknown } = {};
+
+    if (!access) {
+      throw new Error("access token is required");
+    }
+
+    if (productId) {
+      params.product_id = productId;
+    } else {
+      throw new Error("productId is required.");
+    }
+
+    const headers = {
+      Authorization: `Bearer ${access}`,
+    };
+    const response = await apiClient.get(`/product-reviews/${productId}/`, {
+      headers,
+      params,
+    });
+    if (response.status !== 200) {
+      throw new Error("Something wrong with registering fav state");
+    }
+    console.log("getProductReviewOfLoginUser", response.data);
+    return response.data as CommentInfoType;
+  } catch (error) {
+    console.error("Error registering data:", error);
+
+    return null;
+  }
+}
+
+export async function registerProductRating(
+  productId: number,
+  ratingNum: number,
+  comment: string | undefined | null,
+  access: string | undefined | null,
+) {
+  try {
+    const params: { [key: string]: unknown } = {};
+
+    if (!access) {
+      throw new Error("access token is required");
+    }
+
+    if (productId) {
+      params.product_id = productId;
+    } else {
+      throw new Error("productId is required.");
+    }
+
+    params.rating = ratingNum;
+    params.comment = comment;
+
+    const headers = {
+      Authorization: `Bearer ${access}`,
+    };
+    const response = await apiClient.post(
+      `/product-reviews/${productId}/`,
+      params,
+      {
+        headers,
+      },
+    );
+    if (response.status !== 200) {
+      throw new Error("Something wrong with registering fav state");
+    }
+    console.log("registerProductRating", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error registering data:", error);
+
     return null;
   }
 }
@@ -386,10 +469,6 @@ function checkImgFileParam(img: File | null) {
       throw new Error("画像サイズは5MB以下です。");
     }
   }
-}
-
-function formatDateWithOffset(date: Date): string {
-  return format(date, "yyyy-MM-dd'T'HH:mm:ssXXX");
 }
 
 export async function registerFav(

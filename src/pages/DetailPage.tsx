@@ -6,16 +6,26 @@ import ShoppingCartButton from "../component/shared/ShoppingCartButton";
 import FavoriteButton from "../component/shared/FavoriteButton";
 import Rating from "@mui/material/Rating";
 import CommentCard from "../component/featured/DetailPage/CommentCard";
-import { ProductInfoType, RatingInfoType } from "../lib/type/ProductType";
+import { CommentInfoType, ProductInfoType } from "../lib/type/ProductType";
 import {
   getProductDetailById,
   getProductRatings,
 } from "../lib/database/Product";
+import { IconButton } from "@mui/material";
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import { userInfoAtom } from "../lib/jotai/atoms/user";
+import { useAtom } from "jotai";
+import ModalPopup from "../component/shared/ModalPopup";
+import CommentForm from "../component/featured/DetailPage/CommentForm";
+import { PaginationInfoType } from "../lib/type/GenericType";
 
 const DetailPage = () => {
+  const [userInfoJotai] = useAtom(userInfoAtom);
   const { productId } = useParams<{ productId: string }>();
   const [product, setProduct] = useState<ProductInfoType | null>(null);
-  const [rating, setRating] = useState<RatingInfoType | null>(null);
+  const [rating, setRating] =
+    useState<PaginationInfoType<CommentInfoType> | null>(null);
+  const [openCommentForm, setOpenCommentForm] = useState(false);
 
   const id = Number(productId);
 
@@ -26,7 +36,7 @@ const DetailPage = () => {
         console.log({ productDetail });
         setProduct(productDetail);
 
-        const ratings = await getProductRatings(id);
+        const ratings = await getProductRatings(id, userInfoJotai.access);
         console.log({ ratings });
         setRating(ratings);
       };
@@ -35,52 +45,73 @@ const DetailPage = () => {
   }, [id]);
 
   return (
-    <Layout>
-      <div className="detailpage_container">
-        <div className="detailpage_content">
-          <div className="detailpage_image">
-            <img
-              src={
-                product?.img_url
-                  ? product.img_url
-                  : "/public/no_image_square.jpg"
-              }
-              alt={product?.name}
-            />
-          </div>
-          <div className="detailpage_info_container">
-            <div className="detailpage_info">
-              <h2>{product?.name}</h2>
-              <p>Price: ${product?.price.toFixed(2)}</p>
-              <p>Target: {product?.target.name}</p>
-              <p>Type: {product?.clothes_type.name}</p>
-
-              <p>{product?.description}</p>
-              <div className="detailpage_info_action_container">
-                {product && (
-                  <>
-                    <ShoppingCartButton product={product} />
-                    <FavoriteButton product={product} />
-                  </>
-                )}
-              </div>
-            </div>
-            <div className="detailpage_itemReviews">
-              <h3>レビュー</h3>
-              <Rating
-                name="read-only"
-                value={rating?.average_rating || 0}
-                readOnly
-                defaultValue={0}
+    <>
+      <Layout>
+        <div className="detailpage_container">
+          <div className="detailpage_content">
+            <div className="detailpage_image">
+              <img
+                src={
+                  product?.img_url ? product.img_url : "/no_image_square.jpg"
+                }
+                alt={product?.name}
               />
-              {rating?.comments?.map((comment) => {
-                return <CommentCard key={comment.id} comment={comment} />;
-              })}
+            </div>
+            <div className="detailpage_info_container">
+              <div className="detailpage_info">
+                <h2>{product?.name}</h2>
+                <p>Price: ￥{product?.price.toLocaleString()}</p>
+                <p>Target: {product?.target.name}</p>
+                <p>Type: {product?.clothes_type.name}</p>
+
+                <p>{product?.description}</p>
+                <div className="detailpage_info_action_container">
+                  {product && (
+                    <>
+                      <ShoppingCartButton product={product} />
+                      <FavoriteButton product={product} />
+                    </>
+                  )}
+                </div>
+              </div>
+              <div className="detailpage_itemReviews">
+                <div className="detailpage_itemReviews_title_container">
+                  <h4>レビュー</h4>
+                  {/* 購入したことがある商品のみコメント可能 */}
+                  {rating?.is_ordered && (
+                    <IconButton onClick={() => setOpenCommentForm(true)}>
+                      <ChatBubbleOutlineIcon />
+                    </IconButton>
+                  )}
+                </div>
+                <div className="detailpage_allReviews_container">
+                  <Rating
+                    name="read-only"
+                    value={rating?.average_rating || 0}
+                    readOnly
+                    defaultValue={0}
+                  />
+                  <span className="detailpage_allReviews_count">{`(${rating?.count})`}</span>
+                </div>
+                {rating?.results?.map((comment) => {
+                  return <CommentCard key={comment.id} comment={comment} />;
+                })}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </Layout>
+      </Layout>
+      {product && (
+        <ModalPopup
+          open={openCommentForm}
+          handleClose={() => {
+            setOpenCommentForm(false);
+          }}
+        >
+          <CommentForm product={product} />
+        </ModalPopup>
+      )}
+    </>
   );
 };
 
