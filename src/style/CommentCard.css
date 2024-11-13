@@ -1,11 +1,12 @@
 .commentCard_container {
   background-color: var(--ecommerce-background);
-  /* border: 1px solid var(--ecommerce-color); */
   border-radius: 8px;
   padding: 16px;
   max-width: 600px;
-  margin-bottom: 20px;
+  margin: 20px auto;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  width: 95%;
 }
 
 .commentCard_container h4 {
@@ -18,9 +19,28 @@
   margin-bottom: 12px;
 }
 
-.commentCard_container p {
+.commentCard_content_container {
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.commentCard_content_container p {
   font-size: 1rem;
   line-height: 1.5;
   color: #666;
   margin: 0;
+  word-wrap: break-word; /* 長い単語を折り返す */
+  white-space: normal; /* 折り返しを許可 */
+  overflow-wrap: break-word; /* 長い単語を折り返す */
+}
+
+.commentCard_header_container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.commentCard_update_time {
+  font-size: 0.8rem;
+  color: #666;
 }

@@ -49,18 +49,13 @@ export enum validProductImgTypes {
   "image/png",
 }
 
-export type RatingInfoType = {
-  average_rating: number;
-  comments?: CommentInfoType[];
-};
-
 export type CommentInfoType = {
   id: number;
   user: number;
   product: number;
   rating: number;
   comment: string;
-  created_at: string;
+  updated_at: string;
 };
 
 export type CartInfoType = {
