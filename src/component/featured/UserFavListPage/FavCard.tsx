@@ -18,7 +18,7 @@ const FavCard = ({ product }: Props) => {
       onClick={handleCardClick}
     >
       <img
-        src={product.imgUrl ? product.imgUrl : "public/no_image_square.jpg"}
+        src={product.img_url ? product.img_url : "public/no_image_square.jpg"}
         alt={product.name}
         className="productImage"
       />

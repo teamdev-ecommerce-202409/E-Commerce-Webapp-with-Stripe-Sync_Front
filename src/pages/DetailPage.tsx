@@ -41,7 +41,9 @@ const DetailPage = () => {
           <div className="detailpage_image">
             <img
               src={
-                product?.imgUrl ? product.imgUrl : "/public/no_image_square.jpg"
+                product?.img_url
+                  ? product.img_url
+                  : "/public/no_image_square.jpg"
               }
               alt={product?.name}
             />
