@@ -24,7 +24,7 @@ const CartItemCard = ({
     <div className="cartItemCard_container" key={cartItem.product.id}>
       <div className="cartItemCard_image_container">
         <img
-          src={cartItem.product.imgUrl || "/no_image_square.jpg"}
+          src={cartItem.product.img_url || "/no_image_square.jpg"}
           alt="商品画像"
         />
       </div>

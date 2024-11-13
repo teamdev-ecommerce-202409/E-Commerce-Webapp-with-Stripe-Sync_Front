@@ -14,7 +14,7 @@ const OrderItemCard = ({ orderItem }: Props) => {
     >
       <div className="orderItemCard_image_container">
         <img
-          src={orderItem.product.imgUrl || "/no_image_square.jpg"}
+          src={orderItem.product.img_url || "/no_image_square.jpg"}
           alt="商品画像"
         />
       </div>

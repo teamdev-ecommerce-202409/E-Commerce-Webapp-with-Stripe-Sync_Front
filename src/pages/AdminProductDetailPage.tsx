@@ -44,7 +44,7 @@ const AdminProductDetailPage = () => {
       return;
     }
     const productDetail = await getProductDetailById(Number(productId));
-    console.log({ productDetail });
+
     if (productDetail === null) {
       return;
     }
@@ -57,7 +57,7 @@ const AdminProductDetailPage = () => {
     setClothesTypeId(productDetail.clothes_type.id);
     setSizeId(productDetail.size.id);
     setTargetId(productDetail.target.id);
-    setImagePreviewUrl(productDetail.imgUrl);
+    setImagePreviewUrl(productDetail.img_url);
   };
 
   const fetchCategories = async () => {

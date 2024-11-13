@@ -35,7 +35,7 @@ export type ProductInfoType = {
   brand: BrandType; // ForeignKey: Brand の情報
   name: string;
   description: string;
-  imgUrl: string; //TODO現在、backのmodel.pyにないので仮置き
+  img_url: string;
   price: number; // DecimalField に対応（number 型）
   release_date: string; // DateTimeField は string で扱う
   stock_quantity: number;
