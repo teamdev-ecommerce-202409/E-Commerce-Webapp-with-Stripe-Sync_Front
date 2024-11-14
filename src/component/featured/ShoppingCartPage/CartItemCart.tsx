@@ -52,7 +52,7 @@ const CartItemCard = ({
                 if (itemQuantity - 1 === 0) {
                   handleDeleteCartItem(
                     cartItem.product.id,
-                    userInfoJotai.access,
+                    userInfoJotai && userInfoJotai.access,
                   );
                 } else {
                   setItemQuantity(itemQuantity - 1);
