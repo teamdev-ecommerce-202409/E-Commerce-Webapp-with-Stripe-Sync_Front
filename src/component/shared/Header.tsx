@@ -7,8 +7,12 @@ import ModalPopup from "./ModalPopup";
 import LoginForm from "./LoginForm";
 import { IconButton } from "@mui/material";
 import MenuListButton from "./MenuListButton";
+import { useAtom } from "jotai";
+import { userInfoAtom } from "../../lib/jotai/atoms/user";
 
 export const Header = () => {
+  const [userInfoJotai] = useAtom(userInfoAtom); //ユーザー情報のグローバルステート
+
   const [loginFormOpen, setLoginFormOpen] = useState(false);
 
   const handleLoginPopup = () => {
@@ -29,12 +33,16 @@ export const Header = () => {
       <nav className="nav-links">
         <ul>
           <li>
-            <IconButton
-              className="header_iconButton"
-              onClick={handleLoginPopup}
-            >
-              <AccountBoxIcon />
-            </IconButton>
+            {userInfoJotai && userInfoJotai.access ? (
+              <span>{userInfoJotai.userInfo?.name}様</span>
+            ) : (
+              <IconButton
+                className="header_iconButton"
+                onClick={handleLoginPopup}
+              >
+                <AccountBoxIcon />
+              </IconButton>
+            )}
           </li>
           <li>
             <Link to="/shoppingcart">
