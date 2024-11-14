@@ -63,11 +63,37 @@ const DetailPage = () => {
             <div className="detailpage_info_container">
               <div className="detailpage_info">
                 <h2>{product?.name}</h2>
-                <p>Price: ￥{product?.price.toLocaleString()}</p>
-                <p>Target: {product?.target.name}</p>
-                <p>Type: {product?.clothes_type.name}</p>
 
-                <p>{product?.description}</p>
+                <div className="detailpage_info_product_detail_container">
+                  <p>
+                    <span className="detailpage_info_product_detail_title">
+                      Price:
+                    </span>
+                    ￥{product?.price.toLocaleString()}
+                  </p>
+                  <p>
+                    <span className="detailpage_info_product_detail_title">
+                      Target:
+                    </span>
+                    {product?.target.name}
+                  </p>
+                  <p>
+                    <span className="detailpage_info_product_detail_title">
+                      Type:
+                    </span>
+                    {product?.clothes_type.name}
+                  </p>
+                  <p>
+                    <span className="detailpage_info_product_detail_title">
+                      Size:
+                    </span>
+                    {product?.size.name}
+                  </p>
+
+                  <p className="detailpage_info_product_description">
+                    {product?.description}
+                  </p>
+                </div>
                 <div className="detailpage_info_action_container">
                   {product && (
                     <>

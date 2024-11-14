@@ -40,7 +40,29 @@
   background-color: var(--ecommerce-background);
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  color: var(--ecommerce-color);
 }
+.detailpage_info_product_detail_container {
+  margin: 2rem 0;
+}
+.detailpage_info_product_detail_title {
+  font-size: 1rem;
+  color: var(--ecommerce-color);
+  padding: 2px 5px;
+  margin: 5px 0px;
+}
+
+.detailpage_info_product_description {
+  font-size: 1rem;
+  color: var(--ecommerce-color);
+
+  line-height: 1.6;
+  margin-top: 2rem;
+  white-space: pre-wrap; /* テキスト内の改行を維持 */
+  word-wrap: break-word; /* 長い単語で折り返す */
+  overflow-wrap: anywhere; /* コンテナの幅で折り返し */
+}
+
 .detailpage_itemReviews {
   display: flex;
   flex-direction: column;
@@ -50,6 +72,7 @@
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin-top: 20px;
+  color: var(--ecommerce-color);
 }
 
 .detailpage_itemReviews_title_container {
