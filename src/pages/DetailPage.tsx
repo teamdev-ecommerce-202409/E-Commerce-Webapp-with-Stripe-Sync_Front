@@ -63,6 +63,7 @@ const DetailPage = () => {
                 <p>Price: ￥{product?.price.toLocaleString()}</p>
                 <p>Target: {product?.target.name}</p>
                 <p>Type: {product?.clothes_type.name}</p>
+                <p>Size: {product?.size.name}</p>
 
                 <p>{product?.description}</p>
                 <div className="detailpage_info_action_container">
