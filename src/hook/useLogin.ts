@@ -2,8 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAtom } from "jotai";
 import {
+  checkLoginAPI,
   loginAPI,
-  refreshTokenAPI,
   signUpAPI,
   verifyEmailAPI,
 } from "../lib/database/User";
@@ -154,55 +154,15 @@ const useLogin = () => {
     window.location.reload();
   };
 
-  //トークンのリフレッシュ処理
-  const refreshToken = async () => {
-    try {
-      setLoading(true);
-      // アクセストークンが有効期限切れの場合に、リフレッシュトークンを使用して新しくアクセストークンを取得
-      const refresh = userInfoJotai.refresh;
-      if (!refresh) {
-        // リフレッシュトークンがない場合はログアウト処理
-        logout();
-      }
-
-      // リフレッシュトークンがある場合
-      const newTokenObj = await refreshTokenAPI(refresh);
-      // 取得した新たなトークンをjotaiにセット
-      setuserInfoJotai({
-        userInfo: userInfoJotai.userInfo,
-        access: newTokenObj.access,
-        refresh: newTokenObj.refresh,
-      });
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.error(error.message);
-        alert("トークンの再生成に失敗しました。ログアウトします。");
-      } else {
-        console.error("Unknown error", error);
-      }
-      logout();
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const checkLogin = async (checkAdminFlag?: boolean) => {
     try {
       setLoading(true);
-      if (!userInfoJotai.access) {
-        throw new Error("No access token");
-      }
-      if (!userInfoJotai.refresh) {
-        throw new Error("No refresh token");
-      }
-
-      if (checkAdminFlag) {
-        //adminか確認したい場合
-        if (userInfoJotai.userInfo?.role !== "admin") {
-          throw new Error("Not admin");
-        }
-      }
-      return true;
+      const loginResult = await checkLoginAPI(
+        userInfoJotai.access,
+        userInfoJotai.refresh,
+        checkAdminFlag,
+      );
+      return loginResult;
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.error(error.message);
@@ -223,7 +183,6 @@ const useLogin = () => {
     login,
     logout,
     verifiyEmail,
-    refreshToken,
     checkLogin,
   };
 };
