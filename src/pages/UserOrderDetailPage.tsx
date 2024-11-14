@@ -24,7 +24,7 @@ const UserOrderDetailPage = () => {
     }
     const orderInfoRes = await getOrderDetail(
       Number(orderId),
-      userInfoJotai.access,
+      userInfoJotai && userInfoJotai.access,
     );
     if (!orderInfoRes) {
       alert("この注文情報取得エラー。");

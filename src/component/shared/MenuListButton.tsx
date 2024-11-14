@@ -53,17 +53,19 @@ export const MenuListButton = () => {
           "aria-labelledby": "basic-button",
         }}
       >
-        {userInfoJotai.access && (
+        {userInfoJotai && userInfoJotai.access && (
           <MenuItem onClick={() => handleMenuItemClick("/mypage")}>
             Mypage
           </MenuItem>
         )}
-        {userInfoJotai.access && userInfoJotai.userInfo?.role === "admin" && (
-          <MenuItem onClick={() => handleMenuItemClick("/admin")}>
-            Admin
-          </MenuItem>
-        )}
-        {userInfoJotai.access && (
+        {userInfoJotai &&
+          userInfoJotai.access &&
+          userInfoJotai.userInfo?.role === "admin" && (
+            <MenuItem onClick={() => handleMenuItemClick("/admin")}>
+              Admin
+            </MenuItem>
+          )}
+        {userInfoJotai && userInfoJotai.access && (
           <MenuItem onClick={handleLogout} disabled={loading}>
             Logout
           </MenuItem>

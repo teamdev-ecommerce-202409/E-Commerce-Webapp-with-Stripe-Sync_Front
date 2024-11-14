@@ -56,7 +56,7 @@ const HomePage = () => {
           brandId: selectedCategories?.brandCatgory.map((brand) => brand.id),
           keyword: keyword,
         },
-        userInfoJotai.access,
+        userInfoJotai && userInfoJotai.access,
       );
 
       // 商品リストを更新
@@ -76,7 +76,7 @@ const HomePage = () => {
       const allProducts = await getProducts(
         { page: currentPage },
 
-        userInfoJotai.access,
+        userInfoJotai && userInfoJotai.access,
       );
       setProductList(allProducts ? allProducts.results : []);
       // ページネーション設定

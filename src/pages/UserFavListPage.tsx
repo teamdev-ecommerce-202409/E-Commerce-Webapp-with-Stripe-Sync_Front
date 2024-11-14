@@ -21,7 +21,10 @@ const UserFavListPage = () => {
   const navigate = useNavigate();
 
   const fetchFavs = async (currentPage = page) => {
-    const favs = await getFavListByUser(currentPage, userInfoJotai.access);
+    const favs = await getFavListByUser(
+      currentPage,
+      userInfoJotai && userInfoJotai.access,
+    );
     console.log({ favs });
     const newFavs = [];
     if (favs) {
