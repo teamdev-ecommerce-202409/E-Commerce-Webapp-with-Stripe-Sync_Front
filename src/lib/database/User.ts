@@ -53,24 +53,36 @@ export async function loginAPI(email: string, password: string) {
     return null;
   }
 }
-// トークンリフレッシュ機能
-export async function refreshTokenAPI(refresh: string | undefined | null) {
+export async function checkLoginAPI(
+  access: string | undefined | null,
+  refresh: string | undefined | null,
+  isAdmin?: boolean,
+) {
   try {
-    if (!refresh) {
-      throw new Error("リフレッシュトークンがありません");
+    let headers = {};
+    if (access) {
+      headers = {
+        Authorization: `Bearer ${access}`,
+      };
+    } else {
+      throw new Error("access is required");
     }
-    const params: { [key: string]: unknown } = { refresh };
-
-    const response = await apiClient.post("/token/refresh/", params);
+    if (!refresh) {
+      throw new Error("No refresh token");
+    }
+    const data: { [key: string]: unknown } = { refresh };
+    if (isAdmin) {
+      data.check_admin = isAdmin;
+    }
+    const response = await apiClient.post("/check-access/", data, {
+      headers,
+    });
     console.log(response.data);
 
-    return { access: response.data.access, refresh: response.data.refresh };
+    return response.data.result as boolean;
   } catch (error: unknown) {
-    console.error("Error refresh token:", error);
-    if (isAxiosError(error)) {
-      console.error("Error refresh token:", error.response?.data);
-    }
-    throw new Error("トークンの再生成失敗");
+    console.error("Error check token:", error);
+    return false;
   }
 }
 

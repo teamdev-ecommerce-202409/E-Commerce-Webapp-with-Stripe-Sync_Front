@@ -18,7 +18,11 @@ const FavoriteButton = ({ product }: Props) => {
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     event.stopPropagation();
-    await registerFav(product.id, !isFavorite, userInfoJotai.access);
+    await registerFav(
+      product.id,
+      !isFavorite,
+      userInfoJotai && userInfoJotai.access,
+    );
     setIsFavorite(!isFavorite);
   };
 

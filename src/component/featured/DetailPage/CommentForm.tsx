@@ -42,7 +42,7 @@ const CommentForm = ({ product }: Props) => {
       product.id,
       data.rating,
       data.productComment,
-      userInfoJotai.access,
+      userInfoJotai && userInfoJotai.access,
     );
 
     reset();

@@ -36,7 +36,10 @@ const DetailPage = () => {
         console.log({ productDetail });
         setProduct(productDetail);
 
-        const ratings = await getProductRatings(id, userInfoJotai.access);
+        const ratings = await getProductRatings(
+          id,
+          userInfoJotai && userInfoJotai.access,
+        );
         console.log({ ratings });
         setRating(ratings);
       };
