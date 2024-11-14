@@ -30,7 +30,9 @@ const ProductCard = ({ product }: Props) => {
       <h3>{product.name}</h3>
       <p> ¥{product.price.toLocaleString()}</p>
       <div className="productActions_container">
-        {userInfoJotai.access && <FavoriteButton product={product} />}
+        {userInfoJotai && userInfoJotai.access && (
+          <FavoriteButton product={product} />
+        )}
         <ShoppingCartButton product={product} />
       </div>
     </div>

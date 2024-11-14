@@ -25,7 +25,7 @@ const UserOrderListPage = () => {
     setLoading(true);
     const orders = await getOrders(
       { page: currentPage },
-      userInfoJotai.access,
+      userInfoJotai && userInfoJotai.access,
       true,
     );
     console.log({ orders });

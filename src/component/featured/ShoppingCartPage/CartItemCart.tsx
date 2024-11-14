@@ -52,14 +52,14 @@ const CartItemCard = ({
                 if (itemQuantity - 1 === 0) {
                   handleDeleteCartItem(
                     cartItem.product.id,
-                    userInfoJotai.access,
+                    userInfoJotai && userInfoJotai.access,
                   );
                 } else {
                   setItemQuantity(itemQuantity - 1);
                   handleChangeQuantity(
                     cartItem.product.id,
                     itemQuantity - 1,
-                    userInfoJotai.access,
+                    userInfoJotai && userInfoJotai.access,
                   );
                 }
               }}
@@ -78,7 +78,7 @@ const CartItemCard = ({
                 handleChangeQuantity(
                   cartItem.product.id,
                   itemQuantity + 1,
-                  userInfoJotai.access,
+                  userInfoJotai && userInfoJotai.access,
                 );
               }}
             >
@@ -88,7 +88,10 @@ const CartItemCard = ({
           <div className="cartItemCard_delete_button_container">
             <PrimaryButton
               onClick={() =>
-                handleDeleteCartItem(cartItem.product.id, userInfoJotai.access)
+                handleDeleteCartItem(
+                  cartItem.product.id,
+                  userInfoJotai && userInfoJotai.access,
+                )
               }
               loading={false}
               text={"削除"}

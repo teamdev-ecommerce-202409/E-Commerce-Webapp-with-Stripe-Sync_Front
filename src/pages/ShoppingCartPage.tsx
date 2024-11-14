@@ -83,7 +83,7 @@ const ShoppingCartPage = () => {
   };
 
   const clearCart = () => {
-    const isGuestUser = userInfoJotai.access === undefined;
+    const isGuestUser = !userInfoJotai || !userInfoJotai.access;
     if (isGuestUser) {
       const newCartItems: CartInfoType[] = [];
       setCartInfoJotai({ cartItems: newCartItems } as CartInfoJotai);
@@ -121,7 +121,7 @@ const ShoppingCartPage = () => {
 
   useEffect(() => {
     // グローバルステートからログインユーザー情報を取得
-    if (userInfoJotai.access) {
+    if (userInfoJotai && userInfoJotai.access) {
       // ユーザー情報が入っている場合=ログインしている
       getCartItems(userInfoJotai.access);
     } else {
