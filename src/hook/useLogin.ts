@@ -158,8 +158,8 @@ const useLogin = () => {
     try {
       setLoading(true);
       const loginResult = await checkLoginAPI(
-        userInfoJotai.access,
-        userInfoJotai.refresh,
+        userInfoJotai && userInfoJotai.access,
+        userInfoJotai && userInfoJotai.refresh,
         checkAdminFlag,
       );
       return loginResult;

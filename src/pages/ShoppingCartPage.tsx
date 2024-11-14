@@ -121,7 +121,7 @@ const ShoppingCartPage = () => {
 
   useEffect(() => {
     // グローバルステートからログインユーザー情報を取得
-    if (userInfoJotai.access) {
+    if (userInfoJotai && userInfoJotai.access) {
       // ユーザー情報が入っている場合=ログインしている
       getCartItems(userInfoJotai.access);
     } else {
