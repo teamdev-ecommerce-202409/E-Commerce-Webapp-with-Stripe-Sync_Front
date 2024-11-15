@@ -5,7 +5,7 @@ import { ProductInfoType } from "../../../lib/type/ProductType";
 type Props = {
   product: ProductInfoType;
 };
-const FavCard = ({ product }: Props) => {
+const FavAndWishCard = ({ product }: Props) => {
   const navigate = useNavigate();
 
   const handleCardClick = () => {
@@ -31,4 +31,4 @@ const FavCard = ({ product }: Props) => {
   );
 };
 
-export default FavCard;
+export default FavAndWishCard;

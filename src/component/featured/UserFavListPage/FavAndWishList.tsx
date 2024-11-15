@@ -1,19 +1,19 @@
 import { ProductInfoType } from "../../../lib/type/ProductType";
 import "../../../style/FavList.css";
-import FavCard from "./FavCard";
+import FavAndWishCard from "./FavAndWishCard";
 
 type Props = {
   productList: ProductInfoType[];
 };
 
-const FavList = ({ productList }: Props) => {
+const FavAndWishList = ({ productList }: Props) => {
   return (
     <div className="favList_container">
       {productList.map((product) => (
-        <FavCard product={product} key={product.id} />
+        <FavAndWishCard product={product} key={product.id} />
       ))}
     </div>
   );
 };
 
-export default FavList;
+export default FavAndWishList;

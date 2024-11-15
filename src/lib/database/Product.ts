@@ -508,6 +508,44 @@ export async function registerFav(
   }
 }
 
+export async function registerWish(
+  productId: number,
+  wish: boolean,
+  access: string | undefined | null,
+) {
+  try {
+    console.log("registerWish");
+    const params: { [key: string]: unknown } = {};
+
+    if (!access) {
+      throw new Error("access token is required");
+    }
+
+    if (productId) {
+      params.product_id = productId;
+    } else {
+      throw new Error("productId is required.");
+    }
+
+    params.wish = wish;
+
+    const headers = {
+      Authorization: `Bearer ${access}`,
+    };
+    const response = await apiClient.post("/wishlists/", params, {
+      headers,
+    });
+    if (response.status !== 200) {
+      throw new Error("Something wrong with registering fav state");
+    }
+    return response.data as number;
+  } catch (error) {
+    console.error("Error registering data:", error);
+
+    return null;
+  }
+}
+
 export async function getFavListByUser(
   page: number,
   access: string | undefined | null,
@@ -535,6 +573,38 @@ export async function getFavListByUser(
     }>;
   } catch (error) {
     console.error("Error getting fav data:", error);
+
+    return null;
+  }
+}
+
+export async function getWishListByUser(
+  page: number,
+  access: string | undefined | null,
+) {
+  try {
+    const params: { [key: string]: unknown } = { page };
+
+    if (!access) {
+      throw new Error("access token is required");
+    }
+
+    const headers = {
+      Authorization: `Bearer ${access}`,
+    };
+    const response = await apiClient.get("/wishlists/", {
+      headers,
+      params,
+    });
+    if (response.status !== 200) {
+      throw new Error("Something wrong with getting wish list");
+    }
+    return response.data as PaginationInfoType<{
+      user: number;
+      product: ProductInfoType;
+    }>;
+  } catch (error) {
+    console.error("Error getting wish data:", error);
 
     return null;
   }

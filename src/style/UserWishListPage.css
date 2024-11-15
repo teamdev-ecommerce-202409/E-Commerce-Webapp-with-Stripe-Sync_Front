@@ -1,0 +1,14 @@
+.userWishListPage_container {
+  padding: 1rem;
+}
+
+.userWishListPage_title_container {
+  margin: 10px 0;
+  display: flex;
+}
+
+.userWishListPage_favList_container {
+  width: 100%;
+  display: block;
+  box-sizing: border-box;
+}
