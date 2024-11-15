@@ -43,6 +43,7 @@ export type ProductInfoType = {
   created_at: string; // DateTimeField は string で扱う
   updated_at: string; // DateTimeField は string で扱う
   fav?: boolean;
+  wish?: boolean;
 };
 export enum validProductImgTypes {
   "image/jpeg",

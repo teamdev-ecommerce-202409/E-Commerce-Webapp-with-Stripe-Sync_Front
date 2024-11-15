@@ -70,11 +70,12 @@ const MyPage = () => {
               loading={false}
               text={"Favorites"}
             />
-            {/* <PrimaryButton
-              onClick={() => alert()}
+            <PrimaryButton
+              onClick={() => navigate("/mypage/wishlist")}
               loading={false}
               text={"WishList"}
-            /> */}
+            />
+
             <PrimaryButton
               onClick={() => navigate("/mypage/orders")}
               loading={false}

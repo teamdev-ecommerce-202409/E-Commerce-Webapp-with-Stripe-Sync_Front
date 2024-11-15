@@ -5,23 +5,23 @@ import { useAtom } from "jotai";
 import { userInfoAtom } from "../lib/jotai/atoms/user";
 import useLogin from "../hook/useLogin";
 import { ProductInfoType } from "../lib/type/ProductType";
-import { getFavListByUser } from "../lib/database/Product";
+import { getWishListByUser } from "../lib/database/Product";
 import { loadNumPerPage } from "../lib/constants";
 import PaginationControl from "../component/shared/PaginationControl";
-import "../style/UserFavListPage.css";
+import "../style/UserWishListPage.css";
 import FavAndWishList from "../component/featured/UserFavListPage/FavAndWishList";
 
-const UserFavListPage = () => {
+const UserWishListPage = () => {
   const [userInfoJotai] = useAtom(userInfoAtom);
   const { checkLogin } = useLogin();
-  const [favList, setFavList] = useState<ProductInfoType[]>([]);
+  const [wishList, setWishList] = useState<ProductInfoType[]>([]);
   const [page, setPage] = useState(1);
   const [allPageCount, setAllPageCount] = useState(1);
 
   const navigate = useNavigate();
 
-  const fetchFavs = async (currentPage = page) => {
-    const favs = await getFavListByUser(
+  const fetchWishList = async (currentPage = page) => {
+    const favs = await getWishListByUser(
       currentPage,
       userInfoJotai && userInfoJotai.access,
     );
@@ -33,7 +33,7 @@ const UserFavListPage = () => {
       }
     }
     // いいねリストを更新
-    setFavList(newFavs);
+    setWishList(newFavs);
 
     // ページネーション設定
     if (favs?.count) {
@@ -51,18 +51,18 @@ const UserFavListPage = () => {
     };
 
     authCheckLogin();
-    fetchFavs(page);
+    fetchWishList(page);
   }, []);
   return (
     <Layout>
-      <div className="userFavListPage_container">
-        <div className="userFavListPage_title_container">
-          <h2>{userInfoJotai.userInfo?.name} 様のFavorites</h2>
+      <div className="userWishListPage_container">
+        <div className="userWishListPage_title_container">
+          <h2>{userInfoJotai.userInfo?.name} 様のWishList</h2>
         </div>
-        <div className="userFavListPage_favList_container">
-          {favList && favList.length > 0 ? (
+        <div className="userWishListPage_favList_container">
+          {wishList && wishList.length > 0 ? (
             <>
-              <FavAndWishList productList={favList} />
+              <FavAndWishList productList={wishList} />
               <PaginationControl
                 allPageCount={allPageCount} //総ページ数
                 handlePageChange={setPage} //変更されたときに走る関数。第2引数にページ番号が入る
@@ -70,7 +70,7 @@ const UserFavListPage = () => {
               />
             </>
           ) : (
-            <div>いいねした商品はまだないようです。</div>
+            <div>ウィッシュリストした商品はまだないようです。</div>
           )}
         </div>
       </div>
@@ -78,4 +78,4 @@ const UserFavListPage = () => {
   );
 };
 
-export default UserFavListPage;
+export default UserWishListPage;

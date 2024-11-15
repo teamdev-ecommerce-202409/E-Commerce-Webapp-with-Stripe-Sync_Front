@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { ProductInfoType } from "../../../lib/type/ProductType";
 import { useAtom } from "jotai";
 import { userInfoAtom } from "../../../lib/jotai/atoms/user";
+import WishButton from "../../shared/WishButton";
 type Props = {
   product: ProductInfoType;
 };
@@ -29,9 +30,14 @@ const ProductCard = ({ product }: Props) => {
       />
       <h3>{product.name}</h3>
       <p> ¥{product.price.toLocaleString()}</p>
+      <p> サイズ：{product.size.name}</p>
+
       <div className="productActions_container">
         {userInfoJotai && userInfoJotai.access && (
-          <FavoriteButton product={product} />
+          <>
+            <FavoriteButton product={product} />
+            <WishButton product={product} />
+          </>
         )}
         <ShoppingCartButton product={product} />
       </div>
