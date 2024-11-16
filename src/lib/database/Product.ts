@@ -138,15 +138,21 @@ export async function deleteProducts(productIds: number[], access?: string) {
   }
 }
 
-export async function getProductDetailById(productId: number) {
+export async function getProductDetailById(productId: number, access?: string) {
   try {
     const params: { [key: string]: unknown } = {};
+
+    let headers = {};
+    if (access) {
+      headers = {
+        Authorization: `Bearer ${access}`,
+      };
+    }
     if (!productId) {
       throw new Error("productId is required");
     } else {
       params.productId = productId;
     }
-    const headers = {};
     const response = await apiClient.get("/products/" + productId.toString(), {
       headers,
       params,

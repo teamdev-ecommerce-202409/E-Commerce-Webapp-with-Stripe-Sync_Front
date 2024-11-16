@@ -18,6 +18,7 @@ import { useAtom } from "jotai";
 import ModalPopup from "../component/shared/ModalPopup";
 import CommentForm from "../component/featured/DetailPage/CommentForm";
 import { PaginationInfoType } from "../lib/type/GenericType";
+import WishButton from "../component/shared/WishButton";
 
 const DetailPage = () => {
   const [userInfoJotai] = useAtom(userInfoAtom);
@@ -32,7 +33,10 @@ const DetailPage = () => {
   useEffect(() => {
     if (!isNaN(id)) {
       const setProductDetailInfo = async () => {
-        const productDetail = await getProductDetailById(id);
+        const productDetail = await getProductDetailById(
+          id,
+          userInfoJotai && userInfoJotai.access,
+        );
         console.log({ productDetail });
         setProduct(productDetail);
 
@@ -98,7 +102,12 @@ const DetailPage = () => {
                   {product && (
                     <>
                       <ShoppingCartButton product={product} />
-                      <FavoriteButton product={product} />
+                      {userInfoJotai && userInfoJotai.access && (
+                        <>
+                          <FavoriteButton product={product} />
+                          <WishButton product={product} />
+                        </>
+                      )}
                     </>
                   )}
                 </div>
