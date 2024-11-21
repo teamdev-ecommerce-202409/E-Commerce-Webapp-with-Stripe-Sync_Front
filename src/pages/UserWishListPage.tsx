@@ -10,6 +10,8 @@ import { loadNumPerPage } from "../lib/constants";
 import PaginationControl from "../component/shared/PaginationControl";
 import "../style/UserWishListPage.css";
 import FavAndWishList from "../component/featured/UserFavListPage/FavAndWishList";
+import LinkIcon from "@mui/icons-material/Link";
+import { IconButton } from "@mui/material";
 
 const UserWishListPage = () => {
   const [userInfoJotai] = useAtom(userInfoAtom);
@@ -21,14 +23,13 @@ const UserWishListPage = () => {
   const navigate = useNavigate();
 
   const fetchWishList = async (currentPage = page) => {
-    const favs = await getWishListByUser(
+    const wishes = await getWishListByUser(
       currentPage,
       userInfoJotai && userInfoJotai.access,
     );
-    console.log({ favs });
     const newFavs = [];
-    if (favs) {
-      for (const res of favs.results) {
+    if (wishes) {
+      for (const res of wishes.results) {
         newFavs.push(res.product);
       }
     }
@@ -36,8 +37,8 @@ const UserWishListPage = () => {
     setWishList(newFavs);
 
     // ページネーション設定
-    if (favs?.count) {
-      setAllPageCount(Math.ceil(favs?.count / loadNumPerPage));
+    if (wishes?.count) {
+      setAllPageCount(Math.ceil(wishes?.count / loadNumPerPage));
     } else {
       setAllPageCount(0);
     }
@@ -53,11 +54,34 @@ const UserWishListPage = () => {
     authCheckLogin();
     fetchWishList(page);
   }, []);
+
+  const handleCopy = async () => {
+    try {
+      if (userInfoJotai && userInfoJotai.userInfo) {
+        const copyLink =
+          import.meta.env.VITE_FRONT_URL +
+          "/wishlist/" +
+          userInfoJotai.userInfo.id;
+        await navigator.clipboard.writeText(copyLink); // クリップボードにコピー
+        alert(
+          `${userInfoJotai.userInfo?.name}様のウィッシュリストのリンクをコピーしました。`,
+        );
+      } else {
+        throw new Error("未ログイン");
+      }
+    } catch (err) {
+      console.error("リンクのコピーに失敗しました:", err);
+      alert("リンクのコピーに失敗しました");
+    }
+  };
   return (
     <Layout>
       <div className="userWishListPage_container">
         <div className="userWishListPage_title_container">
-          <h2>{userInfoJotai.userInfo?.name} 様のWishList</h2>
+          <h2>{userInfoJotai.userInfo?.name} 様のWishList</h2>{" "}
+          <IconButton onClick={() => handleCopy()}>
+            <LinkIcon />
+          </IconButton>
         </div>
         <div className="userWishListPage_favList_container">
           {wishList && wishList.length > 0 ? (

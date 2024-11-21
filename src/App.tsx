@@ -16,6 +16,7 @@ import UserFavListPage from "./pages/UserFavListPage";
 import MyPage from "./pages/MyPage";
 import UserOrderDetailPage from "./pages/UserOrderDetailPage";
 import UserWishListPage from "./pages/UserWishListPage";
+import PublicWishListPage from "./pages/PublicWishListPage";
 
 const theme = createTheme({
   palette: {
@@ -47,6 +48,7 @@ function App() {
             />
             <Route path="/mypage/favorites" element={<UserFavListPage />} />
             <Route path="/mypage/wishlist" element={<UserWishListPage />} />
+            <Route path="/wishlist/:id" element={<PublicWishListPage />} />
 
             <Route path="/admin" element={<AdminHomePage />} />
             <Route path="/admin/product" element={<AdminProductPage />} />
