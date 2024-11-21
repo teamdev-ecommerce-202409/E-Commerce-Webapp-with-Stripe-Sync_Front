@@ -615,3 +615,33 @@ export async function getWishListByUser(
     return null;
   }
 }
+
+export async function getPublicWishListById(
+  page: number,
+  id: string | undefined | null,
+) {
+  try {
+    const params: { [key: string]: unknown } = { page };
+
+    if (!id) {
+      throw new Error("wish id is required");
+    }
+
+    const headers = {};
+    const response = await apiClient.get("/wishlists/", {
+      headers,
+      params,
+    });
+    if (response.status !== 200) {
+      throw new Error("Something wrong with getting wish list");
+    }
+    return response.data as PaginationInfoType<{
+      user: number;
+      product: ProductInfoType;
+    }>;
+  } catch (error) {
+    console.error("Error getting wish data:", error);
+
+    return null;
+  }
+}
