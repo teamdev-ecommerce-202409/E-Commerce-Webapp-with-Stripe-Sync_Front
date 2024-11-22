@@ -11,18 +11,18 @@ type ResponseFromAPI = {
 };
 
 export async function signUpAPI(
-  userName: string,
+  name: string,
   email: string,
   password: string,
 ) {
   try {
     // クエリパラメータを用意
-    const params: { [key: string]: unknown } = { userName, email, password };
-    if (!userName || !email || !password) {
-      throw new Error("userName, email and password are necessary.");
+    const params: { [key: string]: unknown } = { name, email, password };
+    if (!name || !email || !password) {
+      throw new Error("name, email and password are necessary.");
     }
     // データを送信する
-    const response = await apiClient.post("/user/register", params);
+    const response = await apiClient.post("/signup/", params);
     return response.data as ResponseFromAPI;
   } catch (error: unknown) {
     console.error("Error fetching data:", error);
