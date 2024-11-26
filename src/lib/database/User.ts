@@ -11,18 +11,18 @@ type ResponseFromAPI = {
 };
 
 export async function signUpAPI(
-  userName: string,
+  name: string,
   email: string,
   password: string,
 ) {
   try {
     // クエリパラメータを用意
-    const params: { [key: string]: unknown } = { userName, email, password };
-    if (!userName || !email || !password) {
-      throw new Error("userName, email and password are necessary.");
+    const params: { [key: string]: unknown } = { name, email, password };
+    if (!name || !email || !password) {
+      throw new Error("name, email and password are necessary.");
     }
     // データを送信する
-    const response = await apiClient.post("/user/register", params);
+    const response = await apiClient.post("/signup/", params);
     return response.data as ResponseFromAPI;
   } catch (error: unknown) {
     console.error("Error fetching data:", error);
@@ -86,22 +86,20 @@ export async function checkLoginAPI(
   }
 }
 
-export async function verifyEmailAPI(token: string) {
+export async function verifyEmailAPI(uidb64: string, token: string) {
   try {
-    // クエリパラメータを用意
-    const params: { [key: string]: unknown } = { token };
-    if (!token) {
-      throw new Error("token is necessary.");
+    if (!uidb64 || !token) {
+      throw new Error("uidb64 and token are necessary.");
     }
-    // データを送信する
-    const response = await apiClient.post("/user/verify", params);
-    return response.data as ResponseFromAPI;
+
+    const response = await apiClient.get(`/signup/account-confirm-email/${uidb64}/${token}/`);
+
+    return response.data; // メッセージを返す
   } catch (error: unknown) {
-    console.error("Error fetching data:", error);
+    console.error("Error verifying email:", error);
     if (isAxiosError(error)) {
       return error.response?.data;
     }
-
     return null;
   }
 }

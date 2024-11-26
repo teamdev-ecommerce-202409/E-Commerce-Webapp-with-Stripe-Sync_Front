@@ -17,6 +17,7 @@ import MyPage from "./pages/MyPage";
 import UserOrderDetailPage from "./pages/UserOrderDetailPage";
 import UserWishListPage from "./pages/UserWishListPage";
 import PublicWishListPage from "./pages/PublicWishListPage";
+import EmailConfirmationPage from "./pages/EmailConfirmationPage";
 
 const theme = createTheme({
   palette: {
@@ -65,6 +66,7 @@ function App() {
             <Route path="/shoppingcart" element={<ShoppingCartPage />} />
             <Route path="/checkout/success" element={<CheckoutSuccessPage />} />
             <Route path="/checkout/cancel" element={<CheckoutCancelPage />} />
+            <Route path="/email-confirmation/:uidb64/:token" element={<EmailConfirmationPage />} />
           </Routes>
         </Router>
       </div>
