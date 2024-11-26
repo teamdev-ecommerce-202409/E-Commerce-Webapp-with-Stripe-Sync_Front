@@ -86,34 +86,13 @@ export async function checkLoginAPI(
   }
 }
 
-// export async function verifyEmailAPI(token: string) {
-//   try {
-//     // クエリパラメータを用意
-//     const params: { [key: string]: unknown } = { token };
-//     if (!token) {
-//       throw new Error("token is necessary.");
-//     }
-//     // データを送信する
-//     const response = await apiClient.post("/user/verify", params);
-//     return response.data as ResponseFromAPI;
-//   } catch (error: unknown) {
-//     console.error("Error fetching data:", error);
-//     if (isAxiosError(error)) {
-//       return error.response?.data;
-//     }
-
-//     return null;
-//   }
-// }
 export async function verifyEmailAPI(uidb64: string, token: string) {
   try {
     if (!uidb64 || !token) {
       throw new Error("uidb64 and token are necessary.");
     }
 
-    // const params = { uidb64 };
     const response = await apiClient.get(`/signup/account-confirm-email/${uidb64}/${token}/`);
-    console.log("API Response:", response.data); // レスポンスログ追加
 
     return response.data; // メッセージを返す
   } catch (error: unknown) {
