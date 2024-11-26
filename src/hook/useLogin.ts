@@ -73,13 +73,13 @@ const useLogin = () => {
     }
   };
 
-  const verifiyEmail = async (token: string) => {
+  const verifiyEmail = async (uidb64: string, token: string) => {
     try {
-      if (!token) {
-        throw new Error("token is necessary to verify.");
+      if (!uidb64 || !token) {
+        throw new Error("uidb64 and token are necessary to verify.");
       }
 
-      const data = await verifyEmailAPI(token);
+      const data = await verifyEmailAPI(uidb64, token);
       if (data?.error) {
         throw new Error(data.error);
       }
@@ -88,10 +88,14 @@ const useLogin = () => {
         throw new Error("Something wrong with login API");
       }
 
-      //認証成功時はユーザー情報をjotaiに入れる
-      setuserInfoJotai({ userInfo: data.user, authtoken: data.token });
-
-      alert("Verification Success!");
+      if (data?.message) {
+        alert(data.message); // メール認証成功メッセージを表示
+        alert("Verification Success!");
+        //home画面に移動
+        navigate("/");
+      } else {
+        throw new Error("Failed to confirm email.");
+      }
 
       //home画面に移動
       navigate("/");
