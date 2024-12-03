@@ -9,7 +9,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   resolve: {
     alias: {
-      '@e-commerce/': resolve(__dirname, 'src'),
+      '@e-commerce': resolve(__dirname, 'src'),
     },
   },
   plugins: [react()],

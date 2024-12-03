@@ -15,10 +15,12 @@ import {
 import { CartInfoJotai } from "../lib/jotai/JotaiType";
 import { shippingFeeFreePrice } from "../lib/constants";
 import { checkout, CheckoutData } from "../lib/database/Order";
+import { checkoutInfoAtom } from "@e-commerce/lib/jotai/atoms/checkout";
 
 const ShoppingCartPage = () => {
   const [userInfoJotai] = useAtom(userInfoAtom);
   const [cartInfoJotai, setCartInfoJotai] = useAtom(cartInfoAtom);
+  const [, setCheckoutInfoJotai] = useAtom(checkoutInfoAtom);
   const [cartItems, setCartItems] = useState<CartInfoType[]>([]);
   const [sumPrice, setSumPrice] = useState<number>(0);
   const [shippingFee, setShippingFee] = useState<number>(0);
@@ -102,9 +104,13 @@ const ShoppingCartPage = () => {
       amount: item.quantity,
     }));
     try {
-      const redirectUrl = await checkout(checkoutData);
-      clearCart(); // チェックアウト画面でキャンセルした場合にもカートの中身が消える
-      window.location.href = redirectUrl;
+      const checkoutSessionData = await checkout(checkoutData);
+      setCheckoutInfoJotai({
+        checkout_url: checkoutSessionData.url,
+        order_id: checkoutSessionData.order_id
+      });
+      clearCart(); // チェックアウト画面でキャンセルした場合にもカートの中身が消えてしまう
+      window.location.href = checkoutSessionData.url;
     } catch (error) {
       console.error(error);
       alert("チェックアウトに失敗しました。");

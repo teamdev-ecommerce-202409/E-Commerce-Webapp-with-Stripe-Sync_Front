@@ -11,7 +11,10 @@ export interface CheckoutData {
 export async function checkout(checkoutDataList: CheckoutData[]) {
   try {
     const response = await apiClient.post(`/checkout/`, checkoutDataList);
-    return response.data.url;
+    return {
+      order_id: response.data.order_id,
+      url: response.data.url
+    };
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response) {
