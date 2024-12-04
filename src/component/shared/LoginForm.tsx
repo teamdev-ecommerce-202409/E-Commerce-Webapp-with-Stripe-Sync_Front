@@ -15,6 +15,16 @@ type FormData = {
   password: string;
   confirmPassword: string;
   name: string;
+  address_state: string;
+  address_city: string;
+  address_line1: string;
+  address_line2: string;
+  address_postal_code: string;
+  shipping_state: string;
+  shipping_city: string;
+  shipping_line1: string;
+  shipping_line2: string;
+  shipping_postal_code: string;
 };
 const LoginForm = ({ handleClose }: Props) => {
   const { login, signUp, loading, errorMsg } = useLogin();
@@ -58,7 +68,6 @@ const LoginForm = ({ handleClose }: Props) => {
               {errorMsg && (
                 <p className="errMsg loginForm_errMsg">{errorMsg}</p>
               )}
-
               <div className="loginForm_input-group">
                 <input
                   id="email"
@@ -78,7 +87,6 @@ const LoginForm = ({ handleClose }: Props) => {
                   </p>
                 )}
               </div>
-
               <div className="loginForm_input-group">
                 <input
                   id="name"
@@ -135,6 +143,198 @@ const LoginForm = ({ handleClose }: Props) => {
                 {errors.confirmPassword && (
                   <p className="errMsg loginForm_errMsg">
                     {errors.confirmPassword.message}
+                  </p>
+                )}
+              </div>
+              <div>請求先住所</div>
+              <div className="loginForm_input-group">
+                <input
+                  id="address_postal_code"
+                  type="text"
+                  placeholder="postal-code (XXX-XXXX)"
+                  {...register("address_postal_code", {
+                    required: "Postal-code is required",
+                    maxLength: {
+                      value: 7,
+                      message: "Postal-code must be less than 7 characters long",
+                    },
+                  })}
+                />
+                {errors.address_postal_code && (
+                  <p className="errMsg loginForm_errMsg">
+                    {errors.address_postal_code.message}
+                  </p>
+                )}
+              </div>
+              <div className="loginForm_input-group">
+                <input
+                  id="address_state"
+                  type="text"
+                  placeholder="state"
+                  {...register("address_state", {
+                    required: "State is required",
+                    maxLength: {
+                      value: 255,
+                      message: "State must be less than 255 characters long",
+                    },
+                  })}
+                />
+                {errors.address_state && (
+                  <p className="errMsg loginForm_errMsg">
+                    {errors.address_state.message}
+                  </p>
+                )}
+              </div>
+              <div className="loginForm_input-group">
+                <input
+                  id="address_city"
+                  type="text"
+                  placeholder="city"
+                  {...register("address_city", {
+                    required: "City is required",
+                    maxLength: {
+                      value: 255,
+                      message: "City must be less than 255 characters long",
+                    },
+                  })}
+                />
+                {errors.address_city && (
+                  <p className="errMsg loginForm_errMsg">
+                    {errors.address_city.message}
+                  </p>
+                )}
+              </div>
+              <div className="loginForm_input-group">
+                <input
+                  id="address_line1"
+                  type="text"
+                  placeholder="line-1"
+                  {...register("address_line1", {
+                    required: "Line-1 is required",
+                    maxLength: {
+                      value: 255,
+                      message: "Line-1 must be less than 255 characters long",
+                    },
+                  })}
+                />
+                {errors.address_line1 && (
+                  <p className="errMsg loginForm_errMsg">
+                    {errors.address_line1.message}
+                  </p>
+                )}
+              </div>
+              <div className="loginForm_input-group">
+                <input
+                  id="address_line2"
+                  type="text"
+                  placeholder="line-2"
+                  {...register("address_line2", {
+                    required: "Line-2 is required",
+                    maxLength: {
+                      value: 255,
+                      message: "Line-2 must be less than 255 characters long",
+                    },
+                  })}
+                />
+                {errors.address_line2 && (
+                  <p className="errMsg loginForm_errMsg">
+                    {errors.address_line2.message}
+                  </p>
+                )}
+              </div>
+              <div>配送先住所</div>
+              <div className="loginForm_input-group">
+                <input
+                  id="shipping_postal_code"
+                  type="text"
+                  placeholder="postal-code (XXX-XXXX)"
+                  {...register("shipping_postal_code", {
+                    required: "Postal-code is required",
+                    maxLength: {
+                      value: 7,
+                      message: "Postal-code must be less than 7 characters long",
+                    },
+                  })}
+                />
+                {errors.shipping_postal_code && (
+                  <p className="errMsg loginForm_errMsg">
+                    {errors.shipping_postal_code.message}
+                  </p>
+                )}
+              </div>
+              <div className="loginForm_input-group">
+                <input
+                  id="shipping_state"
+                  type="text"
+                  placeholder="state"
+                  {...register("shipping_state", {
+                    required: "State is required",
+                    maxLength: {
+                      value: 255,
+                      message: "State must be less than 255 characters long",
+                    },
+                  })}
+                />
+                {errors.shipping_state && (
+                  <p className="errMsg loginForm_errMsg">
+                    {errors.shipping_state.message}
+                  </p>
+                )}
+              </div>
+              <div className="loginForm_input-group">
+                <input
+                  id="shipping_city"
+                  type="text"
+                  placeholder="city"
+                  {...register("shipping_city", {
+                    required: "City is required",
+                    maxLength: {
+                      value: 255,
+                      message: "City must be less than 255 characters long",
+                    },
+                  })}
+                />
+                {errors.shipping_city && (
+                  <p className="errMsg loginForm_errMsg">
+                    {errors.shipping_city.message}
+                  </p>
+                )}
+              </div>
+              <div className="loginForm_input-group">
+                <input
+                  id="shipping_line1"
+                  type="text"
+                  placeholder="line-1"
+                  {...register("shipping_line1", {
+                    required: "Line-1 is required",
+                    maxLength: {
+                      value: 255,
+                      message: "Line-1 must be less than 255 characters long",
+                    },
+                  })}
+                />
+                {errors.shipping_line1 && (
+                  <p className="errMsg loginForm_errMsg">
+                    {errors.shipping_line1.message}
+                  </p>
+                )}
+              </div>
+              <div className="loginForm_input-group">
+                <input
+                  id="shipping_line2"
+                  type="text"
+                  placeholder="line-2"
+                  {...register("shipping_line2", {
+                    required: "Line-2 is required",
+                    maxLength: {
+                      value: 255,
+                      message: "Line-2 must be less than 255 characters long",
+                    },
+                  })}
+                />
+                {errors.shipping_line2 && (
+                  <p className="errMsg loginForm_errMsg">
+                    {errors.shipping_line2.message}
                   </p>
                 )}
               </div>
