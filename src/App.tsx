@@ -49,7 +49,7 @@ function App() {
             />
             <Route path="/mypage/favorites" element={<UserFavListPage />} />
             <Route path="/mypage/wishlist" element={<UserWishListPage />} />
-            <Route path="/wishlist/:id" element={<PublicWishListPage />} />
+            <Route path="/wishlist/:id/:access" element={<PublicWishListPage />} />
 
             <Route path="/admin" element={<AdminHomePage />} />
             <Route path="/admin/product" element={<AdminProductPage />} />
