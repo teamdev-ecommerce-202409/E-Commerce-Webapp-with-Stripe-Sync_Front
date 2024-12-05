@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import CloseIcon from "@mui/icons-material/Close";
 import { Button, IconButton } from "@mui/material";
 import { useState } from "react";
+import { AddressType } from "@e-commerce/lib/type/AddressUserInfoType";
 
 type Props = {
   // signUpFlag: boolean;
@@ -15,16 +16,8 @@ type FormData = {
   password: string;
   confirmPassword: string;
   name: string;
-  address_state: string;
-  address_city: string;
-  address_line1: string;
-  address_line2: string;
-  address_postal_code: string;
-  shipping_state: string;
-  shipping_city: string;
-  shipping_line1: string;
-  shipping_line2: string;
-  shipping_postal_code: string;
+  address: AddressType,
+  shipping: AddressType
 };
 const LoginForm = ({ handleClose }: Props) => {
   const { login, signUp, loading, errorMsg } = useLogin();
@@ -40,7 +33,8 @@ const LoginForm = ({ handleClose }: Props) => {
 
   const onSubmit = async (data: FormData) => {
     if (signUpFlag) {
-      await signUp(data.name, data.email, data.password, data.confirmPassword);
+      await signUp(data.name, data.email, data.password, data.confirmPassword,
+        data.address, data.shipping);
       handleClose();
     } else {
       await login(data.email, data.password);
@@ -152,17 +146,17 @@ const LoginForm = ({ handleClose }: Props) => {
                   id="address_postal_code"
                   type="text"
                   placeholder="postal-code (XXX-XXXX)"
-                  {...register("address_postal_code", {
+                  {...register("address.postal_code", {
                     required: "Postal-code is required",
                     maxLength: {
-                      value: 7,
+                      value: 8,
                       message: "Postal-code must be less than 7 characters long",
                     },
                   })}
                 />
-                {errors.address_postal_code && (
+                {errors.address?.postal_code && (
                   <p className="errMsg loginForm_errMsg">
-                    {errors.address_postal_code.message}
+                    {errors.address.postal_code.message}
                   </p>
                 )}
               </div>
@@ -171,7 +165,7 @@ const LoginForm = ({ handleClose }: Props) => {
                   id="address_state"
                   type="text"
                   placeholder="state"
-                  {...register("address_state", {
+                  {...register("address.state", {
                     required: "State is required",
                     maxLength: {
                       value: 255,
@@ -179,9 +173,9 @@ const LoginForm = ({ handleClose }: Props) => {
                     },
                   })}
                 />
-                {errors.address_state && (
+                {errors.address?.state && (
                   <p className="errMsg loginForm_errMsg">
-                    {errors.address_state.message}
+                    {errors.address.state.message}
                   </p>
                 )}
               </div>
@@ -190,7 +184,7 @@ const LoginForm = ({ handleClose }: Props) => {
                   id="address_city"
                   type="text"
                   placeholder="city"
-                  {...register("address_city", {
+                  {...register("address.city", {
                     required: "City is required",
                     maxLength: {
                       value: 255,
@@ -198,9 +192,9 @@ const LoginForm = ({ handleClose }: Props) => {
                     },
                   })}
                 />
-                {errors.address_city && (
+                {errors.address?.city && (
                   <p className="errMsg loginForm_errMsg">
-                    {errors.address_city.message}
+                    {errors.address.city.message}
                   </p>
                 )}
               </div>
@@ -209,7 +203,7 @@ const LoginForm = ({ handleClose }: Props) => {
                   id="address_line1"
                   type="text"
                   placeholder="line-1"
-                  {...register("address_line1", {
+                  {...register("address.line1", {
                     required: "Line-1 is required",
                     maxLength: {
                       value: 255,
@@ -217,9 +211,9 @@ const LoginForm = ({ handleClose }: Props) => {
                     },
                   })}
                 />
-                {errors.address_line1 && (
+                {errors.address?.line1 && (
                   <p className="errMsg loginForm_errMsg">
-                    {errors.address_line1.message}
+                    {errors.address.line1.message}
                   </p>
                 )}
               </div>
@@ -228,7 +222,7 @@ const LoginForm = ({ handleClose }: Props) => {
                   id="address_line2"
                   type="text"
                   placeholder="line-2"
-                  {...register("address_line2", {
+                  {...register("address.line2", {
                     required: "Line-2 is required",
                     maxLength: {
                       value: 255,
@@ -236,9 +230,9 @@ const LoginForm = ({ handleClose }: Props) => {
                     },
                   })}
                 />
-                {errors.address_line2 && (
+                {errors.address?.line2 && (
                   <p className="errMsg loginForm_errMsg">
-                    {errors.address_line2.message}
+                    {errors.address.line2.message}
                   </p>
                 )}
               </div>
@@ -248,17 +242,17 @@ const LoginForm = ({ handleClose }: Props) => {
                   id="shipping_postal_code"
                   type="text"
                   placeholder="postal-code (XXX-XXXX)"
-                  {...register("shipping_postal_code", {
+                  {...register("shipping.postal_code", {
                     required: "Postal-code is required",
                     maxLength: {
-                      value: 7,
+                      value: 8,
                       message: "Postal-code must be less than 7 characters long",
                     },
                   })}
                 />
-                {errors.shipping_postal_code && (
+                {errors.shipping?.postal_code && (
                   <p className="errMsg loginForm_errMsg">
-                    {errors.shipping_postal_code.message}
+                    {errors.shipping.postal_code.message}
                   </p>
                 )}
               </div>
@@ -267,7 +261,7 @@ const LoginForm = ({ handleClose }: Props) => {
                   id="shipping_state"
                   type="text"
                   placeholder="state"
-                  {...register("shipping_state", {
+                  {...register("shipping.state", {
                     required: "State is required",
                     maxLength: {
                       value: 255,
@@ -275,9 +269,9 @@ const LoginForm = ({ handleClose }: Props) => {
                     },
                   })}
                 />
-                {errors.shipping_state && (
+                {errors.shipping?.state && (
                   <p className="errMsg loginForm_errMsg">
-                    {errors.shipping_state.message}
+                    {errors.shipping.state.message}
                   </p>
                 )}
               </div>
@@ -286,7 +280,7 @@ const LoginForm = ({ handleClose }: Props) => {
                   id="shipping_city"
                   type="text"
                   placeholder="city"
-                  {...register("shipping_city", {
+                  {...register("shipping.city", {
                     required: "City is required",
                     maxLength: {
                       value: 255,
@@ -294,9 +288,9 @@ const LoginForm = ({ handleClose }: Props) => {
                     },
                   })}
                 />
-                {errors.shipping_city && (
+                {errors.shipping?.city && (
                   <p className="errMsg loginForm_errMsg">
-                    {errors.shipping_city.message}
+                    {errors.shipping.city.message}
                   </p>
                 )}
               </div>
@@ -305,7 +299,7 @@ const LoginForm = ({ handleClose }: Props) => {
                   id="shipping_line1"
                   type="text"
                   placeholder="line-1"
-                  {...register("shipping_line1", {
+                  {...register("shipping.line1", {
                     required: "Line-1 is required",
                     maxLength: {
                       value: 255,
@@ -313,9 +307,9 @@ const LoginForm = ({ handleClose }: Props) => {
                     },
                   })}
                 />
-                {errors.shipping_line1 && (
+                {errors.shipping?.line1 && (
                   <p className="errMsg loginForm_errMsg">
-                    {errors.shipping_line1.message}
+                    {errors.shipping.line1.message}
                   </p>
                 )}
               </div>
@@ -324,7 +318,7 @@ const LoginForm = ({ handleClose }: Props) => {
                   id="shipping_line2"
                   type="text"
                   placeholder="line-2"
-                  {...register("shipping_line2", {
+                  {...register("shipping.line2", {
                     required: "Line-2 is required",
                     maxLength: {
                       value: 255,
@@ -332,9 +326,9 @@ const LoginForm = ({ handleClose }: Props) => {
                     },
                   })}
                 />
-                {errors.shipping_line2 && (
+                {errors.shipping?.line2 && (
                   <p className="errMsg loginForm_errMsg">
-                    {errors.shipping_line2.message}
+                    {errors.shipping.line2.message}
                   </p>
                 )}
               </div>
