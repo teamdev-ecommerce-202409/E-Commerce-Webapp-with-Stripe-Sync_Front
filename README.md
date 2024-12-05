@@ -12,7 +12,7 @@
    　.env ファイルをルートフォルダ直下に用意し、以下を記述して保存する。
 
 ```
-
+VITE_FRONT_DOMAIN=http://localhost:5173　←フロントドメイン
 VITE_API_URL=http://localhost:8000/api　←接続するバックエンドAPI
 VITE_SOCKET_URL=http://localhost:×××××　←接続するソケット通信
 

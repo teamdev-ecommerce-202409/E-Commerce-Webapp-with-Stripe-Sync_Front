@@ -33,6 +33,7 @@ const PublicWishListPage = () => {
       setAllPageCount(0);
     }
   };
+  
   useEffect(() => {
     fetchWishList(page);
   }, [page]);

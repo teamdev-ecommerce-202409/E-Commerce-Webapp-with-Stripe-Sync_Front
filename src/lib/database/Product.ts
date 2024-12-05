@@ -628,7 +628,7 @@ export async function getPublicWishListById(
     }
 
     const headers = {};
-    const response = await apiClient.get("/wishlists/", {
+    const response = await apiClient.get(`/wishlists/${id}`, {
       headers,
       params,
     });

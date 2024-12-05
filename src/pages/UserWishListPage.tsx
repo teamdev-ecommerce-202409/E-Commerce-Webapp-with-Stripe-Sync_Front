@@ -59,7 +59,7 @@ const UserWishListPage = () => {
     try {
       if (userInfoJotai && userInfoJotai.userInfo) {
         const copyLink =
-          import.meta.env.VITE_FRONT_URL +
+          import.meta.env.VITE_FRONT_DOMAIN +
           "/wishlist/" +
           userInfoJotai.userInfo.id;
         await navigator.clipboard.writeText(copyLink); // クリップボードにコピー
