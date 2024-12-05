@@ -9,6 +9,7 @@ import {
 } from "../lib/database/User";
 import { jotaiInitialValue, userInfoAtom } from "../lib/jotai/atoms/user";
 import { UserInfoType } from "../lib/type/UserInfoType";
+import { AddressType } from "@e-commerce/lib/type/AddressUserInfoType";
 
 const useLogin = () => {
   const [userInfoJotai, setuserInfoJotai] = useAtom(userInfoAtom); //ユーザー情報のグローバルステート
@@ -22,6 +23,8 @@ const useLogin = () => {
     email: string,
     password: string,
     confirmPass: string,
+    address: AddressType,
+    shipping: AddressType
   ) => {
     try {
       setLoading(true);
@@ -53,7 +56,7 @@ const useLogin = () => {
       }
       //サーバー側で登録処理
 
-      const signUpResult = await signUpAPI(name, email, password);
+      const signUpResult = await signUpAPI(name, email, password, address, shipping);
       if (signUpResult) {
         //メール送信した旨、画面に表示
         alert(

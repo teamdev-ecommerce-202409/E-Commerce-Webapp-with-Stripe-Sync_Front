@@ -14,14 +14,14 @@ export async function signUpAPI(
   name: string,
   email: string,
   password: string,
+  address: AddressType,
+  shipping: AddressType
 ) {
   try {
-    // クエリパラメータを用意
-    const params: { [key: string]: unknown } = { name, email, password };
-    if (!name || !email || !password) {
+    const params = { name, email, password, address, shipping };
+    if (!name || !email || !password || !address || !shipping) {
       throw new Error("name, email and password are necessary.");
     }
-    // データを送信する
     const response = await apiClient.post("/signup/", params);
     return response.data as ResponseFromAPI;
   } catch (error: unknown) {
@@ -53,6 +53,7 @@ export async function loginAPI(email: string, password: string) {
     return null;
   }
 }
+
 export async function checkLoginAPI(
   access: string | undefined | null,
   refresh: string | undefined | null,

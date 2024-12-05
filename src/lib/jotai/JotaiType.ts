@@ -10,6 +10,11 @@ export type UserInfoJotai = {
   isAdmin: boolean;
 };
 
+export type checkoutInfoJotai = {
+  checkout_url?: string;
+  order_id?: number;
+};
+
 export type CartInfoJotai = {
   cartItems: CartInfoType[];
 };
