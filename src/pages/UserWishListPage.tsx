@@ -27,16 +27,13 @@ const UserWishListPage = () => {
       currentPage,
       userInfoJotai && userInfoJotai.access,
     );
-    const newFavs = [];
+    const newWishList = [];
     if (wishes) {
       for (const res of wishes.results) {
-        newFavs.push(res.product);
+        newWishList.push(res.product);
       }
     }
-    // いいねリストを更新
-    setWishList(newFavs);
-
-    // ページネーション設定
+    setWishList(newWishList);
     if (wishes?.count) {
       setAllPageCount(Math.ceil(wishes?.count / loadNumPerPage));
     } else {
