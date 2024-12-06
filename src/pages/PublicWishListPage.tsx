@@ -3,21 +3,21 @@ import Layout from "../component/shared/Layout";
 import { useParams } from "react-router-dom";
 
 import { ProductInfoType } from "../lib/type/ProductType";
-import { getPublicWishListById } from "../lib/database/Product";
+import { getWishListById } from "../lib/database/Product";
 import { loadNumPerPage } from "../lib/constants";
 import PaginationControl from "../component/shared/PaginationControl";
 import "../style/UserWishListPage.css";
 import FavAndWishList from "../component/featured/UserFavListPage/FavAndWishList";
 
 const PublicWishListPage = () => {
-  const { id } = useParams();
+  const { id, access } = useParams();
 
   const [wishList, setWishList] = useState<ProductInfoType[]>([]);
   const [page, setPage] = useState(1);
   const [allPageCount, setAllPageCount] = useState(1);
 
   const fetchWishList = async (currentPage = page) => {
-    const wishes = await getPublicWishListById(currentPage, id);
+    const wishes = await getWishListById(currentPage, id, access);
     console.log({ favs: wishes });
     const newWishes = [];
     if (wishes) {
@@ -33,6 +33,7 @@ const PublicWishListPage = () => {
       setAllPageCount(0);
     }
   };
+
   useEffect(() => {
     fetchWishList(page);
   }, [page]);

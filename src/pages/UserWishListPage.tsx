@@ -27,22 +27,20 @@ const UserWishListPage = () => {
       currentPage,
       userInfoJotai && userInfoJotai.access,
     );
-    const newFavs = [];
+    const newWishList = [];
     if (wishes) {
       for (const res of wishes.results) {
-        newFavs.push(res.product);
+        newWishList.push(res.product);
       }
     }
-    // いいねリストを更新
-    setWishList(newFavs);
-
-    // ページネーション設定
+    setWishList(newWishList);
     if (wishes?.count) {
       setAllPageCount(Math.ceil(wishes?.count / loadNumPerPage));
     } else {
       setAllPageCount(0);
     }
   };
+
   useEffect(() => {
     const authCheckLogin = async () => {
       const authResult = await checkLogin();
@@ -50,18 +48,18 @@ const UserWishListPage = () => {
         navigate("/");
       }
     };
-
     authCheckLogin();
     fetchWishList(page);
   }, []);
 
-  const handleCopy = async () => {
+  const handleCopy = async (access: string) => {
     try {
       if (userInfoJotai && userInfoJotai.userInfo) {
         const copyLink =
-          import.meta.env.VITE_FRONT_URL +
+          import.meta.env.VITE_FRONT_DOMAIN +
           "/wishlist/" +
-          userInfoJotai.userInfo.id;
+          userInfoJotai.userInfo.id +
+          "/" + access;
         await navigator.clipboard.writeText(copyLink); // クリップボードにコピー
         alert(
           `${userInfoJotai.userInfo?.name}様のウィッシュリストのリンクをコピーしました。`,
@@ -74,13 +72,19 @@ const UserWishListPage = () => {
       alert("リンクのコピーに失敗しました");
     }
   };
+
   return (
     <Layout>
       <div className="userWishListPage_container">
         <div className="userWishListPage_title_container">
           <h2>{userInfoJotai.userInfo?.name} 様のWishList</h2>{" "}
-          <IconButton onClick={() => handleCopy()}>
+          <IconButton onClick={() => handleCopy("public")}>
             <LinkIcon />
+            <span className="linkLabel">public</span>
+          </IconButton>
+          <IconButton onClick={() => handleCopy("private")}>
+            <LinkIcon />
+            <span className="linkLabel">private</span>
           </IconButton>
         </div>
         <div className="userWishListPage_favList_container">

@@ -517,6 +517,7 @@ export async function registerFav(
 export async function registerWish(
   productId: number,
   wish: boolean,
+  is_public: boolean,
   access: string | undefined | null,
 ) {
   try {
@@ -532,8 +533,8 @@ export async function registerWish(
     } else {
       throw new Error("productId is required.");
     }
-
     params.wish = wish;
+    params.is_public = is_public;
 
     const headers = {
       Authorization: `Bearer ${access}`,
@@ -616,9 +617,10 @@ export async function getWishListByUser(
   }
 }
 
-export async function getPublicWishListById(
+export async function getWishListById(
   page: number,
   id: string | undefined | null,
+  access: string | undefined | null
 ) {
   try {
     const params: { [key: string]: unknown } = { page };
@@ -626,9 +628,12 @@ export async function getPublicWishListById(
     if (!id) {
       throw new Error("wish id is required");
     }
+    if (!access) {
+      throw new Error("access is required");
+    }
 
     const headers = {};
-    const response = await apiClient.get("/wishlists/", {
+    const response = await apiClient.get(`/wishlists/${id}/${access}/`, {
       headers,
       params,
     });
